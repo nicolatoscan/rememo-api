@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nicolatoscan/rememo-api.svg?branch=main)](https://travis-ci.org/nicolatoscan/rememo-api)
+
 # rememo-api
 
 Project: Rememo<br>

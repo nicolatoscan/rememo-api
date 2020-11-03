@@ -2,10 +2,10 @@
   "name": "rememo-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/source/index.js",
   "scripts": {
     "serve": "npm run transpile && npm run start",
-    "start": "node dist/index.js",
+    "start": "node dist/source/index.js",
     "transpile": "tsc",
     "postinstall": "npm run transpile",
     "commit": "git-cz",
