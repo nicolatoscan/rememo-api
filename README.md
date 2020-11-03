@@ -20,3 +20,8 @@ Transpile and run the application
 npm run transpile
 npm run start
 ```
+
+## Test with docker
+```bash
+docker run -p 3000:3000 nicolatoscan/rememo-api
+```
