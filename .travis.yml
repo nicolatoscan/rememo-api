@@ -1,0 +1,9 @@
+language : node_js
+node_js:
+ - node
+os:
+ - linux
+ - osx
+ - windows
+install:
+ - npm install
