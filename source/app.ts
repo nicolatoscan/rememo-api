@@ -30,12 +30,11 @@ export default class App {
     }
 
     private middleware() {
-        this.app.use(morgan('tiny'));
+        this.app.use(morgan('dev'));
     }
     
     private routes() {
         this.app.use('/', (req, res) => { res.send('Hello world!'); });
     }
-
 
 }
