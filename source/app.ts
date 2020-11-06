@@ -1,6 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
-
+import getVersionRouter from './api/router';
 export default class App {
 
     public app: express.Application
@@ -31,10 +31,14 @@ export default class App {
 
     private middleware() {
         this.app.use(morgan('dev'));
+
+        
+
     }
     
     private routes() {
-        this.app.use('/', (req, res) => { res.send('Hello world!'); });
+        this.app.get('/', (req, res) => { res.send('Hello world!'); });
+        this.app.use('/api', getVersionRouter());
     }
 
 }
