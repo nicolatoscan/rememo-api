@@ -1,14 +1,20 @@
 import express from 'express';
 import morgan from 'morgan';
 import getVersionRouter from './api/router';
+import bodyParser from 'body-parser';
+import databaseService from './services/database.services';
+
 export default class App {
 
     public app: express.Application
     private port: number;
+  
 
     constructor() {
         this.app = express();
         this.port = this.normalizePort(process.env.PORT);
+
+        databaseService.connect();
 
         this.middleware();
         this.routes();
@@ -30,10 +36,8 @@ export default class App {
     }
 
     private middleware() {
+        this.app.use(bodyParser.json());
         this.app.use(morgan('dev'));
-
-        
-
     }
     
     private routes() {
