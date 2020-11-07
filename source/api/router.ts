@@ -1,5 +1,5 @@
 import * as express from 'express';
-import getV1Router from './v1/router';
+import getV1Router from './v1/routers';
 
 export default function(): express.Router {
     const router = express.Router();
