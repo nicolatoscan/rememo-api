@@ -1,6 +1,6 @@
 {
   "name": "rememo-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/source/index.js",
   "scripts": {
@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/nicolatoscan/rememo-api#readme",
   "dependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
     "morgan": "^1.10.0"
   },
