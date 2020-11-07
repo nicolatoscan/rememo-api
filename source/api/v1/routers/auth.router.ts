@@ -35,9 +35,10 @@ async function signup(req: express.Request, res: express.Response) {
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(valUser.value.password, salt);
             const insertedId = (await databaseService.getCollection('users').insertOne(Models.createDBUserDoc(valUser.value, hashedPassword))).insertedId;
+            const user = await databaseService.getCollection('users').findOne({ _id: insertedId });
 
             authServices.addAuthToResponse(res, { username: valUser.value.username });
-            res.status(201).send({ result: 'OK', indertedId: insertedId });
+            res.status(201).send(Models.getUserFromDBDoc(user));
         }
     }
 }
