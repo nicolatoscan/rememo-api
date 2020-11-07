@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "f68ede54-8bb4-4ceb-9d46-f72be96dd42f",
+		"name": "Rememo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/auth/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ee44b6ef-8430-4cb1-8806-e6c0af68bb1b",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.displayName).to.eql('Test Displayname');\r",
+							"    pm.expect(responseJson.email).to.eql('email@example.com');\r",
+							"    pm.expect(responseJson.username).to.eql('TestUsername');\r",
+							"    pm.expect(responseJson.password).to.eql(undefined);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "pippo gaiyvgasyibvoiasdivs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"username\": \"TestUsername\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/auth/login",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
