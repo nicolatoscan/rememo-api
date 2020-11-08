@@ -5,7 +5,7 @@
 Project: Rememo<br>
 Group ID: #13<br>
 Alessio Gandelli - [alessiogandelli](https://github.com/alessiogandelli)<br>
-Mattia Salvador<br>
+Mattia Salvador - [MattiaSalvador201506](https://github.com/MattiaSalvador201506)<br>
 Nicola Toscan - [nicolatoscan](https://github.com/nicolatoscan)<br>
 Taras Rashkevych - [TarasRashkevych99](https://github.com/TarasRashkevych99)
 
