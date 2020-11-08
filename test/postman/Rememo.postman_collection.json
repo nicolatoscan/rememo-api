@@ -16,19 +16,20 @@
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"\r",
 							"pm.test('Is json', function() {\r",
 							"    pm.response.to.be.ok;\r",
 							"    pm.response.to.be.withBody;\r",
 							"    pm.response.to.be.json;\r",
 							"});\r",
-							"\r",
 							"pm.test('Has all the property', function() {\r",
 							"    const responseJson = pm.response.json();\r",
 							"    pm.expect(responseJson.displayName).to.eql('Test Displayname');\r",
 							"    pm.expect(responseJson.email).to.eql('email@example.com');\r",
 							"    pm.expect(responseJson.username).to.eql('TestUsername');\r",
-							"    pm.expect(responseJson.password).to.eql(undefined);\r",
+							"    pm.expect(responseJson.password).to.be.undefined;\r",
+							"})\r",
+							"pm.test('Has authentication header', function() {\r",
+							"    pm.expect(pm.response.headers['Authentication']).to.be.string;\r",
 							"})"
 						],
 						"type": "text/javascript"
@@ -46,7 +47,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\r\n    \"username\": \"TestUsername\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"raw": "{\r\n    \"username\": \"TestUsername\",\r\n    \"password\": \"testpassword!\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
