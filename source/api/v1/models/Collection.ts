@@ -11,6 +11,7 @@ export interface Word {
 }
 
 export interface Collection {
+    _id?: string,
     index: number;
     name: string;
     description: string;
@@ -42,6 +43,7 @@ export function validateWord(word: unknown): { value?: Word, error?: string } {
 
 export function validateCollection(collection: Collection): { value?: Collection, error?: string } {
     const validationResult = joi.object({
+        _id: joi.string(),
         index: joi.number().integer().min(0).required(),
         name: joi.string().required(),
         description: joi.string().required(),
@@ -56,6 +58,9 @@ export function validateCollection(collection: Collection): { value?: Collection
     }
 
     const err = collection.words.map(w => validateWord(w).error).find(e => e !== undefined);
+    if (!err) {
+        collection.words.some(w1 => collection.words.find(w2 => w1.id === w2.id));
+    }
     if (err) {
         return { error: err };
     }
@@ -80,6 +85,32 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
                 languageFrom: w.languageFrom,
                 languageTo: w.languageTo
             };
+        })
+    };
+}
+
+export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
+    return {
+        createdOn: new Date(),
+        lastModified: new Date(),
+        index: collection.index,
+        name: collection.name,
+        description: collection.description,
+        owner: collection.owner,
+        languageFrom: collection.languageFrom,
+        languageTo: collection.languageTo,
+        words: collection.words.map(w => {
+            return {
+                id: w.id,
+                index: w.index,
+                original: w.original,
+                translation: w.translation,
+                languageFrom: w.languageFrom,
+                languageTo: w.languageTo
+            };
+        }).sort(w => w.index).map((w, i) => {
+            w.index = i;
+            return w;
         })
     };
 }
