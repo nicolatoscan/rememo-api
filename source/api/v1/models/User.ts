@@ -10,7 +10,6 @@ export interface User {
 
 export interface DBUserDoc extends User, DBObject {
     password: string,
-    createdOn: Date,
     deletedOn: Date | null
 }
 
@@ -27,13 +26,7 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
         return { error: validationResult.error.message };
     }
 
-    return {
-        value: {
-            username: (user as User).username,
-            displayName: (user as User).displayName,
-            email: (user as User).email,
-        }
-    };
+    return { value: (user as User) };
 }
 
 export function getUserFromDBDoc(doc: DBUserDoc): User {

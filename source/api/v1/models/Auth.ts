@@ -46,6 +46,7 @@ export function validateSignupUser(loginUser: unknown): { value?: SignupUser, er
 export function createDBUserDoc(user: SignupUser, hashedPassword: string): DBUserDoc {
     return {
         createdOn: new Date(),
+        lastModified: new Date(),
         deletedOn: null,
         displayName: user.displayName,
         email: user.email,
