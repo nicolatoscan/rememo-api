@@ -1,4 +1,62 @@
 FORMAT: 1A
-HOST: https://polls.apiblueprint.org/
+HOST: https://rememo-api.herokuapp.com/api/v1
 
-# rememo
+# Rememo
+
+# Group Authentication
+
+## Login [/auth/login]
+
+### Login [POST]
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "username": "Username",
+                "password": "password"
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Authentication: Token
+
+    + Body
+
+            {
+                "username": "Username",
+                "email": "email@example.com",
+                "displayName": "Name Surname"
+            }
+            
+## Signup [/auth/signup]
+
+### Signup [POST]
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "username": "Username",
+                "password": "password",
+                "email": "email@example.com"
+                "displayName": "Name Surname",
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Authentication: Token
+
+    + Body
+
+            {
+                "username": "Username",
+                "email": "email@example.com",
+                "displayName": "Name Surname"
+            }
