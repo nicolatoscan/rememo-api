@@ -1,10 +1,17 @@
 import joi from 'joi';
+import { DBObject } from './misc.models';
 
 export interface User {
     username: string;
     displayName: string;
     email: string;
-    password: string;
+    settings?: { [id: string]: string };
+}
+
+export interface DBUserDoc extends User, DBObject {
+    password: string,
+    createdOn: Date,
+    deletedOn: Date | null
 }
 
 export function validateUser(user: unknown): { value?: User, error?: string } {
@@ -25,7 +32,15 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
             username: (user as User).username,
             displayName: (user as User).displayName,
             email: (user as User).email,
-            password: (user as User).password
         }
+    };
+}
+
+export function getUserFromDBDoc(doc: DBUserDoc): User {
+    return {
+        displayName: doc.displayName,
+        email: doc.email,
+        username: doc.username,
+        settings: doc.settings
     };
 }

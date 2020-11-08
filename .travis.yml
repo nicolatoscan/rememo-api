@@ -1,9 +1,14 @@
 language : node_js
 node_js:
  - node
+services:
+ - docker
 os:
  - linux
- - osx
- - windows
+  - windows
 install:
+ - echo -en "PORT=$PORT\nMONGODB_CONNECTION_STRING=$MONGODB_CONNECTION_STRING\nTOKEN_SECRET=$TOKEN_SECRET\nCRYPTO_SECRET=$CRYPTO_SECRET\nDEFAULT_DB=$DEFAULT_DB" > .env
+ - cat .env
+ - docker build -t rememo-api .
+ - docker run -d -p 3000:$PORT --env-file ./.env  rememo-api
  - npm install
