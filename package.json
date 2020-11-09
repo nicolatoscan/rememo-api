@@ -6,6 +6,8 @@
   "scripts": {
     "serve": "npm run transpile && npm run start",
     "start": "node dist/source/index.js",
+    "serve:test": "npm run transpile && npm run start:test",
+    "start:test": "node dist/source/index.js --test",
     "transpile": "tsc",
     "postinstall": "npm run transpile",
     "commit": "git-cz",
