@@ -41,7 +41,7 @@ export function validateWord(word: unknown): { value?: Word, error?: string } {
     return { value: (word as Word) };
 }
 
-export function validateCollection(collection: Collection): { value?: Collection, error?: string } {
+export function validateCollection(collection: unknown): { value?: Collection, error?: string } {
     const validationResult = joi.object({
         _id: joi.string(),
         index: joi.number().integer().min(0).required(),
@@ -57,12 +57,11 @@ export function validateCollection(collection: Collection): { value?: Collection
         return { error: validationResult.error.message };
     }
 
-    const err = collection.words.map(w => validateWord(w).error).find(e => e !== undefined);
-    if (!err) {
-        collection.words.some(w1 => collection.words.find(w2 => w1.id === w2.id));
-    }
+    const err = (collection as Collection).words.map(w => validateWord(w).error).find(e => e !== undefined);
     if (err) {
         return { error: err };
+    } else if ((collection as Collection).words.some(w1 => (collection as Collection).words.find(w2 => w1.id === w2.id))) {
+        return { error: 'Duplicate word id' };
     }
 
     return { value: (collection as Collection) };
@@ -70,6 +69,7 @@ export function validateCollection(collection: Collection): { value?: Collection
 
 export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
     return {
+        _id: doc._id,
         index: doc.index,
         name: doc.name,
         description: doc.description,
