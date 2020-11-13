@@ -7,8 +7,8 @@ export interface Word {
     index: number;
     original: string;
     translation: string;
-    languageFrom: string | undefined;
-    languageTo: string | undefined;
+    languageFrom?: string;
+    languageTo?: string;
 }
 
 export interface Collection {
@@ -17,8 +17,8 @@ export interface Collection {
     name: string;
     description: string;
     owner: string;
-    languageFrom: string | undefined;
-    languageTo: string | undefined;
+    languageFrom?: string;
+    languageTo?: string;
     words: Word[];
 }
 
