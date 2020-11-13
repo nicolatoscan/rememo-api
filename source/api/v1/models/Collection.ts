@@ -1,8 +1,9 @@
 import joi from 'joi';
+import { ObjectId } from 'mongodb';
 import { DBObject } from './misc.models';
 
 export interface Word {
-    id: number;
+    _id?: string | ObjectId;
     index: number;
     original: string;
     translation: string;
@@ -24,9 +25,9 @@ export interface Collection {
 export interface DBCollectionDoc extends Collection, DBObject {
 }
 
-export function validateWord(word: unknown): { value?: Word, error?: string } {
+export function validateWord(word: unknown, idRequired = false): { value?: Word, error?: string } {
     const validationResult = joi.object({
-        id: joi.number().integer().min(0).required(),
+        _id: idRequired ? joi.string().required() : joi.string(),
         index: joi.number().integer().min(0).required(),
         original: joi.string().required(),
         translation: joi.string().required(),
@@ -41,9 +42,9 @@ export function validateWord(word: unknown): { value?: Word, error?: string } {
     return { value: (word as Word) };
 }
 
-export function validateCollection(collection: unknown): { value?: Collection, error?: string } {
+export function validateCollection(collection: unknown, idRequired = false): { value?: Collection, error?: string } {
     const validationResult = joi.object({
-        _id: joi.string(),
+        _id: idRequired ? joi.string().required() : joi.string(),
         index: joi.number().integer().min(0).required(),
         name: joi.string().required(),
         description: joi.string().required(),
@@ -60,8 +61,6 @@ export function validateCollection(collection: unknown): { value?: Collection, e
     const err = (collection as Collection).words.map(w => validateWord(w).error).find(e => e !== undefined);
     if (err) {
         return { error: err };
-    } else if ((collection as Collection).words.some(w1 => (collection as Collection).words.find(w2 => w1.id === w2.id))) {
-        return { error: 'Duplicate word id' };
     }
 
     return { value: (collection as Collection) };
@@ -78,7 +77,7 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
         languageTo: doc.languageTo,
         words: doc.words.map(w => {
             return {
-                id: w.id,
+                _id: w._id,
                 index: w.index,
                 original: w.original,
                 translation: w.translation,
@@ -101,7 +100,7 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         languageTo: collection.languageTo,
         words: collection.words.map(w => {
             return {
-                id: w.id,
+                _id: w._id,
                 index: w.index,
                 original: w.original,
                 translation: w.translation,
