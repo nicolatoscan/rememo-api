@@ -24,8 +24,7 @@ export default class App {
     }
 
     private normalizePort(val: string | number | undefined, fallback = 3000) : number {
-        if (typeof val === 'string')
-        {
+        if (typeof val === 'string') {
             const port = parseInt(val, 10);
             if (!isNaN(port) && port > 0)
                 return port;

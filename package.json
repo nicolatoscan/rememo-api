@@ -11,7 +11,7 @@
     "transpile": "tsc",
     "postinstall": "npm run transpile",
     "commit": "git-cz",
-    "test:postman": "newman run test/postman/Rememo.postman_collection.json -e test/postman/Remmeo.postman_environment.json",
+    "test:postman": "newman run test/postman/Rememo.postman_collection.json -e test/postman/Rememo.postman_environment.json",
     "test:mocha:serve": "npm run transpile && npm run test:mocha:start",
     "test:mocha:start": "mocha ./dist/test/index.test.js",
     "test": "npm run test:mocha:serve && npm run test:postman"
