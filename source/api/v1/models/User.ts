@@ -20,20 +20,14 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
         username: joi.string().min(6).required(),
         displayName: joi.string().min(6).required(),
         email: joi.string().email().required(),
-        password: joi.string().min(6).required()
     }).validate(user);
 
     if (validationResult.error) {
         return { error: validationResult.error.message };
     }
 
-    return {
-        value: {
-            username: (user as User).username,
-            displayName: (user as User).displayName,
-            email: (user as User).email,
-        }
-    };
+    return {value: (user as User)};
+
 }
 
 export function getUserFromDBDoc(doc: DBUserDoc): User {

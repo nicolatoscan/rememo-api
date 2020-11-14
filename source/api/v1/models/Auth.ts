@@ -20,8 +20,8 @@ export interface UpdateUser extends LoginUser{
 export function validateUpdateUser(updateUser: unknown): { value?: UpdateUser, error?: string } {
 
     const validationResult = joi.object({
-        username: joi.string().min(6),
-        password: joi.string().min(6),
+        username: joi.string().min(6).required(),
+        password: joi.string().min(6).required(),
         email: joi.string().email(),
         displayName: joi.string().min(6),
         newPassword: joi.string().min(6)

@@ -3,6 +3,66 @@ import * as AuthModels from '../../../../source/api/v1/models/Auth';
 
 export default function (): void {
     describe('Auth', function () {
+
+        it('should validate Update user', function() {
+            const users: AuthModels.UpdateUser[] = [{
+                username: 'correctUsername',
+                password: 'LongPassword'
+            },{
+                username: 'correctUsername',
+                password: 'LongPassword',
+                newPassword: 'newpassword'
+            },{
+                username: 'correctUsername',
+                password: 'LongPassword',
+                email: 'email.mail@onion.com'
+            },{
+                username: 'correctUsername',
+                password: 'LongPassword',
+                newPassword: 'newpassword',
+                email: 'email.mail@onion.com'
+            }];
+
+            for (const u of users) {
+                const res = AuthModels.validateUpdateUser(u);
+                assert.isUndefined(res.error, res.error);
+                assert.deepEqual(u, res.value, 'Object not equal to source object');
+            }
+        });
+
+        it('should not validate Update user', function() {
+            const users: AuthModels.UpdateUser[] = [{
+                username: 'shus',
+                password: 'LongPassword'
+            },{
+                username: 'correctUsername',
+                password: 'shps',
+                newPassword: 'newpassword'
+            },{
+                username: 'correctUsername',
+                password: 'LongPassword',
+                email: 'email.mail.com'
+            },{
+                username: 'correctUsername',
+                password: 'LongPassword',
+                newPassword: '66',
+                email: 'email.mail@onion.com'
+            },{
+                username: 'correctUsername',
+                password: 'LongPassword',
+                displayName: 'ah'
+            },{
+                username: 'f',
+                password: 'LongPassword',
+            }];
+
+            for (const u of users) {
+                const res = AuthModels.validateLoginUser(u);
+                assert.isString(res.error, `No error string returned on ${JSON.stringify(u)}`);
+                assert.isUndefined(res.value, 'Returned incorrect value');
+            }
+        });
+
         it('should validate Login user', function() {
             const users: AuthModels.LoginUser[] = [{
                 username: 'correctUsername',

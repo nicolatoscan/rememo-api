@@ -67,9 +67,9 @@ async function updateLoggedUser(req: express.Request, res: express.Response) {
             const hashedPassword = await bcrypt.hash(valUser.value.newPassword, salt);
             await databaseService.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { password: hashedPassword } });
         }
-
+        return res.send('User updated');
     }
-    return res.send('User updated');
+    
 }
 
 
