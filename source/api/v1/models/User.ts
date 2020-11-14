@@ -19,7 +19,6 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
         username: joi.string().min(6).required(),
         displayName: joi.string().min(6).required(),
         email: joi.string().email().required(),
-        password: joi.string().min(6).required()
     }).validate(user);
 
     if (validationResult.error) {

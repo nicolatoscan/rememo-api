@@ -2,13 +2,37 @@ import joi from 'joi';
 import { DBUserDoc } from './User';
 
 export interface LoginUser {
-    username: string,
-    password: string
+    username: string;
+    password: string;
 }
 
 export interface SignupUser extends LoginUser {
     displayName: string;
     email: string;
+}
+
+export interface UpdateUser extends LoginUser{
+    displayName?: string;
+    email?: string;
+    newPassword?: string;
+}
+
+export function validateUpdateUser(updateUser: unknown): { value?: UpdateUser, error?: string } {
+
+    const validationResult = joi.object({
+        username: joi.string().min(6).required(),
+        password: joi.string().min(6).required(),
+        email: joi.string().email(),
+        displayName: joi.string().min(6),
+        newPassword: joi.string().min(6)
+    }).validate(updateUser);
+
+    if (validationResult.error) {
+        return { error: validationResult.error.message };
+    }
+
+    return {value: (updateUser as UpdateUser)};
+    
 }
 
 export function validateLoginUser(loginUser: unknown): { value?: LoginUser, error?: string } {

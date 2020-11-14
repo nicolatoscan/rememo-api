@@ -1,33 +1,86 @@
 import * as express from 'express';
 import databaseService from '../../../services/database.services';
 import * as Models from '../models';
+import bcrypt from 'bcryptjs';
 
-async function getUserById(req: express.Request, res: express.Response) {
-    const user = await databaseService.getCollection('users').findOne({ username: req.params.username });
-    if (user) { 
-        res.send(user);
-    }else{
+
+async function getLoggedUser(req: express.Request, res: express.Response) {
+
+    const user = await databaseService.getCollection('users').findOne({ username: res.locals.username });
+    if (user) {
+        res.send(Models.getUserFromDBDoc(user));
+    } else {
         res.status(404).send('User not found');
     }
 }
 
-async function postUser(req: express.Request, res: express.Response) {
-    const valUser = Models.validateUser(req.body);
+async function deleteLoggedUser(req: express.Request, res: express.Response) {
+    const valUser = Models.validateLoginUser(req.body);
     if (valUser.error) {
-        res.status(400).send(valUser.error);
+        return res.status(400).send(valUser.error);
     } else if (valUser.value) {
-        if (await databaseService.getCollection('users').findOne({ email: valUser.value.email })) {
-            res.status(403).send('Email already used');
-        } else {
-            const insertedId = (await databaseService.getCollection('users').insertOne(valUser.value)).insertedId;
-            res.status(201).send(insertedId);
+        //check username
+        if (valUser.value.username !== res.locals.username) {
+            return res.status(400).send('username and logged user do not match ');
         }
+
+        //check password
+        const user = (await databaseService.getCollection('users').findOne({ username: res.locals.username })) as Models.DBUserDoc;
+        if (!user || !(await bcrypt.compare(valUser.value.password, user.password))) {
+            return res.status(301).send('Wrong password');
+        }
+
+        //delete
+        await databaseService.getCollection('users').deleteOne({ username: res.locals.username });
+        return res.send('User deleted');
+
     }
 }
 
+async function updateLoggedUser(req: express.Request, res: express.Response) {
+    const valUser = Models.validateUpdateUser(req.body);
+
+    if (valUser.error) {
+        return res.status(400).send(valUser.error);
+    } else if (valUser.value) {
+
+        //check username
+        if (valUser.value.username !== res.locals.username) {
+            return res.status(400).send('username and logged user do not match ');
+        }
+
+        //check password
+        const user = (await databaseService.getCollection('users').findOne({ username: res.locals.username })) as Models.DBUserDoc;
+        if (!user || !(await bcrypt.compare(valUser.value.password, user.password))) {
+            return res.status(301).send('Wrong password');
+        }
+
+        //update
+        if (valUser.value.displayName) {
+            await databaseService.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { displayName: valUser.value.displayName } });
+        }
+        if (valUser.value.email) {
+            await databaseService.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { email: valUser.value.email } });
+        }
+        if (valUser.value.newPassword) {
+            const salt = await bcrypt.genSalt();
+            const hashedPassword = await bcrypt.hash(valUser.value.newPassword, salt);
+            await databaseService.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { password: hashedPassword } });
+        }
+        return res.send('User updated');
+    }
+    
+}
+
+
+
+
+
 export default function (): express.Router {
     const router = express.Router();
-    router.get('/:username', getUserById);
-    router.post('/', postUser);
+    router.get('/', getLoggedUser);
+    router.delete('/', deleteLoggedUser);
+    router.put('/', updateLoggedUser);
+
     return router;
 }
