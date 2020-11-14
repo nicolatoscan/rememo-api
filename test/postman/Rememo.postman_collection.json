@@ -22,9 +22,9 @@
 							"});\r",
 							"pm.test('Has all the property', function() {\r",
 							"    const responseJson = pm.response.json();\r",
-							"    pm.expect(responseJson.displayName).to.eql('Test Displayname');\r",
-							"    pm.expect(responseJson.email).to.eql('email@example.com');\r",
-							"    pm.expect(responseJson.username).to.eql('TestUsername');\r",
+							"    pm.expect(responseJson.displayName).to.equal('Test Displayname');\r",
+							"    pm.expect(responseJson.email).to.equal('email@example.com');\r",
+							"    pm.expect(responseJson.username).to.equal('TestUsername');\r",
 							"    pm.expect(responseJson.password).to.be.undefined;\r",
 							"})\r",
 							"pm.test('Has authentication header', function() {\r",
@@ -82,10 +82,10 @@
 							"});\r",
 							"pm.test('Has all the property', function() {\r",
 							"    const responseJson = pm.response.json();\r",
-							"    pm.expect(responseJson.displayName).to.eql('Test Displayname');\r",
-							"    pm.expect(responseJson.email).to.eql('email@example.com');\r",
-							"    pm.expect(responseJson.username).to.eql('TestUsername');\r",
-							"    pm.expect(responseJson.password).to.be.undefined;\r",
+							"    pm.expect(responseJson.displayName).to.equal('Test Displayname');\r",
+							"    pm.expect(responseJson.email).to.equal('email@example.com');\r",
+							"    pm.expect(responseJson.username).to.equal('TestUsername');\r",
+							"    pm.expect(responseJson.password).to.equal(undefined);\r",
 							"})\r",
 							"pm.test('Has authentication header', function() {\r",
 							"    const auth = pm.response.headers.find(h => h.key === 'Authentication').value;\r",
@@ -160,7 +160,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3RVc2VybmFtZSIsImlhdCI6MTYwNTIyNzEwNH0.mpRt_fL3QgmJrVzrMlpMnZ0qvVaU3e8dvfke-XlOazk",
+						"value": "{{Token}}",
 						"type": "text"
 					}
 				],
@@ -240,6 +240,167 @@
 						"collections",
 						"{{CollectionId}}",
 						"words"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4dd4e7ea-2013-4f4e-96cb-5e45ef2b97ee",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.displayName).to.equal('Test Displayname');",
+							"    pm.expect(responseJson.email).to.equal('email@example.com');",
+							"    pm.expect(responseJson.username).to.equal('TestUsername');",
+							"    pm.expect(responseJson.password).to.equals(undefined);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/users",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1e7917c6-b9d4-4915-9704-10a1dc54945d",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check response', function() {\r",
+							"   pm.expect(pm.response.text() === 'User update'); \r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUsername\",\r\n    \"displayName\":\"nuovo nome\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/users",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "750fc0d8-c3d2-4628-b4b3-c67580569a28",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check response', function() {\r",
+							"   pm.expect(pm.response.text() === 'User deleted'); \r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUsername\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/users",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
 					]
 				}
 			},
