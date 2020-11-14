@@ -1,0 +1,203 @@
+swagger: '2.0'
+info:
+  version: '0.1.3'
+  title: "Rememo API"
+  description: TODO
+  license:
+    name: MIT
+    url: https://github.com/nicolatoscan/rememo-api/blob/main/LICENSE
+host: rememo-api.herokuapp.com
+basePath: /api/v1
+tags:
+- name: "auth"
+  description: "Authentication"
+- name: "users"
+  description: "Users"
+- name: "collections"
+  description: "Collections"
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /auth/signup:
+    post:
+      tags:
+      - "auth"
+      summary: Create a New User
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SignupUser'
+      responses:
+        201:
+          description: ''
+          schema:
+            $ref: '#/definitions/SignupUserResponse'
+          examples:
+            application/json:
+                username: Test Displayname
+                email: email@example.com
+                displayName: TestUsername
+  /auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: Login
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginUser'
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/SignupUserResponse'
+          examples:
+            application/json:
+                username: Test Displayname
+                email: email@example.com
+                displayName: TestUsername
+  /collections:
+    post:
+      tags:
+      - "collections"
+      summary: Create a new Collection
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Collection'
+      responses:
+        201:
+          description: ''
+          schema:
+            $ref: '#/definitions/ReturnId'
+          examples:
+            application/json:
+                _id: 0123456789abcdef01234567
+  /collections/{collectionId}/words:
+    post:
+      tags:
+      - "collections"
+      summary: Create a new Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Word'
+      responses:
+        201:
+          description: ''
+          schema:
+            $ref: '#/definitions/Word'
+          examples:
+            application/json:
+                _id: 0123456789abcdef01234567
+definitions:
+  ReturnId:
+    title: ReturnId
+    type: object
+    properties:
+      _id:
+        type: string
+    required:
+      - _id
+  LoginUser:
+    title: LoginUser
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+    required:
+      - username
+      - password
+  SignupUser:
+    title: SignupUser
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      displayName:
+        type: string
+      email:
+        type: string
+    required:
+      - username
+      - password
+      - displayName
+      - email
+  SignupUserResponse:
+    title: SignupUser
+    type: object
+    properties:
+      username:
+        type: string
+      displayName:
+        type: string
+      email:
+        type: string
+    required:
+      - username
+      - displayName
+      - email
+  Collection:
+    title: Collection
+    type: object
+    properties:
+      index:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      owner:
+        type: string
+      languageFrom:
+        type: string
+      languageTo:
+        type: string
+      words:
+        type: array
+        items:
+          $ref: '#/definitions/Word'
+    required:
+      - index
+      - name
+      - description
+      - owner
+      - words
+  Word:
+    title: Word
+    type: object
+    properties:
+      index:
+        type: integer
+      original:
+        type: string
+      translation:
+        type: string
+      languageFrom:
+        type: string
+      languageTo:
+        type: string
+    required:
+      - index
+      - original
+      - translation
