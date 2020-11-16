@@ -32,13 +32,26 @@ async function getCollectionById(req: express.Request, res: express.Response){
     if (!idColl) {
         return res.status(404).send('No collection id found');
     }
-    console.log(res.locals.username);
-    console.log(idColl);
+
     const collection = await databaseService.getCollection('collections').findOne({_id: new ObjectId(idColl), owner: res.locals.username });
     if (!collection) {
         return res.status(404).send('No collection found');
     } else {
         return res.send(Models.getCollectionFromDBDoc(collection));
+    }
+}
+
+async function deleteCollectionById(req: express.Request, res: express.Response){
+    const idColl = req.params.idColl;
+    if (!idColl) {
+        return res.status(404).send('No collection id found');
+    }
+
+    const collection = await databaseService.getCollection('collections').deleteOne({_id: new ObjectId(idColl), owner: res.locals.username });
+    if (!collection) {
+        return res.status(404).send('No collection found');
+    } else {
+        return res.send({message:'Collection deleted'});
     }
 }
 
@@ -69,6 +82,7 @@ export default function (): express.Router {
     router.get('/', getCollections);
     router.post('/', createCollection);
     router.get('/:idColl', getCollectionById);
+    router.delete('/:idColl', deleteCollectionById);
     router.post('/:idColl/words', createWord);
     return router;
 }
