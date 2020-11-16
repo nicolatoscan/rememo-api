@@ -60,12 +60,7 @@ export default function (): void {
                     translation: 'Rosso',
                     languageFrom: 'en',
                     languageTo: 'it',
-                }],
-            },{
-                index: 1,
-                name: 'Testing Collection',
-                description: 'Testing description',
-                words: [],
+                }]
             }];
 
             for (const c of collections) {

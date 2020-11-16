@@ -48,7 +48,7 @@ export function validateCollection(collection: unknown, idRequired = false): { v
         index: joi.number().integer().min(0).required(),
         name: joi.string().required(),
         description: joi.string().required(),
-        owner: joi.string().required(),
+        owner: joi.string(),
         languageFrom: joi.string().length(2),
         languageTo: joi.string().length(2),
         words: joi.array()

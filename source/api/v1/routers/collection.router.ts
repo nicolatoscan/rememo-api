@@ -10,6 +10,7 @@ async function createCollection(req: express.Request, res: express.Response) {
     } else if (valCollection.value) {
 
         const collection = valCollection.value;
+        collection.owner = res.locals.username;
         const insertedId = (await databaseService.getCollection('collections').insertOne(Models.createDBCollectionDoc(collection))).insertedId;
         return res.status(201).send({ _id: insertedId });
 
@@ -29,7 +30,7 @@ async function createWord(req: express.Request, res: express.Response) {
         const word = valWord.value;
         word._id = new ObjectId();
         await databaseService.getCollection('collections').updateOne(
-            { _id: new ObjectId(idColl) }, 
+            { _id: new ObjectId(idColl), owner: res.locals.username }, 
             { $push: { words: word } }
         );
 
