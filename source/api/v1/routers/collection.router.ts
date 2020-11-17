@@ -51,7 +51,7 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
     if (!collection) {
         return res.status(404).send('No collection found');
     } else {
-        return res.send({message:'Collection deleted'});
+        return res.status(204).send({message:'Collection deleted'});
     }
 }
 
@@ -76,6 +76,26 @@ async function createWord(req: express.Request, res: express.Response) {
     }
 }
 
+async function updateCollectionById(req: express.Request, res: express.Response){
+    const idColl = req.params.idColl;
+    if (!idColl) {
+        return res.status(404).send('No collection id found');
+    }
+
+    const valCollection = Models.validateCollection(req.body);
+    if(valCollection.error){
+        return res.status(400).send(valCollection.error);
+    }else if(valCollection.value){
+        const collection:any = valCollection.value;
+        delete collection._id;
+        delete collection.owner; 
+        delete collection.words;
+        await databaseService.getCollection('collections').updateOne({_id: new ObjectId(idColl), owner: res.locals.username },{$set:collection});
+        return res.status(204).send({message:'Collection updated'});
+    }
+
+}
+
 
 export default function (): express.Router {
     const router = express.Router();
@@ -84,5 +104,6 @@ export default function (): express.Router {
     router.get('/:idColl', getCollectionById);
     router.delete('/:idColl', deleteCollectionById);
     router.post('/:idColl/words', createWord);
+    router.put('/:idColl', updateCollectionById);
     return router;
 }
