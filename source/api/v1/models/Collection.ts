@@ -77,7 +77,7 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
         languageTo: doc.languageTo,
         words: doc.words.map(w => {
             return {
-                _id: w._id,
+                _id: w._id?.toString(),
                 index: w.index,
                 original: w.original,
                 translation: w.translation,
