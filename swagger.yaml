@@ -21,6 +21,7 @@ consumes:
 - application/json
 produces:
 - application/json
+
 paths:
   /auth/signup:
     post:
@@ -43,6 +44,7 @@ paths:
                 username: Test Displayname
                 email: email@example.com
                 displayName: TestUsername
+  
   /auth/login:
     post:
       tags:
@@ -64,7 +66,55 @@ paths:
                 username: Test Displayname
                 email: email@example.com
                 displayName: TestUsername
+  
   /collections:
+    get:
+      tags:
+      - "collections"
+      summary: Get all the Collections
+      responses:
+        200:
+          description: All the Collections
+          schema:
+            $ref: '#/definitions/CollectionArray'
+          examples:
+            application/json:
+              [
+                {
+                  _id: 5fb6e4b522935b001216de8c,
+                  index: 1,
+                  name: Testing Collection,
+                  description: Testing description,
+                  owner: TestUsername,
+                  languageFrom: null,
+                  languageTo: null,
+                  words: [
+                    {
+                      _id: 5fb6e4b522935b001216de8d,
+                      index: 1,
+                      original: Red,
+                      translation: Rosso
+                    }
+                  ]
+                },
+                {
+                  _id: 6ts6e4b123935b004476de8c,
+                  index: 2,
+                  name: Testing Collection,
+                  description: Testing description,
+                  owner: TestUsername,
+                  languageFrom: null,
+                  languageTo: null,
+                  words: [
+                    {
+                      _id: 6ts6e4b123935b004476de8f,
+                      index: 2,
+                      original: Green,
+                      translation: Verde
+                    }
+                  ]
+                }
+              ]
     post:
       tags:
       - "collections"
@@ -83,6 +133,38 @@ paths:
           examples:
             application/json:
                 _id: 0123456789abcdef01234567
+  
+  /collections/{collectionId}:
+    get:
+      tags:
+      - "collections"
+      summary: Get a Collection by its id
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: A Collection of Words identifiend by its id
+          schema:
+            $ref: '#/definitions/Collection'
+          examples:
+            application/json:
+                index: 123
+                name: My Favorite Colors
+                description: All my favorite colors put together!
+                owner: Mario
+                words: [
+                  {
+                    index: 456,
+                    original: Red,
+                    translation: Rosso,
+                    languageFrom: English,
+                    languageTo: Italiano
+                  }
+                ]
+  
   /collections/{collectionId}/words:
     post:
       tags:
@@ -106,6 +188,25 @@ paths:
           examples:
             application/json:
                 _id: 0123456789abcdef01234567
+  
+  /collections/{collectionId}/words/{wordId}:
+    delete:
+      tags:
+      - "collections"
+      summary: Delete a Word by its id
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Word deleted
+
 definitions:
   ReturnId:
     title: ReturnId
@@ -115,6 +216,7 @@ definitions:
         type: string
     required:
       - _id
+  
   LoginUser:
     title: LoginUser
     type: object
@@ -126,6 +228,7 @@ definitions:
     required:
       - username
       - password
+  
   SignupUser:
     title: SignupUser
     type: object
@@ -143,6 +246,7 @@ definitions:
       - password
       - displayName
       - email
+  
   SignupUserResponse:
     title: SignupUser
     type: object
@@ -157,6 +261,7 @@ definitions:
       - username
       - displayName
       - email
+  
   Collection:
     title: Collection
     type: object
@@ -183,6 +288,13 @@ definitions:
       - description
       - owner
       - words
+  
+  CollectionArray:
+    title: CollectionArray
+    type: array
+    items:
+      $ref: '#/definitions/Collection'
+  
   Word:
     title: Word
     type: object
