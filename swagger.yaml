@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: '0.1.3'
+  version: '0.2.2'
   title: "Rememo API"
   description: TODO
   license:
@@ -164,6 +164,35 @@ paths:
                     languageTo: Italiano
                   }
                 ]
+    put:
+      tags:
+      - "collections"
+      summary: Update a Collection by its id
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateCollection'
+      responses:
+        204:
+          description: 'Collection updated'
+    delete:
+      tags:
+      - "collections"
+      summary: Delete a Collection by its id
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: 'Collection deleted'
   
   /collections/{collectionId}/words:
     post:
@@ -294,6 +323,25 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Collection'
+  
+  UpdateCollection:
+    title: Collection
+    type: object
+    properties:
+      index:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      languageFrom:
+        type: string
+      languageTo:
+        type: string
+    required:
+      - index
+      - name
+      - description
   
   Word:
     title: Word
