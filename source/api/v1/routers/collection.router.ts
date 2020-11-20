@@ -163,8 +163,7 @@ async function deleteWord(req: express.Request, res: express.Response) {
     if (!idWord) {
         return res.status(404).send('No word id found');
     }
-    console.log(idColl);
-    console.log(idWord);
+
     const word = await databaseService.getCollection('collections').updateOne(
         { _id: new ObjectId(idColl), owner: res.locals.username }, 
         {$pull: {words: {_id: new ObjectId(idWord)} } }
