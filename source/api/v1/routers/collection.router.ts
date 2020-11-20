@@ -153,6 +153,31 @@ async function updateWord(req: express.Request, res: express.Response) {
 
 }
 
+async function deleteWord(req: express.Request, res: express.Response) {
+    const idColl = req.params.idColl;
+    if (!idColl) {
+        return res.status(404).send('No collection id found');
+    }
+
+    const idWord = req.params.idWord;
+    if (!idWord) {
+        return res.status(404).send('No word id found');
+    }
+    console.log(idColl);
+    console.log(idWord);
+    const word = await databaseService.getCollection('collections').updateOne(
+        { _id: new ObjectId(idColl), owner: res.locals.username }, 
+        {$pull: {words: {_id: new ObjectId(idWord)} } }
+    );
+
+    if (!word) {
+        return res.status(404).send('No word found');
+    } else {
+        return res.status(204).send({ message: 'Word deleted' });
+    }
+
+}
+
 
 export default function (): express.Router {
     const router = express.Router();
@@ -163,7 +188,7 @@ export default function (): express.Router {
     router.post('/:idColl/words', createWord);
     router.put('/:idColl', updateCollectionById);
     router.get('/:idColl/words/:idWord', getWord);
-    //router.delete('/:idColl/words/:idWord', deleteWord);
+    router.delete('/:idColl/words/:idWord', deleteWord);
     router.put('/:idColl/words/:idWord', updateWord);
     return router;
 }
