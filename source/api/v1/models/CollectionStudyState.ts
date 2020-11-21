@@ -10,18 +10,20 @@ export interface DBCollectionStudyStateDoc extends DBObject {
     lastDoneCorrectDate: Date;
     lastDoneCorrectCounter: number;
 
-    wordsState: {
-        wordId: ObjectId;
-        learned: boolean;
-        score: number;
-        lastDoneDate: Date;
-        lastDoneCorrectDate: Date;
-        lastDoneCounter: number;
-        lastDoneCorrectCounter: number;
-    }[];
+    wordsState: WordStudyState[];
 }
 
-export function getEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []) : DBCollectionStudyStateDoc {
+export interface WordStudyState {
+    wordId: ObjectId;
+    learned: boolean;
+    score: number;
+    lastDoneDate: Date;
+    lastDoneCorrectDate: Date;
+    lastDoneCounter: number;
+    lastDoneCorrectCounter: number;
+}
+
+export function getEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBCollectionStudyStateDoc {
     return {
         createdOn: new Date(),
         lastModified: new Date(),
@@ -32,19 +34,18 @@ export function getEmptyDBCollectionStudyStateDoc(collectionId: string, userId: 
         lastDoneDate: new Date(),
         lastDoneCorrectDate: new Date(),
         lastDoneCorrectCounter: 0,
+        wordsState: wordsIds.map(id => getEmptyWordStudyState(id))
+    };
+}
 
-        wordsState: wordsIds.map(id => {
-            return {
-                wordId: new ObjectId(id),
-                learned: false,
-                score: 0,
-                lastCorrectCounter: 0,
-                lastDoneCounter: 0,
-                lastDoneDate: new Date(),
-                lastDoneCorrectDate: new Date(),
-                lastDoneCorrectCounter: 0
-
-            };
-        })
+export function getEmptyWordStudyState(wordId: string): WordStudyState {
+    return {
+        wordId: new ObjectId(wordId),
+        learned: false,
+        score: 0,
+        lastDoneDate: new Date(),
+        lastDoneCorrectDate: new Date(),
+        lastDoneCounter: 0,
+        lastDoneCorrectCounter: 0
     };
 }

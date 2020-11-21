@@ -95,14 +95,16 @@ async function createWord(req: express.Request, res: express.Response) {
     } else if (valWord.value) {
         const word = valWord.value;
         word._id = new ObjectId();
+
         await databaseService.getCollection('collections').updateOne(
             { _id: new ObjectId(idColl), owner: res.locals.username },
             { $push: { words: word } }
         );
-        // await databaseService.getCollection('collection-study-state').updateOne(
-        //     { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
-        //     {} //{ $push: { words: word } }
-        // );
+
+        await databaseService.getCollection('collection-study-state').updateOne(
+            { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
+            { $push: { wordsState: Models.getEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
+        );
 
         return res.status(201).send({ _id: word._id });
     }
@@ -179,6 +181,12 @@ async function deleteWord(req: express.Request, res: express.Response) {
     const word = await databaseService.getCollection('collections').updateOne(
         { _id: new ObjectId(idColl), owner: res.locals.username },
         { $pull: { words: { _id: new ObjectId(idWord) } } }
+    );
+
+    
+    await databaseService.getCollection('collection-study-state').updateOne(
+        { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
+        { $pull: { wordsState: { wordId: new ObjectId(idWord) } } }
     );
 
     if (!word) {
