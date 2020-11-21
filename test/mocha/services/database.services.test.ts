@@ -1,27 +1,27 @@
-import databaseServices from '../../../source/services/database.services';
+import databaseHelper from '../../../source/helpers/database.helper';
 
 export default function (): void {
     describe('Database services', function () {
 
         before(async function () {
             this.timeout(10000);
-            await databaseServices.connect();
+            await databaseHelper.connect();
         });
 
         it('should get the connection', function() {
-            databaseServices.getConnection();
+            databaseHelper.getConnection();
         });
 
         it('should get the rememo DB', function() {
-            databaseServices.getDb();
+            databaseHelper.getDb();
         });
         it('should get the collections', function() {
-            databaseServices.getCollection('collections');
-            databaseServices.getCollection('users');
+            databaseHelper.getCollection('collections');
+            databaseHelper.getCollection('users');
         });
 
         after(function() {
-            databaseServices.closeConnection();
+            databaseHelper.closeConnection();
         });
 
     });

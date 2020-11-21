@@ -1,13 +1,13 @@
 import { Collection, Db, MongoClient } from 'mongodb';
 
-class DatabaseService {
-    private static instance: DatabaseService;
+class DatabaseHelper {
+    private static instance: DatabaseHelper;
     private connection: MongoClient | null = null;
     constructor() {
-        if (DatabaseService.instance) {
-            return DatabaseService.instance;
+        if (DatabaseHelper.instance) {
+            return DatabaseHelper.instance;
         }
-        DatabaseService.instance = this;
+        DatabaseHelper.instance = this;
     }
 
     public async connect(): Promise<MongoClient> {
@@ -42,5 +42,5 @@ class DatabaseService {
 
 }
 
-export default new DatabaseService();
+export default new DatabaseHelper();
 

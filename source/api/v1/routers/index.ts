@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { auth } from '../../../services/auth.services';
+import { auth } from '../../../helpers/auth.helper';
 import getUserRouter from './users.router';
 import getAuthRouter from './auth.router';
 import getCollectionRouter from './collection.router';

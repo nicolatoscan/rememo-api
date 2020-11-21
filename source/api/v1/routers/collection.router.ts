@@ -1,13 +1,13 @@
 import * as express from 'express';
 import * as Models from '../models';
-import databaseService from '../../../services/database.services';
+import databaseHelper from '../../../helpers/database.helper';
 import LANG from '../../../lang';
 import { ObjectId } from 'mongodb';
 
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
 
-    const collections = await databaseService.getCollection('collections').find({ owner: res.locals.username }).toArray();
+    const collections = await databaseHelper.getCollection('collections').find({ owner: res.locals.username }).toArray();
 
     return res.send(collections.map(col => Models.getCollectionFromDBDoc(col)));
 
@@ -23,9 +23,9 @@ async function createCollection(req: express.Request, res: express.Response) {
         collection.owner = res.locals.username;
 
         const collectionToInsert = Models.createDBCollectionDoc(collection);
-        const insertedId = (await databaseService.getCollection('collections').insertOne(collectionToInsert)).insertedId;
+        const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
 
-        await databaseService.getCollection('collection-study-state').insertOne(
+        await databaseHelper.getCollection('collection-study-state').insertOne(
             Models.getEmptyDBCollectionStudyStateDoc(insertedId, res.locals._id, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
         );
 
@@ -39,7 +39,7 @@ async function getCollectionById(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    const collection = await databaseService.getCollection('collections').findOne({ _id: new ObjectId(idColl), owner: res.locals.username });
+    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(idColl), owner: res.locals.username });
     if (!collection) {
         return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
     } else {
@@ -63,7 +63,7 @@ async function updateCollectionById(req: express.Request, res: express.Response)
         delete collection.owner;
         delete collection.words;
         collection.lastModified = new Date();
-        await databaseService.getCollection('collections').updateOne({ _id: new ObjectId(idColl), owner: res.locals.username }, { $set: collection });
+        await databaseHelper.getCollection('collections').updateOne({ _id: new ObjectId(idColl), owner: res.locals.username }, { $set: collection });
 
         return res.status(204).send({ message: LANG.COLLECTION_UPDATED });
     }
@@ -76,8 +76,8 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    await databaseService.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
-    await databaseService.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) });
+    await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
+    await databaseHelper.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) });
 
     return res.status(204).send({ message: LANG.COLLECTION_DELETED });
 }
@@ -96,12 +96,12 @@ async function createWord(req: express.Request, res: express.Response) {
         const word = valWord.value;
         word._id = new ObjectId();
 
-        await databaseService.getCollection('collections').updateOne(
+        await databaseHelper.getCollection('collections').updateOne(
             { _id: new ObjectId(idColl), owner: res.locals.username },
             { $push: { words: word } }
         );
 
-        await databaseService.getCollection('collection-study-state').updateOne(
+        await databaseHelper.getCollection('collection-study-state').updateOne(
             { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
             { $push: { wordsState: Models.getEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
         );
@@ -122,7 +122,7 @@ async function getWord(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
-    const collection = await databaseService.getCollection('collections').findOne({ _id: new ObjectId(idColl), owner: res.locals.username });
+    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(idColl), owner: res.locals.username });
 
     if (!collection) {
         return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
@@ -157,7 +157,7 @@ async function updateWord(req: express.Request, res: express.Response) {
     } else if (valWord.value) {
         const word = valWord.value;
         word._id = new ObjectId(idWord);
-        await databaseService.getCollection('collections').updateOne(
+        await databaseHelper.getCollection('collections').updateOne(
             { _id: new ObjectId(idColl), owner: res.locals.username, 'words._id': word._id },
             { $set: { 'words.$': word } }
         );
@@ -178,13 +178,13 @@ async function deleteWord(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
-    const word = await databaseService.getCollection('collections').updateOne(
+    const word = await databaseHelper.getCollection('collections').updateOne(
         { _id: new ObjectId(idColl), owner: res.locals.username },
         { $pull: { words: { _id: new ObjectId(idWord) } } }
     );
 
     
-    await databaseService.getCollection('collection-study-state').updateOne(
+    await databaseHelper.getCollection('collection-study-state').updateOne(
         { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
         { $pull: { wordsState: { wordId: new ObjectId(idWord) } } }
     );

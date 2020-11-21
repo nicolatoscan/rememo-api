@@ -1,7 +1,7 @@
 import getServicesTests from './services';
 import getApiTests from './api';
 import dotenv from 'dotenv';
-import databaseServices from '../../source/services/database.services';
+import databaseHelper from '../../source/helpers/database.helper';
 dotenv.config({ path: './.env.test' });
 
 describe('Test', function() {
@@ -9,14 +9,14 @@ describe('Test', function() {
     // CLEAN DB
     before(async function() {
         this.timeout(20000);
-        await databaseServices.connect();
-        await databaseServices.getCollection('collections').drop();
-        await databaseServices.getCollection('users').drop();
-        await databaseServices.getCollection('collection-study-state').drop();
-        await databaseServices.getDb().createCollection('collections');
-        await databaseServices.getDb().createCollection('users');
-        await databaseServices.getDb().createCollection('collection-study-state');
-        databaseServices.closeConnection();
+        await databaseHelper.connect();
+        await databaseHelper.getCollection('collections').drop();
+        await databaseHelper.getCollection('users').drop();
+        await databaseHelper.getCollection('collection-study-state').drop();
+        await databaseHelper.getDb().createCollection('collections');
+        await databaseHelper.getDb().createCollection('users');
+        await databaseHelper.getDb().createCollection('collection-study-state');
+        databaseHelper.closeConnection();
         console.log('DATABASE CLEANED');
     });
 

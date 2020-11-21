@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import getVersionRouter from './api/router';
 import bodyParser from 'body-parser';
-import databaseService from './services/database.services';
+import databaseHelper from './helpers/database.helper';
 
 export default class App {
 
@@ -18,7 +18,7 @@ export default class App {
     }
 
     private async start(): Promise<void> {
-        await databaseService.connect();
+        await databaseHelper.connect();
         console.log('Database connected');
 
         this.middleware();
