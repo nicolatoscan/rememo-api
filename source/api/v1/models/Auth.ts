@@ -1,6 +1,8 @@
 import joi from 'joi';
 import { DBUserDoc } from './User';
 
+
+// --- INTERFACES ---
 export interface LoginUser {
     username: string;
     password: string;
@@ -17,6 +19,7 @@ export interface UpdateUser extends LoginUser{
     newPassword?: string;
 }
 
+// --- VAlIDATORS ---
 export function validateUpdateUser(updateUser: unknown): { value?: UpdateUser, error?: string } {
 
     const validationResult = joi.object({
@@ -66,7 +69,7 @@ export function validateSignupUser(loginUser: unknown): { value?: SignupUser, er
 }
 
 
-
+// --- DB parsers ---
 export function createDBUserDoc(user: SignupUser, hashedPassword: string): DBUserDoc {
     return {
         createdOn: new Date(),

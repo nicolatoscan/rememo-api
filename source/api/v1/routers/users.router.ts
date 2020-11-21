@@ -69,7 +69,7 @@ async function updateLoggedUser(req: express.Request, res: express.Response) {
         }
         return res.send('User updated');
     }
-    
+
 }
 
 
@@ -78,6 +78,7 @@ async function updateLoggedUser(req: express.Request, res: express.Response) {
 
 export default function (): express.Router {
     const router = express.Router();
+
     router.get('/', getLoggedUser);
     router.delete('/', deleteLoggedUser);
     router.put('/', updateLoggedUser);

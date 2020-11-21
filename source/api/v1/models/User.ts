@@ -1,6 +1,7 @@
 import joi from 'joi';
 import { DBObject } from './misc.models';
 
+// --- INTERFACES ---
 export interface User {
     username: string;
     displayName: string;
@@ -13,6 +14,7 @@ export interface DBUserDoc extends User, DBObject {
     deletedOn: Date | null
 }
 
+// --- VAlIDATORS ---
 export function validateUser(user: unknown): { value?: User, error?: string } {
 
     const validationResult = joi.object({
@@ -28,6 +30,7 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
     return { value: (user as User) };
 }
 
+// --- DB parsers ---
 export function getUserFromDBDoc(doc: DBUserDoc): User {
     return {
         displayName: doc.displayName,

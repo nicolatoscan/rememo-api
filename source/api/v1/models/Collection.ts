@@ -2,6 +2,7 @@ import joi from 'joi';
 import { ObjectId } from 'mongodb';
 import { DBObject } from './misc.models';
 
+// --- INTERFACES ---
 export interface Word {
     _id?: string | ObjectId;
     index: number;
@@ -25,6 +26,7 @@ export interface Collection {
 export interface DBCollectionDoc extends Collection, DBObject {
 }
 
+// --- VAlIDATORS ---
 export function validateWord(word: unknown, idRequired = false): { value?: Word, error?: string } {
     const validationResult = joi.object({
         _id: idRequired ? joi.string().required() : joi.string(),
@@ -66,6 +68,7 @@ export function validateCollection(collection: unknown, idRequired = false): { v
     return { value: (collection as Collection) };
 }
 
+// --- DB parsers ---
 export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
     return {
         _id: doc._id,
