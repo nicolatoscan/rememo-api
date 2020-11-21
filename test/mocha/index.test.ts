@@ -1,7 +1,7 @@
 import getServicesTests from './services';
 import getApiTests from './api';
 import dotenv from 'dotenv';
-import databaseServices from '../source/services/database.services';
+import databaseServices from '../../source/services/database.services';
 dotenv.config({ path: './.env.test' });
 
 describe('Test', function() {

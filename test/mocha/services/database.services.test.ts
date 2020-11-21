@@ -1,4 +1,4 @@
-import databaseServices from '../../source/services/database.services';
+import databaseServices from '../../../source/services/database.services';
 
 export default function (): void {
     describe('Database services', function () {

@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import * as AuthModels from '../../../../source/api/v1/models/Auth';
+import * as AuthModels from '../../../../../source/api/v1/models/Auth';
 
 export default function (): void {
     describe('Auth', function () {

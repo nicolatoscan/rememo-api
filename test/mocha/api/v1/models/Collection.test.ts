@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { Collection, Word, validateCollection, validateWord, createDBCollectionDoc } from '../../../../source/api/v1/models/Collection';
+import { Collection, Word, validateCollection, validateWord, createDBCollectionDoc } from '../../../../../source/api/v1/models/Collection';
 
 export default function (): void {
     describe('Collection', function () {

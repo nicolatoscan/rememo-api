@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import * as UserModels from '../../../../source/api/v1/models/User';
+import * as UserModels from '../../../../../source/api/v1/models/User';
 
 export default function (): void {
     describe('User', function () {

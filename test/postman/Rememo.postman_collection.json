@@ -264,7 +264,6 @@
 							"});",
 							"pm.test('Has all the property', function() {",
 							"    const responseJson = pm.response.json();",
-							"    console.log(responseJson)",
 							"    pm.expect(typeof responseJson[0]._id === 'string');",
 							"    pm.expect(typeof responseJson[0].index === 'number');",
 							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Collection','Testing Collection updated']);",
