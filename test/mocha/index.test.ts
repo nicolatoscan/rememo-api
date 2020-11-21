@@ -12,8 +12,10 @@ describe('Test', function() {
         await databaseServices.connect();
         await databaseServices.getCollection('collections').drop();
         await databaseServices.getCollection('users').drop();
+        await databaseServices.getCollection('collection-study-state').drop();
         await databaseServices.getDb().createCollection('collections');
         await databaseServices.getDb().createCollection('users');
+        await databaseServices.getDb().createCollection('collection-study-state');
         databaseServices.closeConnection();
         console.log('DATABASE CLEANED');
     });
