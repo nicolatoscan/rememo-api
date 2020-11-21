@@ -16,7 +16,7 @@ export function auth(req: Request, res: Response, next: NextFunction): void {
     }
 }
 
-export function addAuthToResponse(res: Response, userInfo: { username: string }): Response {
+export function addAuthToResponse(res: Response, userInfo: { username: string, _id: string}): Response {
     const token = jwt.sign(userInfo, process.env.TOKEN_SECRET as string);
     return res.header('Authentication', token);
 }

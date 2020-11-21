@@ -21,7 +21,13 @@ async function createCollection(req: express.Request, res: express.Response) {
     } else if (valCollection.value) {
         const collection = valCollection.value;
         collection.owner = res.locals.username;
-        const insertedId = (await databaseService.getCollection('collections').insertOne(Models.createDBCollectionDoc(collection))).insertedId;
+
+        const collectionToInsert = Models.createDBCollectionDoc(collection);
+        const insertedId = (await databaseService.getCollection('collections').insertOne(collectionToInsert)).insertedId;
+
+        await databaseService.getCollection('collection-study-state').insertOne(
+            Models.getEmptyDBCollectionStudyStateDoc(insertedId, res.locals._id, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
+        );
 
         return res.status(201).send({ _id: insertedId });
     }
@@ -70,12 +76,10 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    const collection = await databaseService.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
-    if (!collection) {
-        return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
-    } else {
-        return res.status(204).send({ message: LANG.COLLECTION_DELETED });
-    }
+    await databaseService.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
+    await databaseService.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) });
+
+    return res.status(204).send({ message: LANG.COLLECTION_DELETED });
 }
 
 // --- WORDS ---
@@ -91,9 +95,15 @@ async function createWord(req: express.Request, res: express.Response) {
     } else if (valWord.value) {
         const word = valWord.value;
         word._id = new ObjectId();
+
         await databaseService.getCollection('collections').updateOne(
             { _id: new ObjectId(idColl), owner: res.locals.username },
             { $push: { words: word } }
+        );
+
+        await databaseService.getCollection('collection-study-state').updateOne(
+            { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
+            { $push: { wordsState: Models.getEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
         );
 
         return res.status(201).send({ _id: word._id });
@@ -171,6 +181,12 @@ async function deleteWord(req: express.Request, res: express.Response) {
     const word = await databaseService.getCollection('collections').updateOne(
         { _id: new ObjectId(idColl), owner: res.locals.username },
         { $pull: { words: { _id: new ObjectId(idWord) } } }
+    );
+
+    
+    await databaseService.getCollection('collection-study-state').updateOne(
+        { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
+        { $pull: { wordsState: { wordId: new ObjectId(idWord) } } }
     );
 
     if (!word) {
