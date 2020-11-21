@@ -7,15 +7,17 @@ export interface DBCollectionStudyStateDoc extends DBObject {
     score: number;
     counter: number;
     lastDoneDate: Date;
-    lastCorrectCounter: number;
+    lastDoneCorrectDate: Date;
+    lastDoneCorrectCounter: number;
 
     wordsState: {
         wordId: ObjectId;
-        learned: number;
+        learned: boolean;
         score: number;
         lastDoneDate: Date;
+        lastDoneCorrectDate: Date;
         lastDoneCounter: number;
-        lastCorrectCounter: number;
+        lastDoneCorrectCounter: number;
     }[];
 }
 
@@ -28,16 +30,20 @@ export function getEmptyDBCollectionStudyStateDoc(collectionId: string, userId: 
         score: 0,
         counter: 0,
         lastDoneDate: new Date(),
-        lastCorrectCounter: 0,
+        lastDoneCorrectDate: new Date(),
+        lastDoneCorrectCounter: 0,
 
         wordsState: wordsIds.map(id => {
             return {
                 wordId: new ObjectId(id),
-                learned: 0,
+                learned: false,
                 score: 0,
                 lastCorrectCounter: 0,
                 lastDoneCounter: 0,
-                lastDoneDate: new Date()
+                lastDoneDate: new Date(),
+                lastDoneCorrectDate: new Date(),
+                lastDoneCorrectCounter: 0
+
             };
         })
     };
