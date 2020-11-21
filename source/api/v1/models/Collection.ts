@@ -103,7 +103,7 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         languageTo: collection.languageTo,
         words: collection.words.map(w => {
             return {
-                _id: w._id,
+                _id: w._id ? w._id : new ObjectId(),
                 index: w.index,
                 original: w.original,
                 translation: w.translation,

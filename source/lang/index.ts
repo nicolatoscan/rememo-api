@@ -19,4 +19,5 @@ export default {
     WORD_UPDATED: 'Word updated',
     WORD_DELETED: 'Word deleted',
 
+    STATUS_NOT_FOUND: 'Status not found',
 };

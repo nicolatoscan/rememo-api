@@ -21,10 +21,13 @@ async function createCollection(req: express.Request, res: express.Response) {
     } else if (valCollection.value) {
         const collection = valCollection.value;
         collection.owner = res.locals.username;
-        const insertedId = (await databaseService.getCollection('collections').insertOne(Models.createDBCollectionDoc(collection))).insertedId;
 
-        //TODO: fix word insert
-        await databaseService.getCollection('collection-study-state').insertOne(Models.getEmptyDBCollectionStudyStateDoc(insertedId, res.locals._id, []));
+        const collectionToInsert = Models.createDBCollectionDoc(collection);
+        const insertedId = (await databaseService.getCollection('collections').insertOne(collectionToInsert)).insertedId;
+
+        await databaseService.getCollection('collection-study-state').insertOne(
+            Models.getEmptyDBCollectionStudyStateDoc(insertedId, res.locals._id, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
+        );
 
         return res.status(201).send({ _id: insertedId });
     }
@@ -73,12 +76,10 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    const collection = await databaseService.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
-    if (!collection) {
-        return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
-    } else {
-        return res.status(204).send({ message: LANG.COLLECTION_DELETED });
-    }
+    await databaseService.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
+    await databaseService.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) });
+
+    return res.status(204).send({ message: LANG.COLLECTION_DELETED });
 }
 
 // --- WORDS ---
@@ -98,6 +99,10 @@ async function createWord(req: express.Request, res: express.Response) {
             { _id: new ObjectId(idColl), owner: res.locals.username },
             { $push: { words: word } }
         );
+        // await databaseService.getCollection('collection-study-state').updateOne(
+        //     { collectionId: new ObjectId(idColl), userId: new ObjectId(res.locals._id) },
+        //     {} //{ $push: { words: word } }
+        // );
 
         return res.status(201).send({ _id: word._id });
     }
