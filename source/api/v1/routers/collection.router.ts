@@ -23,6 +23,9 @@ async function createCollection(req: express.Request, res: express.Response) {
         collection.owner = res.locals.username;
         const insertedId = (await databaseService.getCollection('collections').insertOne(Models.createDBCollectionDoc(collection))).insertedId;
 
+        //TODO: fix word insert
+        await databaseService.getCollection('collection-study-state').insertOne(Models.getEmptyDBCollectionStudyStateDoc(insertedId, res.locals._id, []));
+
         return res.status(201).send({ _id: insertedId });
     }
 }

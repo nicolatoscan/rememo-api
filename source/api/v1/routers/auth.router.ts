@@ -18,7 +18,7 @@ async function login(req: express.Request, res: express.Response) {
         }
 
         valUser.value.password = '';
-        authServices.addAuthToResponse(res, { username: valUser.value.username });
+        authServices.addAuthToResponse(res, { username: valUser.value.username, _id: user._id.toString() });
 
         return res.status(200).send(Models.getUserFromDBDoc(user));
     }
@@ -41,7 +41,7 @@ async function signup(req: express.Request, res: express.Response) {
             const insertedId = (await databaseService.getCollection('users').insertOne(Models.createDBUserDoc(valUser.value, hashedPassword))).insertedId;
             const user = await databaseService.getCollection('users').findOne({ _id: insertedId });
 
-            authServices.addAuthToResponse(res, { username: valUser.value.username });
+            authServices.addAuthToResponse(res, { username: valUser.value.username, _id: user._id.toString() });
 
             res.status(201).send(Models.getUserFromDBDoc(user));
         }
