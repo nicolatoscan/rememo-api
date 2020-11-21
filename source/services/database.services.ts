@@ -12,7 +12,6 @@ class DatabaseService {
 
     public async connect(): Promise<MongoClient> {
         this.connection = await (new MongoClient(process.env.MONGODB_CONNECTION_STRING as string, { useUnifiedTopology: true }).connect());
-        console.log('Database connected');
         return this.connection;
     }
 

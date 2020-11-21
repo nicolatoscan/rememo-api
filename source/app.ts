@@ -14,7 +14,12 @@ export default class App {
         this.app = express();
         this.port = this.normalizePort(process.env.PORT);
 
-        databaseService.connect();
+        this.start();
+    }
+
+    private async start(): Promise<void> {
+        await databaseService.connect();
+        console.log('Database connected');
 
         this.middleware();
         this.routes();
