@@ -1,8 +1,7 @@
 import * as express from 'express';
 import * as Models from '../models';
 import * as authHelpers from '../../../helpers/auth.helper';
-import databaseHelper from '../../../helpers/database.helper';
-import bcrypt from 'bcryptjs';
+import * as userServices from '../services/user.services';
 import LANG from '../../../lang';
 
 async function login(req: express.Request, res: express.Response) {
@@ -11,16 +10,15 @@ async function login(req: express.Request, res: express.Response) {
         return res.status(400).send(valUser.error);
 
     } else if (valUser.value) {
+        const userInfo = await userServices.login(valUser.value);
 
-        const user = await databaseHelper.getCollection('users').findOne({ username: valUser.value?.username });
-        if (!user || !(await bcrypt.compare(valUser.value.password, user.password))) {
-            return res.status(400).send(LANG.AUTH_WRONG_CREDENTIAL);
+        if (!userInfo) {
+            return res.status(301).send(LANG.AUTH_WRONG_CREDENTIAL);
         }
 
-        valUser.value.password = '';
-        authHelpers.addAuthToResponse(res, { username: valUser.value.username, _id: user._id.toString() });
+        authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
 
-        return res.status(200).send(Models.getUserFromDBDoc(user));
+        return res.status(200).send(userInfo.user);
     }
 }
 
@@ -30,20 +28,15 @@ async function signup(req: express.Request, res: express.Response) {
         return res.status(400).send(valUser.error);
 
     } else if (valUser.value) {
-
-        if (await databaseHelper.getCollection('users').findOne({ username: valUser.value.username })) {
+        if (await userServices.checkUsernameExists(valUser.value.username)) {
             res.status(403).send(LANG.AUTH_USERNAME_ALREADY_IN_USE);
 
         } else {
 
-            const salt = await bcrypt.genSalt();
-            const hashedPassword = await bcrypt.hash(valUser.value.password, salt);
-            const insertedId = (await databaseHelper.getCollection('users').insertOne(Models.createDBUserDoc(valUser.value, hashedPassword))).insertedId;
-            const user = await databaseHelper.getCollection('users').findOne({ _id: insertedId });
+            const userInfo = await userServices.createUser(valUser.value);
+            authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
 
-            authHelpers.addAuthToResponse(res, { username: valUser.value.username, _id: user._id.toString() });
-
-            res.status(201).send(Models.getUserFromDBDoc(user));
+            res.status(201).send(userInfo.user);
         }
     }
 }

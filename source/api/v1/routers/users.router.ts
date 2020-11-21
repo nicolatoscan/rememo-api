@@ -1,15 +1,14 @@
 import * as express from 'express';
 import * as Models from '../models';
-import databaseHelper from '../../../helpers/database.helper';
-import bcrypt from 'bcryptjs';
+import * as userServices from '../services/user.services';
 import LANG from '../../../lang';
 
 
 async function getLoggedUser(req: express.Request, res: express.Response) {
+    const user = await userServices.getUserById(res.locals._id);
 
-    const user = await databaseHelper.getCollection('users').findOne({ username: res.locals.username });
     if (user) {
-        res.send(Models.getUserFromDBDoc(user));
+        res.send(user);
     } else {
         res.status(404).send(LANG.USER_NOT_FOUND);
     }
@@ -25,17 +24,14 @@ async function deleteLoggedUser(req: express.Request, res: express.Response) {
             return res.status(400).send(LANG.AUTH_USER_DOES_NOT_MATCH);
         }
 
-        //check password
-        const user = (await databaseHelper.getCollection('users').findOne({ username: res.locals.username })) as Models.DBUserDoc;
-        if (!user || !(await bcrypt.compare(valUser.value.password, user.password))) {
+        const result = await userServices.deleteUserById(res.locals._id, valUser.value.password);
+
+        if (!result)
             return res.status(301).send(LANG.AUTH_WRONG_CREDENTIAL);
-        }
-
-        //delete
-        await databaseHelper.getCollection('users').deleteOne({ username: res.locals.username });
-        return res.send(LANG.USER_DELETED);
-
+        else
+            return res.send(LANG.USER_DELETED);
     }
+
 }
 
 async function updateLoggedUser(req: express.Request, res: express.Response) {
@@ -50,25 +46,12 @@ async function updateLoggedUser(req: express.Request, res: express.Response) {
             return res.status(400).send(LANG.AUTH_USER_DOES_NOT_MATCH);
         }
 
-        //check password
-        const user = (await databaseHelper.getCollection('users').findOne({ username: res.locals.username })) as Models.DBUserDoc;
-        if (!user || !(await bcrypt.compare(valUser.value.password, user.password))) {
-            return res.status(301).send(LANG.AUTH_WRONG_CREDENTIAL);
-        }
+        const result = await userServices.updateUserById(res.locals._id, valUser.value.password, valUser.value);
 
-        //update
-        if (valUser.value.displayName) {
-            await databaseHelper.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { displayName: valUser.value.displayName } });
-        }
-        if (valUser.value.email) {
-            await databaseHelper.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { email: valUser.value.email } });
-        }
-        if (valUser.value.newPassword) {
-            const salt = await bcrypt.genSalt();
-            const hashedPassword = await bcrypt.hash(valUser.value.newPassword, salt);
-            await databaseHelper.getCollection('users').updateOne({ username: valUser.value.username }, { $set: { password: hashedPassword } });
-        }
-        return res.send(LANG.USER_UPDATED);
+        if (!result)
+            return res.status(301).send(LANG.AUTH_WRONG_CREDENTIAL);
+        else
+            return res.send(LANG.USER_UPDATED);
     }
 
 }
