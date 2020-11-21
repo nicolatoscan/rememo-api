@@ -66,6 +66,55 @@ paths:
                 username: Test Displayname
                 email: email@example.com
                 displayName: TestUsername
+                
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: Get the logged User
+      responses:
+        201:
+          description: ''
+          schema:
+            $ref: '#/definitions/SignupUserResponse'
+          examples:
+            application/json:
+                username: Test Displayname
+                email: email@example.com
+                displayName: TestUsername
+    delete:
+      tags:
+      - "users"
+      summary: delete the logged User
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginUser'
+      responses:
+        200:
+          description: 'user deleted'
+    put:
+      tags:
+      - "users"
+      summary: update the logged User
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateUser'
+      responses:
+        201:
+          description: ''
+          schema:
+            $ref: '#/definitions/SignupUserResponse'
+          examples:
+            application/json:
+                username: Test Displayname
+                email: email@example.com
+                displayName: TestUsername
   
   /collections:
     get:
@@ -275,7 +324,25 @@ definitions:
       - password
       - displayName
       - email
-  
+      
+  UpdateUser:
+    title: UpdateUser
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      displayName:
+        type: string
+      email:
+        type: string
+      newPassword:
+        type: string
+    required:
+      - username
+      - password
+
   SignupUserResponse:
     title: SignupUser
     type: object
