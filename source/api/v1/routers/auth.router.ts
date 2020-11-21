@@ -1,8 +1,9 @@
 import * as express from 'express';
-import databaseService from '../../../services/database.services';
 import * as Models from '../models';
-import bcrypt from 'bcryptjs';
 import * as authServices from '../../../services/auth.services';
+import databaseService from '../../../services/database.services';
+import bcrypt from 'bcryptjs';
+import LANG from '../../../lang';
 
 async function login(req: express.Request, res: express.Response) {
     const valUser = Models.validateLoginUser(req.body);
@@ -13,7 +14,7 @@ async function login(req: express.Request, res: express.Response) {
 
         const user = await databaseService.getCollection('users').findOne({ username: valUser.value?.username });
         if (!user || !(await bcrypt.compare(valUser.value.password, user.password))) {
-            return res.status(400).send('Wrong email or password');
+            return res.status(400).send(LANG.AUTH_WRONG_CREDENTIAL);
         }
 
         valUser.value.password = '';
@@ -31,7 +32,7 @@ async function signup(req: express.Request, res: express.Response) {
     } else if (valUser.value) {
 
         if (await databaseService.getCollection('users').findOne({ username: valUser.value.username })) {
-            res.status(403).send('Username already used');
+            res.status(403).send(LANG.AUTH_USERNAME_ALREADY_IN_USE);
 
         } else {
 
@@ -46,6 +47,7 @@ async function signup(req: express.Request, res: express.Response) {
         }
     }
 }
+
 
 export default function (): express.Router {
     const router = express.Router();

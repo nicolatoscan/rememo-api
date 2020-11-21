@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as Models from '../models';
 import databaseService from '../../../services/database.services';
+import LANG from '../../../lang';
 import { ObjectId } from 'mongodb';
 
 // --- COLLECTIONS ---
@@ -29,12 +30,12 @@ async function createCollection(req: express.Request, res: express.Response) {
 async function getCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const collection = await databaseService.getCollection('collections').findOne({ _id: new ObjectId(idColl), owner: res.locals.username });
     if (!collection) {
-        return res.status(404).send('No collection found');
+        return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
     } else {
         return res.send(Models.getCollectionFromDBDoc(collection));
     }
@@ -43,7 +44,7 @@ async function getCollectionById(req: express.Request, res: express.Response) {
 async function updateCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const valCollection = Models.validateCollection(req.body);
@@ -55,9 +56,10 @@ async function updateCollectionById(req: express.Request, res: express.Response)
         delete collection._id;
         delete collection.owner;
         delete collection.words;
+        collection.lastModified = new Date();
         await databaseService.getCollection('collections').updateOne({ _id: new ObjectId(idColl), owner: res.locals.username }, { $set: collection });
 
-        return res.status(204).send({ message: 'Collection updated' });
+        return res.status(204).send({ message: LANG.COLLECTION_UPDATED });
     }
 
 }
@@ -65,14 +67,14 @@ async function updateCollectionById(req: express.Request, res: express.Response)
 async function deleteCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const collection = await databaseService.getCollection('collections').deleteOne({ _id: new ObjectId(idColl), owner: res.locals.username });
     if (!collection) {
-        return res.status(404).send('No collection found');
+        return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
     } else {
-        return res.status(204).send({ message: 'Collection deleted' });
+        return res.status(204).send({ message: LANG.COLLECTION_DELETED });
     }
 }
 
@@ -80,7 +82,7 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
 async function createWord(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const valWord = Models.validateWord(req.body);
@@ -101,26 +103,26 @@ async function createWord(req: express.Request, res: express.Response) {
 async function getWord(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
 
     const idWord = req.params.idWord;
     if (!idWord) {
-        return res.status(404).send('No word id found');
+        return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
     const collection = await databaseService.getCollection('collections').findOne({ _id: new ObjectId(idColl), owner: res.locals.username });
 
     if (!collection) {
-        return res.status(404).send('No collection found');
+        return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
     }
 
 
     const word = Models.getCollectionFromDBDoc(collection).words.find(w => w._id === idWord);
 
     if (!word) {
-        return res.status(404).send('No word found');
+        return res.status(404).send(LANG.WORD_NOT_FOUND);
     } else {
         return res.send(word);
     }
@@ -130,12 +132,12 @@ async function getWord(req: express.Request, res: express.Response) {
 async function updateWord(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
     if (!idWord) {
-        return res.status(404).send('No word id found');
+        return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
     const valWord = Models.validateWord(req.body);
@@ -150,7 +152,7 @@ async function updateWord(req: express.Request, res: express.Response) {
             { $set: { 'words.$': word } }
         );
 
-        return res.status(204).send({ message: 'Word updated' });
+        return res.status(204).send({ message: LANG.WORD_UPDATED });
     }
 
 }
@@ -158,12 +160,12 @@ async function updateWord(req: express.Request, res: express.Response) {
 async function deleteWord(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     if (!idColl) {
-        return res.status(404).send('No collection id found');
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
     if (!idWord) {
-        return res.status(404).send('No word id found');
+        return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
     const word = await databaseService.getCollection('collections').updateOne(
@@ -172,9 +174,9 @@ async function deleteWord(req: express.Request, res: express.Response) {
     );
 
     if (!word) {
-        return res.status(404).send('No word found');
+        return res.status(404).send(LANG.WORD_NOT_FOUND);
     } else {
-        return res.status(204).send({ message: 'Word deleted' });
+        return res.status(204).send({ message: LANG.WORD_DELETED });
     }
 
 }
