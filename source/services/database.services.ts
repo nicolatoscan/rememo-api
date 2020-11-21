@@ -34,7 +34,9 @@ class DatabaseService {
         return this.connection?.db(db);
     }
 
-    public getCollection(collection: 'users' | 'collections'): Collection {
+    public getCollection(
+        collection: 'users' | 'collections' | 'collection-study-state'
+    ): Collection {
         return this.getDb().collection(collection);
     }
 
