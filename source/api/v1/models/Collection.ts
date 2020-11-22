@@ -20,6 +20,7 @@ export interface Collection {
     owner: string;
     languageFrom?: string;
     languageTo?: string;
+    share?:boolean;
     words: Word[];
 }
 
@@ -53,6 +54,7 @@ export function validateCollection(collection: unknown, idRequired = false): { v
         owner: joi.string(),
         languageFrom: joi.string().length(2),
         languageTo: joi.string().length(2),
+        share: joi.boolean(),
         words: joi.array()
     }).validate(collection);
 
@@ -78,6 +80,7 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
         owner: doc.owner,
         languageFrom: doc.languageFrom,
         languageTo: doc.languageTo,
+        share: doc.share ? true : false,
         words: doc.words.map(w => {
             return {
                 _id: w._id?.toString(),
@@ -101,6 +104,7 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         owner: collection.owner,
         languageFrom: collection.languageFrom,
         languageTo: collection.languageTo,
+        share: collection.share ? true : false,
         words: collection.words.map(w => {
             return {
                 _id: w._id ? w._id : new ObjectId(),

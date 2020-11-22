@@ -10,6 +10,7 @@ export async function getCollections(username: string): Promise<Models.Collectio
 
 export async function createCollection(collection: Models.Collection, userId: string, owner: string): Promise<{ collectionId: string }> {
 
+    delete collection._id;
     collection.owner = owner;
     const collectionToInsert = Models.createDBCollectionDoc(collection);
 
