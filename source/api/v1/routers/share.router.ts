@@ -16,10 +16,6 @@ async function shareCollectionById(req: express.Request, res: express.Response) 
     
     const link:string = 'api/v1/share/import/' + idColl;
 
-    const collection = await collectionServices.getCollectionById(idColl, res.locals.username);
-    
-    console.log(collection);
-
     res.send(link);
 
 }
