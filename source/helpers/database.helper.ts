@@ -35,7 +35,7 @@ class DatabaseHelper {
     }
 
     public getCollection(
-        collection: 'users' | 'collections' | 'collection-study-state'
+        collection: 'users' | 'collections' | 'collection-study-state' | 'tests'
     ): Collection {
         return this.getDb().collection(collection);
     }
