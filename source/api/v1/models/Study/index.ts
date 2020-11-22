@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
-import { DBObject } from './misc.models';
-import joi from 'joi';
+import { DBObject } from '../misc.models';
+
+export * from './Train';
+export * from './Test';
 
 export interface DBCollectionStudyStateDoc extends DBObject {
     collectionId: ObjectId;
@@ -22,13 +24,6 @@ export interface WordStudyState {
     lastDoneCorrectDate: Date;
     lastDoneCounter: number;
     lastDoneCorrectCounter: number;
-}
-
-
-export interface TrainingResult {
-    collectionId: string;
-    wordId: string;
-    correct: boolean;
 }
 
 export function createEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBCollectionStudyStateDoc {
@@ -56,19 +51,4 @@ export function createEmptyWordStudyState(wordId: string): WordStudyState {
         lastDoneCounter: 0,
         lastDoneCorrectCounter: 0
     };
-}
-
-export function validateTrainingResult(trainingResult: unknown): { value?: TrainingResult, error?: string } {
-
-    const validationResult = joi.object({
-        collectionId: joi.string().required(),
-        wordId: joi.string().required(),
-        correct: joi.boolean().required(),
-    }).validate(trainingResult);
-
-    if (validationResult.error) {
-        return { error: validationResult.error.message };
-    }
-
-    return { value: (trainingResult as TrainingResult) };
 }
