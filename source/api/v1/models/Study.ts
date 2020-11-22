@@ -28,7 +28,7 @@ export interface WordStudyState {
 export interface TrainingResult {
     collectionId: string;
     wordId: string;
-    result: boolean;
+    correct: boolean;
 }
 
 export function createEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBCollectionStudyStateDoc {
@@ -63,7 +63,7 @@ export function validateTrainingResult(trainingResult: unknown): { value?: Train
     const validationResult = joi.object({
         collectionId: joi.string().required(),
         wordId: joi.string().required(),
-        result: joi.boolean().required(),
+        correct: joi.boolean().required(),
     }).validate(trainingResult);
 
     if (validationResult.error) {
