@@ -20,4 +20,7 @@ export default {
     WORD_DELETED: 'Word deleted',
 
     STATUS_NOT_FOUND: 'Status not found',
+
+    OK: 'OK',
+    KO: 'KO',
 };

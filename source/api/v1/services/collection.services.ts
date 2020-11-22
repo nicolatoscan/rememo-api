@@ -16,7 +16,7 @@ export async function createCollection(collection: Models.Collection, userId: st
     const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
 
     await databaseHelper.getCollection('collection-study-state').insertOne(
-        Models.getEmptyDBCollectionStudyStateDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
+        Models.createEmptyDBCollectionStudyStateDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
     );
 
     return { collectionId: insertedId };
@@ -52,7 +52,7 @@ export async function createWord(word: Models.Word, collectionId: string, userId
 
     await databaseHelper.getCollection('collection-study-state').updateOne(
         { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $push: { wordsState: Models.getEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
+        { $push: { wordsState: Models.createEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
     );
 
     return { wordId: word._id.toHexString() };
