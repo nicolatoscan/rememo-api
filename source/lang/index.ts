@@ -19,7 +19,7 @@ export default {
     WORD_UPDATED: 'Word updated',
     WORD_DELETED: 'Word deleted',
 
-    STATUS_NOT_FOUND: 'Status not found',
+    LEARN_STATE_NOT_FOUND: 'Learn state non found',
 
     OK: 'OK',
     KO: 'KO',
