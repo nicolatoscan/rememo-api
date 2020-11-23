@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as Models from '../../models';
 import * as testServices from '../../services/study.services/test.services';
-import LANG from '../../../../lang';
 
 async function generateTest(req: express.Request, res: express.Response) {
     const valTestQuery = Models.validateTestQuery(req.body);

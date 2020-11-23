@@ -1,7 +1,7 @@
 import * as Models from '../../models';
 import databaseHelper from '../../../../helpers/database.helper';
 import { ObjectId } from 'mongodb';
-
+import LANG from '../../../../lang';
 
 export async function createTest(testQuery: Models.TestQuery, owner: string, userId: string): Promise<Models.Test> {
     const ids = testQuery.collectionPollIds.map(id => new ObjectId(id));
@@ -49,15 +49,15 @@ export async function checkTest(queryTest: Models.Test, userId: string): Promise
         { _id: new ObjectId(queryTest._id), ownerId: new ObjectId(userId), corrected: false }
     )) as Models.Test;
     if (!docTest)
-        return { error: 'Test not found' };
+        return { error: LANG.TEST_NOT_FOUND };
 
     if (docTest.questions.length !== queryTest.questions.length)
-        return { error: 'Question ids do not match' };
+        return { error: LANG.TEST_QUESTION_IDS_DO_NOT_MACTH };
     const dbIds = docTest.questions.map(q => q.wordId.toString());
     const queryIds = queryTest.questions.map(q => q.wordId.toString());
     for (let i = 0; i < dbIds.length; i++)
         if (dbIds[i] !== queryIds[i])
-            return { error: 'Question ids do not match' };
+            return { error: LANG.TEST_QUESTION_IDS_DO_NOT_MACTH };
 
     for (let i = 0; i < dbIds.length; i++) {
         const qDoc = docTest.questions[i];

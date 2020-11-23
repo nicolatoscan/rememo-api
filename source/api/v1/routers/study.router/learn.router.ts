@@ -1,6 +1,6 @@
 import * as express from 'express';
-import LANG from '../../../../lang';
 import * as learnServices from '../../services/study.services/learn.services';
+import LANG from '../../../../lang';
 
 
 async function getCollectionLearnStatus(req: express.Request, res: express.Response) {

@@ -21,6 +21,9 @@ export default {
 
     LEARN_STATE_NOT_FOUND: 'Learn state non found',
 
+    TEST_NOT_FOUND: 'Test not found',
+    TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
+
     OK: 'OK',
     KO: 'KO',
 };
