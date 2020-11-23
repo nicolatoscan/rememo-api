@@ -12,12 +12,12 @@ async function getCollectionLearnState(req: express.Request, res: express.Respon
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    const learnState = await learnServices.getCollectionLearnStatus(idColl, idUser);
+    const collectionLearnState = await learnServices.getCollectionLearnState(idColl, idUser);
 
-    if(!learnState) {
+    if(!collectionLearnState) {
         return res.status(404).send(LANG.LEARN_STATE_COLLECTION_NOT_FOUND);
     } else {
-        return res.send(learnState);
+        return res.send(collectionLearnState);
     }
 }
 
