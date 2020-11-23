@@ -102,6 +102,11 @@ export async function deleteWordById(collectionId: string, wordId: string, userI
         { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
         { $pull: { wordsState: { wordId: new ObjectId(wordId) } } }
     );
+
+    await databaseHelper.getCollection('stats').updateOne(
+        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
+        { $pull: { words: { wordId: new ObjectId(wordId) } } }
+    );
 }
 
 
