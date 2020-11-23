@@ -44,7 +44,7 @@ export async function updateCollectionById(id: string, owner: string, updateProp
 export async function deleteCollectionById(id: string, userId: string, owner: string): Promise<void> {
     await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(id), owner: owner });
     await databaseHelper.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
-    await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id)});
+    await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId)});
 
 }
 
@@ -61,6 +61,11 @@ export async function createWord(word: Models.Word, collectionId: string, userId
         { $push: { wordsState: Models.createEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
     );
     
+    await databaseHelper.getCollection('stats').updateOne(
+        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
+        { $push: { wordsState: Models.createEmptyWordStats((word._id as ObjectId).toHexString()) } }
+    );
+
     return { wordId: word._id.toHexString() };
 
 }
