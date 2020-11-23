@@ -11,7 +11,7 @@ export async function getCollections(username: string): Promise<Models.Collectio
 export async function createCollection(collection: Models.Collection, userId: string, owner: string): Promise<{ collectionId: string }> {
 
     collection.owner = owner;
-    const collectionToInsert = Models.createDBCollectionDoc(collection);
+    const collectionToInsert = Models.createDBCollectionDoc(collection); 
 
     const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
 
@@ -44,8 +44,8 @@ export async function updateCollectionById(id: string, owner: string, updateProp
 export async function deleteCollectionById(id: string, userId: string, owner: string): Promise<void> {
     await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(id), owner: owner });
     await databaseHelper.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
+    await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id)});
 
-    await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
 }
 
 export async function createWord(word: Models.Word, collectionId: string, userId: string, owner: string): Promise<{ wordId: string }> {
@@ -61,7 +61,6 @@ export async function createWord(word: Models.Word, collectionId: string, userId
         { $push: { wordsState: Models.createEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
     );
     
-
     return { wordId: word._id.toHexString() };
 
 }
