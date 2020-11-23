@@ -17,3 +17,11 @@ export async function getCollectionLearnStatus(idColl: string, id: string,): Pro
 
     return learnState;
 }
+
+export async function updateWordLearnState(idColl: string, id: string, wordId: string, status: number): Promise<void> {
+    await databaseHelper.getCollection('collection-study-state').updateOne(
+        { collectionId: new ObjectId(idColl), userId: new ObjectId(id), 'wordsState.wordId': new ObjectId(wordId) }, 
+        { $set: { 'wordsState.$.learned': status } }
+    );
+}
+
