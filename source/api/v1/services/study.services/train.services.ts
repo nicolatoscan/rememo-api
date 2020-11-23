@@ -52,3 +52,55 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
     );
     return true;
 }
+
+function getSampleRange<T>(source: T[], range: number): T[] {
+    const x = Math.random();
+
+    const top = ((x: number) => Math.min(
+        (1 + range - Math.pow(Math.max(0, x - range), 2)) * source.length,
+        source.length
+    ))(x);
+    const bottom = ((x: number) => Math.max(
+        (1 - (2 * x * range) - Math.pow(Math.max(2 * range, x), 2)) * source.length,
+        0
+    ))(x);
+
+    return source.slice(Math.floor(bottom), Math.ceil(top));
+}
+
+export async function getNextWord(idsPolls: string[], owner: string, userId: string): Promise<Models.Word | undefined> {
+
+    const wordsPoll = (await databaseHelper.getCollection('collection-study-state')
+        .find({
+            collectionId: { $in: idsPolls.map(id => new ObjectId(id)) },
+            userId: new ObjectId(userId)
+        })
+        .project({ collectionId: 1, counter: 1, score: 1, wordsState: 1 })
+        .toArray() as { collectionId: ObjectId, counter: number, score: number, wordsState: Models.WordStudyState[] }[])
+        .map(c =>
+            c.wordsState.map(w => {
+                return {
+                    collectionId: c.collectionId,
+                    wordId: w.wordId,
+                    collectionCounter: c.counter,
+                    collectionScore: c.score,
+                    score: w.score,
+                    lastDoneDate: w.lastDoneDate,
+                    lastDoneCorrectDate: w.lastDoneCorrectDate,
+                    lastDoneCounter: w.lastDoneCounter,
+                    lastDoneCorrectCounter: w.lastDoneCorrectCounter
+                };
+            })
+        ).flat(1).sort((w1, w2) => w1.score - w2.score);
+
+    const RANGE = 0.1;
+    const sample = getSampleRange(wordsPoll, RANGE);
+    if (sample.length === 0)
+        return undefined;
+
+    const wordInfo = sample.reduce((min, w) => w.lastDoneCorrectCounter < min.lastDoneCorrectCounter ? w : min);
+    const word = ((await databaseHelper.getCollection('collections')
+        .findOne({ _id: new ObjectId(wordInfo.collectionId), owner: owner })) as Models.DBCollectionDoc)
+        ?.words.find(w => (w._id as ObjectId).toHexString() === wordInfo.wordId.toHexString());
+    return word;
+}

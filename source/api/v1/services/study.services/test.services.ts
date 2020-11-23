@@ -5,7 +5,6 @@ import { ObjectId } from 'mongodb';
 
 export async function createTest(testQuery: Models.TestQuery, owner: string, userId: string): Promise<Models.Test> {
     const ids = testQuery.collectionPollIds.map(id => new ObjectId(id));
-    console.log(ids);
 
     const wordsPoll = (await databaseHelper.getCollection('collections')
         .find({
@@ -13,7 +12,7 @@ export async function createTest(testQuery: Models.TestQuery, owner: string, use
             _id: { $in: ids }
         })
         .project({ _id: 1, words: 1 })
-        .toArray() as Models.DBCollectionDoc[])
+        .toArray() as { _id: ObjectId, words: Models.Word[] }[] )
         .map(c =>
             c.words.map(w => {
                 return {

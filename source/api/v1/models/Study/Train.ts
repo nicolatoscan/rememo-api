@@ -6,6 +6,10 @@ export interface TrainingResult {
     correct: boolean;
 }
 
+export interface NextWordQuery {
+    collectionPollIds: string[];
+}
+
 export function validateTrainingResult(trainingResult: unknown): { value?: TrainingResult, error?: string } {
 
     const validationResult = joi.object({
@@ -19,4 +23,17 @@ export function validateTrainingResult(trainingResult: unknown): { value?: Train
     }
 
     return { value: (trainingResult as TrainingResult) };
+}
+
+export function validateNextWordQuery(nextWordQuery: unknown): { value?: NextWordQuery, error?: string } {
+
+    const validationResult = joi.object({
+        collectionPollIds: joi.array().items(joi.string())
+    }).validate(nextWordQuery);
+
+    if (validationResult.error) {
+        return { error: validationResult.error.message };
+    }
+
+    return { value: (nextWordQuery as NextWordQuery) };
 }
