@@ -1,6 +1,7 @@
 import * as Models from '../../models';
 import databaseHelper from '../../../../helpers/database.helper';
 import { ObjectId } from 'mongodb';
+import * as statsServices from '../stats.services';
 
 function expAverage(correct: boolean, oldN: number, ALPHA: number): number {
     const res = (oldN * (1 - ALPHA)) + ((correct ? 1 : 0) * ALPHA);
@@ -50,6 +51,8 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
         { _id: studyState._id },
         studyState
     );
+
+    statsServices.saveTraining(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct);
     return true;
 }
 
