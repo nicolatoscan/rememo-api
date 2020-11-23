@@ -25,3 +25,10 @@ export async function updateWordLearnState(idColl: string, id: string, wordId: s
     );
 }
 
+export async function resetCollectionLearnState(idColl: string, idUser: string): Promise<void> {
+    await databaseHelper.getCollection('collection-study-state').updateMany(
+        {collectionId: new ObjectId(idColl), userId: new ObjectId(idUser)},
+        {$set: { 'wordsState.$[].learned': 0 } }
+    );
+}
+

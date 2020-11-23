@@ -41,12 +41,27 @@ async function updateWordLearnState(req: express.Request, res: express.Response)
     return res.status(204).send(LANG.LEARN_STATE_WORD_UPDATED);
 }
 
+async function resetCollectionLearnState(req: express.Request, res: express.Response) {
+    const idColl = req.params.idColl;
+    const idUser = res.locals._id;
+    
+    if (!idColl) {
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
+    }
+
+    await learnServices.resetCollectionLearnState(idColl, idUser);
+
+    return res.status(204).send(LANG.LEARN_STATE_COLLECTION_RESETED);
+
+}
+
 
 export default function (): express.Router {
     const router = express.Router();
 
     router.get('/:idColl/status', getCollectionLearnState);
     router.put('/:idColl/learned', updateWordLearnState);
+    router.put('/:idColl/reset', resetCollectionLearnState);
 
     return router;
 }
