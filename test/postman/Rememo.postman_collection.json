@@ -166,7 +166,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"index\": 1,\r\n    \"name\": \"Testing Collection\",\r\n    \"description\": \"Testing description\",\r\n    \"owner\": \"pippo\",\r\n    \"words\": []\r\n}",
+					"raw": "{\r\n    \"index\": 1,\r\n    \"name\": \"Testing Collection\",\r\n    \"description\": \"Testing description\",\r\n    \"owner\": \"pippo\",\r\n    \"words\": [{\r\n        \"index\": 1,\r\n        \"original\": \"Red\",\r\n        \"translation\": \"Rosso\"\r\n    }]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -424,6 +424,60 @@
 						"{{CollectionId}}",
 						"words",
 						"{{WordId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/learn/:idColl/status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "772f3e83-1eb5-4c62-aad5-437002c63017",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('array');\r",
+							"    responseJson.forEach(item => { pm.expect(item).to.be.an('object').to.have.all.keys('wordId', 'learned');\r",
+							"                                   pm.expect(typeof item.wordId === 'string')\r",
+							"                                   pm.expect(typeof item.learned === 'number') });\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/study/learn/{{CollectionId}}/status",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"study",
+						"learn",
+						"{{CollectionId}}",
+						"status"
 					]
 				}
 			},
