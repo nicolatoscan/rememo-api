@@ -496,7 +496,7 @@
 							"});\r",
 							" pm.test('Have two query parameters', function(){\r",
 							"     const queryParam = pm.request.url.query.all();\r",
-							"     pm.expect(queryParam.length == 2);\r",
+							"     pm.expect(queryParam.length === 2);\r",
 							"     pm.expect(queryParam[0].key === 'wordId');\r",
 							"     pm.expect(queryParam[1].key === 'status');\r",
 							" });"
@@ -524,7 +524,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{API_ENDPOINT}}/api/v1/study/learn/{{CollectionId}}/learned?wordId={{WordId}}&status=0.456",
+					"raw": "{{API_ENDPOINT}}/api/v1/study/learn/{{CollectionId}}/learned?wordId={{WordId}}&status=0.333",
 					"host": [
 						"{{API_ENDPOINT}}"
 					],
@@ -543,8 +543,59 @@
 						},
 						{
 							"key": "status",
-							"value": "0.456"
+							"value": "0.333"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/learn/:idColl/reset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b3b76f98-149e-4e87-a6e5-3c8061f0d55b",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/study/learn/{{CollectionId}}/reset",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"study",
+						"learn",
+						"{{CollectionId}}",
+						"reset"
 					]
 				}
 			},
