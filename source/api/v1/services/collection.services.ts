@@ -63,7 +63,7 @@ export async function createWord(word: Models.Word, collectionId: string, userId
     
     await databaseHelper.getCollection('stats').updateOne(
         { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $push: { wordsState: Models.createEmptyWordStats((word._id as ObjectId).toHexString()) } }
+        { $push: { words: Models.createEmptyWordStats((word._id as ObjectId).toHexString()) } }
     );
 
     return { wordId: word._id.toHexString() };

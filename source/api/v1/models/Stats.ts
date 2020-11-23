@@ -29,7 +29,6 @@ export interface Day {
 }
 
 
-
 export function createDBStatsDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBStatsDoc {
     return {
         createdOn: new Date(),
