@@ -8,7 +8,7 @@ export default class App {
 
     public app: express.Application
     private port: number;
-  
+
 
     constructor() {
         this.app = express();
@@ -28,7 +28,7 @@ export default class App {
         console.log(`Server listening on port ${this.port}`);
     }
 
-    private normalizePort(val: string | number | undefined, fallback = 3000) : number {
+    private normalizePort(val: string | number | undefined, fallback = 3000): number {
         if (typeof val === 'string') {
             const port = parseInt(val, 10);
             if (!isNaN(port) && port > 0)
@@ -42,8 +42,14 @@ export default class App {
     private middleware() {
         this.app.use(bodyParser.json());
         this.app.use(morgan('dev'));
+        this.app.use((req, res, next) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authentication,Date');
+            next();
+        });
     }
-    
+
     private routes() {
         this.app.get('/', (req, res) => { res.send('Hello world!'); });
         this.app.use('/api', getVersionRouter());

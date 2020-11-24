@@ -18,7 +18,10 @@ async function login(req: express.Request, res: express.Response) {
 
         authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
 
-        return res.status(200).send(userInfo.user);
+        res.status(200).send({
+            ...userInfo.user,
+            token: res.getHeader('Authentication')
+        });
     }
 }
 
@@ -36,7 +39,10 @@ async function signup(req: express.Request, res: express.Response) {
             const userInfo = await userServices.createUser(valUser.value);
             authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
 
-            res.status(201).send(userInfo.user);
+            res.status(201).send({
+                ...userInfo.user,
+                token: res.getHeader('Authentication')
+            });
         }
     }
 }
