@@ -16,6 +16,8 @@ tags:
   description: "Collections"
 - name: "study"
   description: "Study"
+- name: "share"
+  description: "Share"
 schemes:
 - https
 consumes:
@@ -37,7 +39,7 @@ paths:
             $ref: '#/definitions/SignupUser'
       responses:
         201:
-          description: ''
+          description: 'Created user'
           schema:
             $ref: '#/definitions/SignupUserResponse'
           examples:
@@ -59,7 +61,7 @@ paths:
             $ref: '#/definitions/LoginUser'
       responses:
         200:
-          description: ''
+          description: 'Logged in user'
           schema:
             $ref: '#/definitions/SignupUserResponse'
           examples:
@@ -348,6 +350,37 @@ paths:
       responses:
         204:
           description: 'Collection Learn State reseted'
+          
+  /share/{collectionId}:
+    get:
+      tags:
+      - "share"
+      summary: Share a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'Collection can be shared'
+          examples:
+            application/json:
+                url: share/import/5fbeca7fa4b2a77d62753073
+
+  /share/import/{collectionId}:
+    get:
+      tags:
+      - "share"
+      summary: Import a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: 'Collection imported'
 
 definitions:
   ReturnId:
