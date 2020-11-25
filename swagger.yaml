@@ -2,7 +2,6 @@ swagger: '2.0'
 info:
   version: '0.2.2'
   title: "Rememo API"
-  description: TODO
   license:
     name: MIT
     url: https://github.com/nicolatoscan/rememo-api/blob/main/LICENSE
@@ -15,6 +14,8 @@ tags:
   description: "Users"
 - name: "collections"
   description: "Collections"
+- name: "study"
+  description: "Study"
 schemes:
 - https
 consumes:
@@ -284,6 +285,69 @@ paths:
       responses:
         204:
           description: Word deleted
+          
+  /study/learn/{collectionId}/status:
+    get:
+      tags:
+      - "study"
+      summary: Get the Learn State of a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'An array of objects which defines the Learn State of a Collection'
+          schema: 
+            $ref: '#/definitions/CollectionLearnState'
+          examples:
+            application/json: [
+                  {
+                    wordId: 353hk23j5b23k5bjk2sdfasd,
+                    learned: 0.343
+                  },
+                  {
+                    wordId: 891fedf7gd7fgd89f789df7g,
+                    learned: 0.575
+                  }
+                ]
+  
+  /study/learn/{collectionId}/learned:
+    put:
+      tags:
+      - "study"
+      summary: Update the Learn State of a Word
+      parameters:
+        - name: collectionId
+          in: path
+          type: string
+          required: true
+        - name: wordId
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: number
+          required: true
+      responses:
+        204:
+          description: 'Word Learn State updated'
+          
+  /study/learn/{collectionId}/reset:
+    put:
+      tags:
+      - "study"
+      summary: Reset the Learn State of a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          type: string
+          required: true
+      responses:
+        204:
+          description: 'Collection Learn State reseted'
 
 definitions:
   ReturnId:
@@ -428,3 +492,21 @@ definitions:
       - index
       - original
       - translation
+      
+  CollectionLearnState:
+    title: CollectionLearnState
+    type: array
+    items:
+      $ref: '#/definitions/WordLearnState'
+      
+  WordLearnState:
+    title: WordLearnState
+    type: object
+    properties:
+      wordId:
+        type: string
+      learned:
+        type: number
+    required:
+      - wordId
+      - learned
