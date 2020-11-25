@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as Models from '../models';
 import LANG from '../../../lang';
 import * as collectionServices from '../services/collection.services';
 
@@ -10,7 +9,7 @@ async function shareCollectionById(req: express.Request, res: express.Response) 
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
     collectionServices.updateCollectionById(idColl, res.locals.username, { share: true });
-    const link = `api/v1/share/import/${idColl}`;
+    const link = `share/import/${idColl}`;
     
     res.send({ url: link });
 
