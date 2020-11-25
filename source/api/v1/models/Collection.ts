@@ -17,7 +17,7 @@ export interface Collection {
     index: number;
     name: string;
     description: string;
-    owner: string;
+    owner?: string;
     languageFrom?: string;
     languageTo?: string;
     words: Word[];
