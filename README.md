@@ -2,6 +2,8 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/nicolatoscan/rememo-api/blob/master/LICENSE)
 ![ts](https://badgen.net/badge/Built%20With/TypeScript/blue)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nicolatoscan/rememo-api.svg)](https://hub.docker.com/r/nicolatoscan/rememo-api)
+
 # Rememo API
 
 Project: Rememo<br>
