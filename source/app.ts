@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import getVersionRouter from './api/router';
 import bodyParser from 'body-parser';
 import databaseHelper from './helpers/database.helper';
+import * as path from 'path';
 
 export default class App {
 
@@ -52,7 +53,9 @@ export default class App {
     }
 
     private routes() {
-        this.app.get('/', (req, res) => { res.send('Hello world!'); });
+        this.app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '../../public/index.html')); });
+        this.app.get('/app', (req, res) => { res.status(301).redirect('https://rememo.nicolatoscan.dev/'); });
+        this.app.get('/doc', (req, res) => { res.status(301).redirect('https://rememoapi.docs.apiary.io/'); });
         this.app.use('/api', getVersionRouter());
     }
 
