@@ -72,7 +72,7 @@ export async function checkTest(queryTest: Models.Test, userId: string): Promise
         { _id: docTest._id },
         docTest
     );
-    statsServices.saveTestResult(docTest);
+    statsServices.saveTestResult(docTest, userId);
     return { testResult: docTest };
 }
 

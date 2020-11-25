@@ -52,7 +52,7 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
         studyState
     );
 
-    statsServices.saveTraining(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct);
+    statsServices.saveTraining(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct, userId);
     return true;
 }
 
