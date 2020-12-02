@@ -27,17 +27,14 @@ export async function saveTraining(collId: string, wordId: string, result: boole
     }], userId);
 }
 
+interface Result {
+    collectionId: string;
+    wordId: string;
+    result: boolean;
+    type: ResultType;
+}
 
-async function saveResult(result: { collectionId: string, wordId: string, result: boolean, type: ResultType }[], userId: string ) {
-    const resultMappedByGroupId = result.reduce((entryMap, e) => entryMap.set(e.collectionId, [...entryMap.get(e.collectionId) || [], e]), new Map());
-    for (const collectionId of resultMappedByGroupId.keys()) {
-        const subResult = resultMappedByGroupId.get(collectionId);
-        console.log(subResult);
-        // const correctCollCounter = subResult.filter;
-        /*await databaseHelper.getCollection('stats').updateOne(
-            { collectionId: new ObjectId(collectionId), userId: userId },
-            {}
-        );*/
-    }
-
+async function saveResult(result: Result[], userId: string) {
+    //salva nel db
+    return;
 }
