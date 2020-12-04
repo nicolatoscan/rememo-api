@@ -6,22 +6,42 @@ import LANG from '../../../lang';
 
 
 
-async function getTestStats(req: express.Request, res: express.Response) {
-    const idTest = req.params.idTest;
+async function getCollStatsTest(req: express.Request, res: express.Response) {
+    const idColl = req.params.idColl;
     
-    if (!idTest) {
+    if (!idColl) {
         return res.status(404).send(LANG.TEST_NOT_FOUND);
     }
-
-
     
+}
+
+async function getCollStatsTrain(req: express.Request, res: express.Response) {
+    const idColl = req.params.idColl;
+    
+    if (!idColl) {
+        return res.status(404).send(LANG.TEST_NOT_FOUND);
+    }
+}
+
+async function getWordStatsTest(req: express.Request, res: express.Response) {
+ 
+    //
+}
+
+async function getWordStatsTrain(req: express.Request, res: express.Response) {
+ 
+    //
 }
 
 
 
 export default function (): express.Router {
     const router = express.Router();
-    router.get('/stats/test/:idTest', getTestStats);
-    router.get('/stats/word/:idWord');
+    router.get('/stats/test/:idColl', getCollStatsTest);
+    router.get('/stats/train/:idColl', getCollStatsTrain);
+
+    router.get('/stats/word/:idColl/:idWord/test', getWordStatsTest);
+    router.get('/stats/word/:idColl/:idWord/train', getWordStatsTrain);
+
     return router;
 }
