@@ -23,6 +23,7 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
     if (!studyState)
         return false;
 
+  
     const word = studyState.wordsState.find(w => w.wordId.toHexString() === result.wordId);
     if (!word)
         return false;
@@ -51,8 +52,8 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
         { _id: studyState._id },
         studyState
     );
-
-    statsServices.saveTraining(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct, userId);
+    console.log(result.correct);
+    statsServices.saveTrainingResult(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct, userId);
     return true;
 }
 

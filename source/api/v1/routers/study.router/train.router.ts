@@ -4,11 +4,12 @@ import * as trainServices from '../../services/study.services/train.services';
 import LANG from '../../../../lang';
 
 async function saveResult(req: express.Request, res: express.Response) {
+    
     const valResult = Models.validateTrainingResult(req.body);
     if (valResult.error) {
         return res.status(400).send(valResult.error);
     } else if (valResult.value) {
-
+        
         await trainServices.saveTrainingResult(valResult.value, res.locals._id);
 
         return res.status(204).send({message: LANG.OK });
