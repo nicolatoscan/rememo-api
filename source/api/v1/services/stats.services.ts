@@ -57,8 +57,8 @@ async function saveResult(result: Result[], userId: string) {
                 if (word){
                     word.correctTest += ((wordState.result && wordState.type == ResultType.Test)? 1 : 0);
                     word.wrongTest += ((!wordState.result && wordState.type == ResultType.Test)? 1 : 0);
-                    word.correctTrain += ((wordState.result && wordState.type == ResultType.Test)? 1 : 0);
-                    word.wrongTrain += ((!wordState.result && wordState.type == ResultType.Test)? 1 : 0);
+                    word.correctTrain += ((wordState.result && wordState.type == ResultType.Train)? 1 : 0);
+                    word.wrongTrain += ((!wordState.result && wordState.type == ResultType.Train)? 1 : 0);
                 }
             }
         }
