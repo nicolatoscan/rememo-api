@@ -64,12 +64,20 @@ async function saveResult(result: Result[], userId: string) {
                     word.wrongTrain += ((!wordState.result && wordState.type == ResultType.Train) ? 1 : 0);
                 }
             }
-        
+
             await databaseHelper.getCollection('stats').replaceOne(
-                { collectionId: new ObjectId(collectionId), userId: new ObjectId( userId )},
+                { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
                 stat
             );
         }
     }
     return;
+}
+
+export async function getStatsCollection(idColl: string,  idUser: string) {
+    const stats = await databaseHelper.getCollection('stats').findOne({userId: new ObjectId( idUser), collectionId: new ObjectId( idColl)});
+
+    if (!stats)
+        return null;
+    return Models.getStatsFromDBDoc(stats);
 }

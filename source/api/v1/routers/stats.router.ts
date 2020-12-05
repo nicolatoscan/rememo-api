@@ -24,8 +24,8 @@ async function getCollStatsTrain(req: express.Request, res: express.Response) {
 }
 
 async function getWordStatsTest(req: express.Request, res: express.Response) {
- 
-    //
+
+    //   
 }
 
 async function getWordStatsTrain(req: express.Request, res: express.Response) {
@@ -40,8 +40,8 @@ export default function (): express.Router {
     router.get('/stats/test/:idColl', getCollStatsTest);
     router.get('/stats/train/:idColl', getCollStatsTrain);
 
-    router.get('/stats/word/:idColl/:idWord/test', getWordStatsTest);
-    router.get('/stats/word/:idColl/:idWord/train', getWordStatsTrain);
+    router.get('/stats/test/:idColl/word/:idWord', getWordStatsTest);
+    router.get('/stats/train/:idColl/word/:idWord', getWordStatsTrain);
 
     return router;
 }
