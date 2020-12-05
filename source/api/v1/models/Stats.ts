@@ -1,3 +1,4 @@
+import { notDeepStrictEqual } from 'assert';
 import { ObjectId } from 'mongodb';
 import { DBObject } from './misc.models';
 
@@ -52,6 +53,7 @@ export function createDBStatsDoc(collectionId: string, userId: string, wordsIds:
         })
     };
 }
+
 export function createEmptyWordStats(wordId: string): WordStats {
     return {
         wordId: new ObjectId(wordId) ,
@@ -60,5 +62,37 @@ export function createEmptyWordStats(wordId: string): WordStats {
         wrongTrain: 0,
         correctTest: 0,
         wrongTest: 0
+    };
+}
+
+export function getStatsFromDBDoc(doc:DBStatsDoc) : DBStatsDoc {
+    return {
+        _id: doc._id?.toString(),
+        createdOn: doc.createdOn,
+        lastModified: doc.lastModified,
+        collectionId: doc.collectionId,
+        userId: doc.userId,
+        correctTrain: doc.correctTrain,
+        wrongTrain: doc.wrongTrain,
+        correctTest: doc.correctTest,
+        wrongTest: doc.wrongTest,
+        words: doc.words.map(w => {
+            return {
+                wordId: w.wordId,
+                days: w.days.map(d => {
+                    return {
+                        day: d.day,
+                        correctTrain: d.correctTrain,
+                        wrongTrain: d.wrongTrain,
+                        correctTest: d.correctTest,
+                        wrongTest: d.wrongTest
+                    };
+                }),
+                correctTrain: w.correctTrain,
+                wrongTrain: w.wrongTrain,
+                correctTest: w.correctTest,
+                wrongTest: w.wrongTest
+            };
+        })
     };
 }
