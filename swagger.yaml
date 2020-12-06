@@ -381,8 +381,75 @@ paths:
       responses:
         204:
           description: 'Collection imported'
+          
+  /stats/test/{collectionId}/word/{wordId}:
+    get:
+      tags:
+      - "stats"
+      summary: Get the stats about a word in test
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/StatsTest'
+          examples:
+            application/json:
+              correctTest: 0
+              wrongTest: 0
+          
+  /stats/train/{collectionId}/word/{wordId}:
+    get:
+      tags:
+      - "stats"
+      summary: Get the stats about a word in train
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/StatsTrain'
+          examples:
+            application/json:
+              correctTrain: 0
+              wrongTrain: 0
 
 definitions:
+  
+  StatsTrain:
+    title: StatsTest
+    type: object
+    properties:
+      correctTrain:
+        type: number
+      wrongTrain:
+        type: number
+  
+  StatsTest:
+    title: StatsTest
+    type: object
+    properties:
+      correctTest:
+        type: number
+      wrongTest:
+        type: number
+
   ReturnId:
     title: ReturnId
     type: object
