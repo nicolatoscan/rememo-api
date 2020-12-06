@@ -74,8 +74,8 @@ async function saveResult(result: Result[], userId: string) {
     return;
 }
 
-export async function getStatsCollection(idColl: string,  idUser: string) {
-    const stats = await databaseHelper.getCollection('stats').findOne({userId: new ObjectId( idUser), collectionId: new ObjectId( idColl)});
+export async function getStatsCollection(idColl: string) {
+    const stats = await databaseHelper.getCollection('stats').findOne({ collectionId: new ObjectId( idColl)});
 
     if (!stats)
         return null;
