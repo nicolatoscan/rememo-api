@@ -43,7 +43,17 @@ async function getWordStatsTest(req: express.Request, res: express.Response) {
 
 async function getWordStatsTrain(req: express.Request, res: express.Response) {
 
-    //
+    const idColl = req.params.idColl;
+    const idWord = req.params.idColl;
+
+    if (!idColl && !idWord) {
+        return res.status(404).send(LANG.TEST_NOT_FOUND);
+    }
+    const stats = await statsServices.getStatsCollection(idColl);
+    const word = stats?.words.find(e => e.wordId !== new ObjectId(idWord));
+
+
+    return res.status(200).send({ correctTrain: word?.correctTrain, wrongTrain: word?.wrongTrain });
 }
 
 
