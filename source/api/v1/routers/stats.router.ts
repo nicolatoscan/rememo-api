@@ -15,6 +15,10 @@ async function getCollStatsTest(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.TEST_NOT_FOUND);
     }
 
+    const stats = await statsServices.getStatsCollection(idColl);
+
+    return res.status(200).send({ correctTest: stats?.correctTest, wrongTest: stats?.wrongTest });
+
 }
 
 async function getCollStatsTrain(req: express.Request, res: express.Response) {
@@ -23,6 +27,10 @@ async function getCollStatsTrain(req: express.Request, res: express.Response) {
     if (!idColl) {
         return res.status(404).send(LANG.TEST_NOT_FOUND);
     }
+
+    const stats = await statsServices.getStatsCollection(idColl);
+
+    return res.status(200).send({ correctTest: stats?.correctTrain, wrongTest: stats?.wrongTrain });
 }
 
 async function getWordStatsTest(req: express.Request, res: express.Response) {
