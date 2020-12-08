@@ -8,7 +8,7 @@ export interface TestQuery {
 
 export interface Test {
     _id?: string | ObjectId;
-    ownerId?: string;
+    ownerId?: string | ObjectId;
     createdOn?: Date;
     numberOfQuestions: number;
     collectionPollIds: string[];
@@ -49,6 +49,8 @@ export function validateTestResult(testResult: unknown): { value?: Test, error?:
             collectionId: joi.string().required(),
             wordId: joi.string().required(),
             question: joi.string().required(),
+            correct: joi.string(),
+            result: joi.string(),
             answer: joi.string().required(),
         })).required()
     }).validate(testResult);

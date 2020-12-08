@@ -28,7 +28,7 @@ export async function createTest(testQuery: Models.TestQuery, owner: string, use
 
     const test: Models.Test = {
         createdOn: new Date(),
-        ownerId: userId,
+        ownerId: new ObjectId(userId),
         corrected: false,
         collectionPollIds: testQuery.collectionPollIds,
         numberOfQuestions: testQuery.numberOfQuestions,
