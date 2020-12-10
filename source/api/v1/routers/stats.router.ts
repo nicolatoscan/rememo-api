@@ -5,7 +5,20 @@ import LANG from '../../../lang';
 import { ObjectId } from 'mongodb';
 
 
+async function getCollectionStats(req: express.Request, res: express.Response) {
+    const idColl = req.params.idColl;
+    if (!idColl) {
+        return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
+    }
 
+    const stats = await statsServices.getStatsCollection(idColl);
+
+    if (!stats) {
+        return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
+    } else {
+        return res.send(stats);
+    }
+}
 
 
 async function getCollStatsTest(req: express.Request, res: express.Response) {
@@ -68,6 +81,7 @@ async function getWordStatsTrain(req: express.Request, res: express.Response) {
 
 export default function (): express.Router {
     const router = express.Router();
+    router.get('/:idColl', getCollectionStats);
     router.get('/test/:idColl', getCollStatsTest);
     router.get('/train/:idColl', getCollStatsTrain);
 
