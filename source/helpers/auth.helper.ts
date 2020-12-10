@@ -3,6 +3,10 @@ import jwt from 'jsonwebtoken';
 import LANG from '../lang';
 
 export function auth(req: Request, res: Response, next: NextFunction): void {
+    if (req.method === 'OPTIONS') {
+        next();
+        return;
+    }
     const token = req.header('Authorization');
     if (token) {
         try {
