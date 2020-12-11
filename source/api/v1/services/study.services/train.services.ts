@@ -1,6 +1,7 @@
 import * as Models from '../../models';
 import databaseHelper from '../../../../helpers/database.helper';
 import { ObjectId } from 'mongodb';
+import * as statsServices from '../stats.services';
 
 function expAverage(correct: boolean, oldN: number, ALPHA: number): number {
     const res = (oldN * (1 - ALPHA)) + ((correct ? 1 : 0) * ALPHA);
@@ -22,6 +23,7 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
     if (!studyState)
         return false;
 
+  
     const word = studyState.wordsState.find(w => w.wordId.toHexString() === result.wordId);
     if (!word)
         return false;
@@ -50,6 +52,8 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
         { _id: studyState._id },
         studyState
     );
+    console.log(result.correct);
+    statsServices.saveTrainingResult(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct, userId);
     return true;
 }
 

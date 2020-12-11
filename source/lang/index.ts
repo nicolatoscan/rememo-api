@@ -13,6 +13,7 @@ export default {
     COLLECTION_NOT_FOUND: 'Collection not found',
     COLLECTION_UPDATED: 'Collection updated',
     COLLECTION_DELETED: 'Collection deleted',
+    COLLECTION_NOT_SHARED: 'Collection not shared',
 
     WORD_ID_NOT_FOUND: 'Word id not found',
     WORD_NOT_FOUND: 'Word not found',
@@ -23,9 +24,13 @@ export default {
     LEARN_STATE_COLLECTION_RESETED: 'Collection learn state reseted',
     LEARN_STATE_WORD_QUERY_PARAM_NOT_FOUND: 'Word learn state query parameter not found',
     LEARN_STATE_WORD_UPDATED: 'Word learn state updated',
+    LEARN_STATE_NOT_FOUND: 'Learn state non found',
+
     
     TEST_NOT_FOUND: 'Test not found',
     TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
+  
+    STATUS_NOT_FOUND: 'Status not found',
 
     OK: 'OK',
     KO: 'KO',

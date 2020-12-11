@@ -12,6 +12,7 @@ export function auth(req: Request, res: Response, next: NextFunction): void {
         try {
             res.locals = jwt.verify(token, process.env.TOKEN_SECRET as string) as Record<string, unknown>;
             next();
+            return;
         } catch (err) {
             res.status(301).send(LANG.AUTH_INVALID_TOKEN);
         }

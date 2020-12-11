@@ -703,6 +703,106 @@
 			"response": []
 		},
 		{
+			"name": "/share/:idCol",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1694b087-a87e-454c-a6e2-6158b18996b3",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.url === 'string');",
+							"",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/share/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"share",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/share/import/:idCol ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c7fe9702-7740-4559-9c19-365a97457a2c",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/share/import/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"share",
+						"import",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/collections/:idCol/words/:idWord",
 			"event": [
 				{

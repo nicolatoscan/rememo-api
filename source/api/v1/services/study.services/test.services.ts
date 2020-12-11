@@ -2,6 +2,7 @@ import * as Models from '../../models';
 import databaseHelper from '../../../../helpers/database.helper';
 import { ObjectId } from 'mongodb';
 import LANG from '../../../../lang';
+import * as statsServices from '../stats.services';
 
 export async function createTest(testQuery: Models.TestQuery, owner: string, userId: string): Promise<Models.Test> {
     const ids = testQuery.collectionPollIds.map(id => new ObjectId(id));
@@ -71,6 +72,7 @@ export async function checkTest(queryTest: Models.Test, userId: string): Promise
         { _id: docTest._id },
         docTest
     );
-
+    statsServices.saveTestResult(docTest, userId);
     return { testResult: docTest };
 }
+

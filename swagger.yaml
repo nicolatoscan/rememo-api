@@ -2,7 +2,6 @@ swagger: '2.0'
 info:
   version: '0.2.2'
   title: "Rememo API"
-  description: TODO
   license:
     name: MIT
     url: https://github.com/nicolatoscan/rememo-api/blob/main/LICENSE
@@ -15,6 +14,10 @@ tags:
   description: "Users"
 - name: "collections"
   description: "Collections"
+- name: "study"
+  description: "Study"
+- name: "share"
+  description: "Share"
 schemes:
 - https
 consumes:
@@ -36,7 +39,7 @@ paths:
             $ref: '#/definitions/SignupUser'
       responses:
         201:
-          description: ''
+          description: 'Created user'
           schema:
             $ref: '#/definitions/SignupUserResponse'
           examples:
@@ -58,7 +61,7 @@ paths:
             $ref: '#/definitions/LoginUser'
       responses:
         200:
-          description: ''
+          description: 'Logged in user'
           schema:
             $ref: '#/definitions/SignupUserResponse'
           examples:
@@ -284,8 +287,169 @@ paths:
       responses:
         204:
           description: Word deleted
+          
+  /study/learn/{collectionId}/status:
+    get:
+      tags:
+      - "study"
+      summary: Get the Learn State of a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'An array of objects which defines the Learn State of a Collection'
+          schema: 
+            $ref: '#/definitions/CollectionLearnState'
+          examples:
+            application/json: [
+                  {
+                    wordId: 353hk23j5b23k5bjk2sdfasd,
+                    learned: 0.343
+                  },
+                  {
+                    wordId: 891fedf7gd7fgd89f789df7g,
+                    learned: 0.575
+                  }
+                ]
+  
+  /study/learn/{collectionId}/learned:
+    put:
+      tags:
+      - "study"
+      summary: Update the Learn State of a Word
+      parameters:
+        - name: collectionId
+          in: path
+          type: string
+          required: true
+        - name: wordId
+          in: query
+          type: string
+          required: true
+        - name: status
+          in: query
+          type: number
+          required: true
+      responses:
+        204:
+          description: 'Word Learn State updated'
+          
+  /study/learn/{collectionId}/reset:
+    put:
+      tags:
+      - "study"
+      summary: Reset the Learn State of a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          type: string
+          required: true
+      responses:
+        204:
+          description: 'Collection Learn State reseted'
+          
+  /share/{collectionId}:
+    get:
+      tags:
+      - "share"
+      summary: Share a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'Collection can be shared'
+          examples:
+            application/json:
+                url: share/import/5fbeca7fa4b2a77d62753073
+
+  /share/import/{collectionId}:
+    get:
+      tags:
+      - "share"
+      summary: Import a Collection
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: 'Collection imported'
+          
+  /stats/test/{collectionId}/word/{wordId}:
+    get:
+      tags:
+      - "stats"
+      summary: Get the stats about a word in test
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/StatsTest'
+          examples:
+            application/json:
+              correctTest: 0
+              wrongTest: 0
+          
+  /stats/train/{collectionId}/word/{wordId}:
+    get:
+      tags:
+      - "stats"
+      summary: Get the stats about a word in train
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/StatsTrain'
+          examples:
+            application/json:
+              correctTrain: 0
+              wrongTrain: 0
 
 definitions:
+  
+  StatsTrain:
+    title: StatsTest
+    type: object
+    properties:
+      correctTrain:
+        type: number
+      wrongTrain:
+        type: number
+  
+  StatsTest:
+    title: StatsTest
+    type: object
+    properties:
+      correctTest:
+        type: number
+      wrongTest:
+        type: number
+
   ReturnId:
     title: ReturnId
     type: object
@@ -428,3 +592,21 @@ definitions:
       - index
       - original
       - translation
+      
+  CollectionLearnState:
+    title: CollectionLearnState
+    type: array
+    items:
+      $ref: '#/definitions/WordLearnState'
+      
+  WordLearnState:
+    title: WordLearnState
+    type: object
+    properties:
+      wordId:
+        type: string
+      learned:
+        type: number
+    required:
+      - wordId
+      - learned

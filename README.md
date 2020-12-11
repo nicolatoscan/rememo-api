@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.org/nicolatoscan/rememo-api.svg?branch=main)](https://travis-ci.org/nicolatoscan/rememo-api)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/nicolatoscan/rememo-api/blob/master/LICENSE)
+![ts](https://badgen.net/badge/Built%20With/TypeScript/blue)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nicolatoscan/rememo-api.svg)](https://hub.docker.com/r/nicolatoscan/rememo-api)
 
-# rememo-api
+# Rememo API
 
 Project: Rememo<br>
 Group ID: #13<br>
@@ -10,14 +14,23 @@ Nicola Toscan - [nicolatoscan](https://github.com/nicolatoscan)<br>
 Taras Rashkevych - [TarasRashkevych99](https://github.com/TarasRashkevych99)
 
 ## Overview
-This project consist's of an [express](https://expressjs.com/) rest API server written in Typescript.
+This project consists of an [express](https://expressjs.com/) rest API server written in Typescript.
 
-## Requirements
+## Web Application
+A web application that uses this API is being developed at https://github.com/nicolatoscan/rememo-webapp <br>
+A live demo is available at https://rememo.nicolatoscan.dev <br>
+You can find there a README and wiki on how it's being developed.
+
+## Live demo
+A live demo is available at https://rememo-api.herokuapp.com/
+
+## API documentation
+API documentation available at https://rememoapi.docs.apiary.io/
+
+## How to demo on your machine
 Make sure you have installed [Node.js](https://nodejs.org/en/).<br>
 This project was developed with Node v15 and tested on Ubuntu and Windows.
 
-
-## Get the application
 Clone the repository on your machine.
 ```bash
 git clone https://github.com/nicolatoscan/rememo-api.git
@@ -41,13 +54,19 @@ TOKEN_SECRET=<a-token-secret>
 CRYPTO_SECRET=<crypto-secret>
 ```
 
-## Run
-To start the application use:
+Run the application:
 ```bash
 npm run start
 ```
 
-## Test
+## Run with docker
+From the repository a docker image is automatically created using `Dockerfile`.<br>
+The project can be run in a docker container using the same `.env` described before with:
+```bash
+docker run -p 3000:3000 --env-file ./.env nicolatoscan/rememo-api
+```
+
+## Tests
 IMPORTANT! The test will wipe the database, check you are using the `.env.test` variables.<br>
 Tests for the code are made using the [Mocha](https://mochajs.org/) test framework and can be run with:
 ```bash
@@ -69,22 +88,15 @@ Both tests can be run with:
 npm test
 ```
 
-## Run with docker
-From the repository a docker image is automatically created using `Dockerfile`.<br>
-The project can be run in a docker container with:
-```bash
-docker run -p 3000:3000 nicolatoscan/rememo-api
-```
-
 ## npm scripts
-The application come with several npm scripts:
+The application comes with several npm scripts:
+* `npm run serve` - Transpile and run the application in one command
 * `npm run start` - Start the application from the transpiled file
+* `npm run serve:test` - Transpile and run the application in one command using the `.env.test` variables
 * `npm run start:test` - Start the application from the transpiled file using the `.env.test` variables
 * `npm run transpile` - Transpile the typescript file to javascript
-* `npm run serve` - Transpile and run the application in one command
-* `npm run serve:test` - Transpile and run the application in one command using the `.env.test` variables
-* `npm run test` - Transpile the application and run all the tests
 * `npm run start:test` - Run all the tests
 * `npm run test:postman` - Run the Postman tests
 * `npm run test:mocha:start` - Run the Mocha tests
 * `npm run test:mocha:serve` - Transpile and run the Mocha tests
+* `npm run test` - Transpile the application and run all the tests
