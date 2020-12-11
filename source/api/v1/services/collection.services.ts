@@ -12,12 +12,16 @@ export async function createCollection(collection: Models.Collection, userId: st
 
     delete collection._id;
     collection.owner = owner;
-    const collectionToInsert = Models.createDBCollectionDoc(collection);
+    const collectionToInsert = Models.createDBCollectionDoc(collection); 
 
     const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
 
     await databaseHelper.getCollection('collection-study-state').insertOne(
-        Models.getEmptyDBCollectionStudyStateDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
+        Models.createEmptyDBCollectionStudyStateDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
+    );
+
+    await databaseHelper.getCollection('stats').insertOne(
+        Models.createDBStatsDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
     );
 
     return { collectionId: insertedId };
@@ -44,6 +48,8 @@ export async function updateCollectionById(id: string, owner: string, updateProp
 export async function deleteCollectionById(id: string, userId: string, owner: string): Promise<void> {
     await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(id), owner: owner });
     await databaseHelper.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
+    await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId)});
+
 }
 
 export async function createWord(word: Models.Word, collectionId: string, userId: string, owner: string): Promise<{ wordId: string }> {
@@ -56,7 +62,12 @@ export async function createWord(word: Models.Word, collectionId: string, userId
 
     await databaseHelper.getCollection('collection-study-state').updateOne(
         { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $push: { wordsState: Models.getEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
+        { $push: { wordsState: Models.createEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
+    );
+    
+    await databaseHelper.getCollection('stats').updateOne(
+        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
+        { $push: { words: Models.createEmptyWordStats((word._id as ObjectId).toHexString()) } }
     );
 
     return { wordId: word._id.toHexString() };
@@ -94,6 +105,11 @@ export async function deleteWordById(collectionId: string, wordId: string, userI
     await databaseHelper.getCollection('collection-study-state').updateOne(
         { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
         { $pull: { wordsState: { wordId: new ObjectId(wordId) } } }
+    );
+
+    await databaseHelper.getCollection('stats').updateOne(
+        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
+        { $pull: { words: { wordId: new ObjectId(wordId) } } }
     );
 }
 

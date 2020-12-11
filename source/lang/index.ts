@@ -20,6 +20,14 @@ export default {
     WORD_UPDATED: 'Word updated',
     WORD_DELETED: 'Word deleted',
 
+    LEARN_STATE_NOT_FOUND: 'Learn state non found',
+
+    TEST_NOT_FOUND: 'Test not found',
+    TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
+  
     STATUS_NOT_FOUND: 'Status not found',
+  
+    OK: 'OK',
+    KO: 'KO',
 
 };

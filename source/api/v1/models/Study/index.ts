@@ -1,5 +1,8 @@
 import { ObjectId } from 'mongodb';
-import { DBObject } from './misc.models';
+import { DBObject } from '../misc.models';
+
+export * from './Train';
+export * from './Test';
 
 export interface DBCollectionStudyStateDoc extends DBObject {
     collectionId: ObjectId;
@@ -15,7 +18,7 @@ export interface DBCollectionStudyStateDoc extends DBObject {
 
 export interface WordStudyState {
     wordId: ObjectId;
-    learned: boolean;
+    learned: number;
     score: number;
     lastDoneDate: Date;
     lastDoneCorrectDate: Date;
@@ -23,7 +26,7 @@ export interface WordStudyState {
     lastDoneCorrectCounter: number;
 }
 
-export function getEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBCollectionStudyStateDoc {
+export function createEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBCollectionStudyStateDoc {
     return {
         createdOn: new Date(),
         lastModified: new Date(),
@@ -34,14 +37,14 @@ export function getEmptyDBCollectionStudyStateDoc(collectionId: string, userId: 
         lastDoneDate: new Date(),
         lastDoneCorrectDate: new Date(),
         lastDoneCorrectCounter: 0,
-        wordsState: wordsIds.map(id => getEmptyWordStudyState(id))
+        wordsState: wordsIds.map(id => createEmptyWordStudyState(id))
     };
 }
 
-export function getEmptyWordStudyState(wordId: string): WordStudyState {
+export function createEmptyWordStudyState(wordId: string): WordStudyState {
     return {
         wordId: new ObjectId(wordId),
-        learned: false,
+        learned: 0,
         score: 0,
         lastDoneDate: new Date(),
         lastDoneCorrectDate: new Date(),
