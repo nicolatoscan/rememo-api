@@ -32,7 +32,7 @@ async function updateWordLearnState(req: express.Request, res: express.Response)
     const wordId = req.query.wordId as string;
     const status = Number(req.query.status);
 
-    if (!wordId || !status) {
+    if (!wordId || (status == null) || (status == undefined)) {
         return res.status(404).send(LANG.LEARN_STATE_WORD_QUERY_PARAM_NOT_FOUND);
     }
 
