@@ -72,7 +72,7 @@ function getSampleRange<T>(source: T[], range: number): T[] {
     return source.slice(Math.floor(bottom), Math.ceil(top));
 }
 
-export async function getNextWord(idsPolls: string[], owner: string, userId: string): Promise<Models.Word | undefined> {
+export async function getNextWord(idsPolls: string[], owner: string, userId: string): Promise<Models.FullWord | undefined> {
 
     const wordsPoll = (await databaseHelper.getCollection('collection-study-state')
         .find({
@@ -103,8 +103,16 @@ export async function getNextWord(idsPolls: string[], owner: string, userId: str
         return undefined;
 
     const wordInfo = sample.reduce((min, w) => w.lastDoneCorrectCounter < min.lastDoneCorrectCounter ? w : min);
-    const word = ((await databaseHelper.getCollection('collections')
-        .findOne({ _id: new ObjectId(wordInfo.collectionId), owner: owner })) as Models.DBCollectionDoc)
-        ?.words.find(w => (w._id as ObjectId).toHexString() === wordInfo.wordId.toHexString());
-    return word;
+    const collection = ((await databaseHelper.getCollection('collections')
+        .findOne({ _id: new ObjectId(wordInfo.collectionId), owner: owner })) as Models.DBCollectionDoc);
+    const word = collection?.words.find(w => (w._id as ObjectId).toHexString() === wordInfo.wordId.toHexString());
+
+    if (collection && word) {
+        return {
+            ...word,
+            collectionId: collection._id?.toString() ?? '',
+        };
+    } else {
+        return undefined;
+    }
 }

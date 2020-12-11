@@ -12,6 +12,10 @@ export interface Word {
     languageTo?: string;
 }
 
+export interface FullWord extends Word {
+    collectionId: string | ObjectId;
+}
+
 export interface Collection {
     _id?: string,
     index: number;
