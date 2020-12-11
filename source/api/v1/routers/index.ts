@@ -5,6 +5,7 @@ import getAuthRouter from './auth.router';
 import getCollectionRouter from './collection.router';
 import getStudyRouter from './study.router';
 import getStatsRouter from './stats.router';
+import getShareRouter from './share.router';
 
 export default function(): express.Router {
     const router = express.Router();
@@ -16,6 +17,10 @@ export default function(): express.Router {
     router.use('/collections', getCollectionRouter());
     router.use('/study', getStudyRouter());
     router.use('/stats', getStatsRouter());
+
+    router.use('/share', getShareRouter());
+
+
 
     return router;
 }

@@ -10,6 +10,7 @@ export async function getCollections(username: string): Promise<Models.Collectio
 
 export async function createCollection(collection: Models.Collection, userId: string, owner: string): Promise<{ collectionId: string }> {
 
+    delete collection._id;
     collection.owner = owner;
     const collectionToInsert = Models.createDBCollectionDoc(collection); 
 
@@ -28,10 +29,13 @@ export async function createCollection(collection: Models.Collection, userId: st
 }
 
 export async function getCollectionById(id: string, owner: string): Promise<Models.Collection | null> {
-    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id), owner: owner });
+    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id) }) as Models.DBCollectionDoc;
     if (!collection)
         return null;
-    return Models.getCollectionFromDBDoc(collection);
+    if (collection.owner === owner || collection.share)
+        return Models.getCollectionFromDBDoc(collection);
+    else
+        return null;
 }
 
 export async function updateCollectionById(id: string, owner: string, updateProps: any): Promise<void> {
