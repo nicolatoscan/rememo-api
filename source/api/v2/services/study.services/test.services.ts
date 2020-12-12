@@ -4,12 +4,12 @@ import { ObjectId } from 'mongodb';
 import LANG from '../../../../lang';
 import * as statsServices from '../stats.services';
 
-export async function createTest(testQuery: Models.TestQuery, owner: string, userId: string): Promise<Models.Test> {
+export async function createTest(testQuery: Models.TestQuery, userId: string): Promise<Models.Test> {
     const ids = testQuery.collectionPollIds.map(id => new ObjectId(id));
 
     const wordsPoll = (await databaseHelper.getCollection('collections')
         .find({
-            owner: owner,
+            owner: new ObjectId(userId),
             _id: { $in: ids }
         })
         .project({ _id: 1, words: 1 })

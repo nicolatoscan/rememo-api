@@ -3,15 +3,15 @@ import databaseHelper from '../../../helpers/database.helper';
 import { ObjectId } from 'mongodb';
 
 
-export async function getCollections(username: string): Promise<Models.Collection[]> {
-    const collections = await databaseHelper.getCollection('collections').find({ owner: username }).toArray();
+export async function getCollections(userId: string): Promise<Models.Collection[]> {
+    const collections = await databaseHelper.getCollection('collections').find({ owner: new ObjectId(userId) }).toArray();
     return collections.map(col => Models.getCollectionFromDBDoc(col));
 }
 
-export async function createCollection(collection: Models.Collection, userId: string, owner: string): Promise<{ collectionId: string }> {
+export async function createCollection(collection: Models.Collection, userId: string): Promise<{ collectionId: string }> {
 
     delete collection._id;
-    collection.owner = owner;
+    collection.owner = new ObjectId(userId);
     const collectionToInsert = Models.createDBCollectionDoc(collection); 
 
     const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
@@ -28,35 +28,35 @@ export async function createCollection(collection: Models.Collection, userId: st
 
 }
 
-export async function getCollectionById(id: string, owner: string): Promise<Models.Collection | null> {
+export async function getCollectionById(id: string, userId: string): Promise<Models.Collection | null> {
     const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id) }) as Models.DBCollectionDoc;
     if (!collection)
         return null;
-    if (collection.owner === owner || collection.share)
+    if (collection.owner?.toString() === userId || collection.share)
         return Models.getCollectionFromDBDoc(collection);
     else
         return null;
 }
 
-export async function updateCollectionById(id: string, owner: string, updateProps: any): Promise<void> {
+export async function updateCollectionById(id: string, userId: string, updateProps: any): Promise<void> {
     if (updateProps._id)
         delete updateProps._id;
     updateProps.lastModified = new Date();
-    await databaseHelper.getCollection('collections').updateOne({ _id: new ObjectId(id), owner: owner }, { $set: updateProps });
+    await databaseHelper.getCollection('collections').updateOne({ _id: new ObjectId(id), owner: new ObjectId(userId) }, { $set: updateProps });
 }
 
-export async function deleteCollectionById(id: string, userId: string, owner: string): Promise<void> {
-    await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(id), owner: owner });
+export async function deleteCollectionById(id: string, userId: string): Promise<void> {
+    await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(id), owner: new ObjectId(userId) });
     await databaseHelper.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
     await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId)});
 
 }
 
-export async function createWord(word: Models.Word, collectionId: string, userId: string, owner: string): Promise<{ wordId: string }> {
+export async function createWord(word: Models.Word, collectionId: string, userId: string): Promise<{ wordId: string }> {
     word._id = new ObjectId();
 
     await databaseHelper.getCollection('collections').updateOne(
-        { _id: new ObjectId(collectionId), owner: owner },
+        { _id: new ObjectId(collectionId), owner: new ObjectId(userId) },
         { $push: { words: word } }
     );
 
@@ -74,8 +74,8 @@ export async function createWord(word: Models.Word, collectionId: string, userId
 
 }
 
-export async function getWordById(collectionId: string, wordId: string, owner: string): Promise<Models.Word | null> {
-    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(collectionId), owner: owner });
+export async function getWordById(collectionId: string, wordId: string, userId: string): Promise<Models.Word | null> {
+    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(collectionId), owner: new ObjectId(userId) });
     if (!collection) {
         return null;
     }
@@ -87,18 +87,18 @@ export async function getWordById(collectionId: string, wordId: string, owner: s
     return word;
 }
 
-export async function updateWordById(collectionId: string, wordId: string, owner: string, updateProps: any): Promise<void> {
+export async function updateWordById(collectionId: string, wordId: string, userId: string, updateProps: any): Promise<void> {
     if (updateProps._id)
         delete updateProps._id;
     await databaseHelper.getCollection('collections').updateOne(
-        { _id: new ObjectId(collectionId), owner: owner, 'words._id': wordId },
+        { _id: new ObjectId(collectionId), owner: new ObjectId(userId), 'words._id': wordId },
         { $set: { 'words.$': updateProps } }
     );
 }
 
-export async function deleteWordById(collectionId: string, wordId: string, userId: string, owner: string): Promise<void> {
+export async function deleteWordById(collectionId: string, wordId: string, userId: string): Promise<void> {
     await databaseHelper.getCollection('collections').updateOne(
-        { _id: new ObjectId(collectionId), owner: owner },
+        { _id: new ObjectId(collectionId), owner: new ObjectId(userId) },
         { $pull: { words: { _id: new ObjectId(wordId) } } }
     );
 

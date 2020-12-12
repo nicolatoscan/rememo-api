@@ -8,7 +8,7 @@ async function shareCollectionById(req: express.Request, res: express.Response) 
     if (!idColl) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
-    collectionServices.updateCollectionById(idColl, res.locals.username, { share: true });
+    collectionServices.updateCollectionById(idColl, res.locals._id, { share: true });
     const link = `share/import/${idColl}`;
     
     res.send({ url: link });
@@ -22,14 +22,14 @@ async function importCollection(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    const collection = await collectionServices.getCollectionById(idColl, res.locals.username);
+    const collection = await collectionServices.getCollectionById(idColl, res.locals._id);
 
     if (!collection?.share) {
         return res.status(404).send(LANG.COLLECTION_NOT_SHARED);
     }
 
 
-    await collectionServices.createCollection(collection, res.locals._id, res.locals.username);
+    await collectionServices.createCollection(collection, res.locals._id);
     return res.status(204).send();
 
 }

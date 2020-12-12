@@ -5,7 +5,7 @@ import LANG from '../../../lang';
 
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
-    const colls = await collectionServices.getCollections(res.locals.username);
+    const colls = await collectionServices.getCollections(res.locals._id);
     return res.send(colls);
 
 }
@@ -18,7 +18,7 @@ async function createCollection(req: express.Request, res: express.Response) {
     } else if (valCollection.value) {
         const collection = valCollection.value;
 
-        const { collectionId } = await collectionServices.createCollection(collection, res.locals._id, res.locals.username);
+        const { collectionId } = await collectionServices.createCollection(collection, res.locals._id);
 
         return res.status(201).send({ _id: collectionId });
     }
@@ -30,7 +30,7 @@ async function getCollectionById(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    const collection = await collectionServices.getCollectionById(idColl, res.locals.username);
+    const collection = await collectionServices.getCollectionById(idColl, res.locals._id);
 
     if (!collection) {
         return res.status(404).send(LANG.COLLECTION_NOT_FOUND);
@@ -55,7 +55,7 @@ async function updateCollectionById(req: express.Request, res: express.Response)
         delete collection.owner;
         delete collection.words;
 
-        await collectionServices.updateCollectionById(idColl, res.locals.username, collection);
+        await collectionServices.updateCollectionById(idColl, res.locals._id, collection);
 
         return res.status(204).send({ message: LANG.COLLECTION_UPDATED });
     }
@@ -68,7 +68,7 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    await collectionServices.deleteCollectionById(idColl, res.locals._id, res.locals.username);
+    await collectionServices.deleteCollectionById(idColl, res.locals._id);
 
     return res.status(204).send({ message: LANG.COLLECTION_DELETED });
 }
@@ -87,7 +87,7 @@ async function createWord(req: express.Request, res: express.Response) {
     } else if (valWord.value) {
         const word = valWord.value;
 
-        const { wordId } = await collectionServices.createWord(word, idColl, res.locals._id, res.locals.username);
+        const { wordId } = await collectionServices.createWord(word, idColl, res.locals._id);
 
         return res.status(201).send({ _id: wordId });
     }
@@ -104,7 +104,7 @@ async function getWordById(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
-    const word = await collectionServices.getWordById(idColl, idWord, res.locals.username);
+    const word = await collectionServices.getWordById(idColl, idWord, res.locals._id);
 
     if (!word) {
         return res.status(404).send(LANG.WORD_NOT_FOUND);
@@ -132,7 +132,7 @@ async function updateWordById(req: express.Request, res: express.Response) {
     } else if (valWord.value) {
         const word = valWord.value;
 
-        await collectionServices.updateWordById(idColl, idWord, res.locals.username, word);
+        await collectionServices.updateWordById(idColl, idWord, res.locals._id, word);
 
         return res.status(204).send({ message: LANG.WORD_UPDATED });
     }
@@ -150,7 +150,7 @@ async function deleteWordById(req: express.Request, res: express.Response) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
-    await collectionServices.deleteWordById(idColl, idWord, res.locals._id, res.locals.username);
+    await collectionServices.deleteWordById(idColl, idWord, res.locals._id);
 
     return res.status(204).send({ message: LANG.WORD_DELETED });
 

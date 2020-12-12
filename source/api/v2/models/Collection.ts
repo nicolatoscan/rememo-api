@@ -21,7 +21,7 @@ export interface Collection {
     index: number;
     name: string;
     description: string;
-    owner?: string;
+    owner?: string | ObjectId;
     languageFrom?: string;
     languageTo?: string;
     share?:boolean;

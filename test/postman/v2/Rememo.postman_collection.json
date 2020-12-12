@@ -1,0 +1,891 @@
+{
+	"info": {
+		"_postman_id": "f68ede54-8bb4-4ceb-9d46-f72be96dd42f",
+		"name": "Rememo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/aut/signup",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8597ef97-a2e0-4bf1-bcb3-482ac5c56124",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.displayName).to.equal('Test Displayname');\r",
+							"    pm.expect(responseJson.email).to.equal('email@example.com');\r",
+							"    pm.expect(responseJson.username).to.equal('TestUsername');\r",
+							"    pm.expect(responseJson.password).to.be.undefined;\r",
+							"})\r",
+							"pm.test('Has authentication header', function() {\r",
+							"    const auth = pm.response.headers.find(h => h.key === 'Authentication').value;\r",
+							"    pm.expect(typeof auth === 'string');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"username\": \"TestUsername\",\r\n    \"displayName\": \"Test Displayname\",\r\n    \"password\": \"testpassword!\",\r\n    \"email\": \"email@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/auth/signup",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Sign Up"
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "86abebee-dce7-4a0f-9a6c-822a01328add",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.displayName).to.equal('Test Displayname');\r",
+							"    pm.expect(responseJson.email).to.equal('email@example.com');\r",
+							"    pm.expect(responseJson.username).to.equal('TestUsername');\r",
+							"    pm.expect(responseJson.password).to.equal(undefined);\r",
+							"})\r",
+							"pm.test('Has authentication header', function() {\r",
+							"    const auth = pm.response.headers.find(h => h.key === 'Authentication').value;\r",
+							"    pm.expect(typeof auth === 'string');\r",
+							"    pm.environment.set('Token', auth)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUsername\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/auth/login",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b123d18-5f5a-4d61-b269-5944052af823",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson._id).to.be.string;\r",
+							"    pm.environment.set('CollectionId', responseJson._id)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"index\": 1,\r\n    \"name\": \"Testing Collection\",\r\n    \"description\": \"Testing description\",\r\n    \"owner\": \"pippo\",\r\n    \"words\": [{\r\n        \"index\": 1,\r\n        \"original\": \"Red\",\r\n        \"translation\": \"Rosso\"\r\n    }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections/:idColl/words",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c4379ee2-112e-4f5b-851d-81ba8dc91add",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson._id).to.be.string;\r",
+							"    pm.environment.set('WordId', responseJson._id);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"index\": 1,\r\n    \"original\": \"Red\",\r\n    \"translation\": \"Rosso\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}/words",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}",
+						"words"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "75f15cfb-77c9-4bbd-b461-54c65af71b01",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].index === 'number');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Collection','Testing Collection updated']);",
+							"    pm.expect(responseJson[0].description).to.oneOf(['Testing description','Testing description updated']);",
+							"    pm.expect(typeof responseJson[0].owner === 'string');",
+							"    pm.expect(responseJson[0].languageFrom === null);",
+							"    pm.expect(responseJson[0].languageTo === null);",
+							"    pm.expect(typeof responseJson[0].words[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].index === 'number');",
+							"    pm.expect(typeof responseJson[0].words[0].original === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].translation === 'string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections/:idCol",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4105b4fd-28b1-4ec2-a33a-46ab8aa73cd0",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson._id === 'string');",
+							"    pm.expect(typeof responseJson.index === 'number');",
+							"    pm.expect(responseJson.name).to.oneOf(['Testing Collection','Testing Collection updated']);",
+							"    pm.expect(responseJson.description).to.oneOf(['Testing description','Testing description updated']);",
+							"    pm.expect(typeof responseJson.owner === 'string');",
+							"    pm.expect(responseJson.languageFrom === null);",
+							"    pm.expect(responseJson.languageTo === null);",
+							"    pm.expect(typeof responseJson.words[0]._id === 'string');",
+							"    pm.expect(typeof responseJson.words[0].index === 'number');",
+							"    pm.expect(typeof responseJson.words[0].original === 'string');",
+							"    pm.expect(typeof responseJson.words[0].translation === 'string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections/:idCol/words/:idWord",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f404f5a5-7712-4e5d-abf8-31574c4616da",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson._id === 'string');",
+							"    pm.expect(typeof responseJson.index === 'number');",
+							"    pm.expect(typeof responseJson.original === 'string');",
+							"    pm.expect(typeof responseJson.translation === 'string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}/words/{{WordId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}",
+						"words",
+						"{{WordId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c72e9aa-0d29-412a-977a-6162b6fd648e",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"index\": 1,\r\n    \"name\": \"Testing Collection updated\",\r\n    \"description\": \"Testing description updated\",\r\n    \"words\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections/:idCol/words/:idWord",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dc300989-17a8-47a0-98b7-fa6255599f4f",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"index\": 1,\r\n    \"original\": \"Green\",\r\n    \"translation\": \"Verde\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}/words/{{WordId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}",
+						"words",
+						"{{WordId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/share/:idCol",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1694b087-a87e-454c-a6e2-6158b18996b3",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.url === 'string');",
+							"",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/share/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"share",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/share/import/:idCol ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c7fe9702-7740-4559-9c19-365a97457a2c",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/share/import/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"share",
+						"import",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collections/:idCol/words/:idWord",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1e007f56-c229-42a6-8a78-fb374f7d93d8",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"//pm.test('Check response', function() {",
+							"//   pm.expect(pm.response.text() === 'Word deleted'); ",
+							"//})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}/words/{{WordId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}",
+						"words",
+						"{{WordId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collection/:idCollection",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2314ed03-61e4-4f4e-8444-56b49e3776e7",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"//pm.test('Check response', function() {\r",
+							"//   pm.expect(pm.response.text() === 'User deleted'); \r",
+							"//})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4dd4e7ea-2013-4f4e-96cb-5e45ef2b97ee",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.displayName).to.equal('Test Displayname');",
+							"    pm.expect(responseJson.email).to.equal('email@example.com');",
+							"    pm.expect(responseJson.username).to.equal('TestUsername');",
+							"    pm.expect(responseJson.password).to.equals(undefined);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/users",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1e7917c6-b9d4-4915-9704-10a1dc54945d",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check response', function() {\r",
+							"   pm.expect(pm.response.text() === 'User update'); \r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUsername\",\r\n    \"displayName\":\"nuovo nome\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/users",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "750fc0d8-c3d2-4628-b4b3-c67580569a28",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check response', function() {\r",
+							"   pm.expect(pm.response.text() === 'User deleted'); \r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"TestUsername\",\r\n    \"password\": \"testpassword!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/users",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

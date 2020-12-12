@@ -72,7 +72,7 @@ function getSampleRange<T>(source: T[], range: number): T[] {
     return source.slice(Math.floor(bottom), Math.ceil(top));
 }
 
-export async function getNextWord(idsPolls: string[], owner: string, userId: string): Promise<Models.FullWord | undefined> {
+export async function getNextWord(idsPolls: string[], userId: string): Promise<Models.FullWord | undefined> {
 
     const wordsPoll = (await databaseHelper.getCollection('collection-study-state')
         .find({
@@ -104,7 +104,7 @@ export async function getNextWord(idsPolls: string[], owner: string, userId: str
 
     const wordInfo = sample.reduce((min, w) => w.lastDoneCorrectCounter < min.lastDoneCorrectCounter ? w : min);
     const collection = ((await databaseHelper.getCollection('collections')
-        .findOne({ _id: new ObjectId(wordInfo.collectionId), owner: owner })) as Models.DBCollectionDoc);
+        .findOne({ _id: new ObjectId(wordInfo.collectionId), owner: new ObjectId(userId) })) as Models.DBCollectionDoc);
     const word = collection?.words.find(w => (w._id as ObjectId).toHexString() === wordInfo.wordId.toHexString());
 
     if (collection && word) {

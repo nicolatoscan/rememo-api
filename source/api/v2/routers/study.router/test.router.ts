@@ -7,7 +7,7 @@ async function generateTest(req: express.Request, res: express.Response) {
     if (valTestQuery.error) {
         return res.status(400).send(valTestQuery.error);
     } else if (valTestQuery.value) {
-        const test = await testServices.createTest(valTestQuery.value, res.locals.username, res.locals._id);
+        const test = await testServices.createTest(valTestQuery.value, res.locals._id);
         return res.status(201).send(test);
     }
 }
