@@ -1,12 +1,29 @@
 import * as Models from '../models';
 import databaseHelper from '../../../helpers/database.helper';
 import { ObjectId } from 'mongodb';
+import * as classServices from '../services/class.services';
 
 
-export async function getCollections(userId: string): Promise<Models.Collection[]> {
+
+export async function getAllCollections(userId: string): Promise<Models.Collection[]> {
+    const user = (await databaseHelper.getCollection('users').findOne({ username: new ObjectId(userId) })) as Models.DBUserDoc;
     const collections = await databaseHelper.getCollection('collections').find({ owner: new ObjectId(userId) }).toArray();
     return collections.map(col => Models.getCollectionFromDBDoc(col));
 }
+
+export async function getMyCollections(userId: string): Promise<Models.Collection[]> {
+    const collections = await databaseHelper.getCollection('collections').find({ owner: new ObjectId(userId) }).toArray();
+    return collections.map(col => Models.getCollectionFromDBDoc(col));
+}
+
+export async function getJoinedClassCollections(userId: string): Promise<Models.Collection[]> {
+    const user = (await databaseHelper.getCollection('users').findOne({ username: new ObjectId(userId) })) as Models.DBUserDoc;
+    const collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);
+    const collections = await databaseHelper.getCollection('collections').find({ _id: { $in : collectionIDs }}).toArray();
+    return collections.map(col => Models.getCollectionFromDBDoc(col));
+}
+
+
 
 export async function createCollection(collection: Models.Collection, userId: string): Promise<{ collectionId: string }> {
 
