@@ -6,7 +6,7 @@ import { DBObject } from './misc.models';
 export interface StudyClass {
     _id: string | ObjectId,
     name: string,
-    collections: string[]
+    collections: string[] | ObjectId[]
 }
 
 export interface User {
@@ -14,7 +14,7 @@ export interface User {
     displayName: string;
     email: string;
     createdClasses: StudyClass[],
-    joinedClasses: string[],
+    joinedClasses: string[] | ObjectId[],
     settings?: { [id: string]: string };
 }
 
