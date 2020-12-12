@@ -18,7 +18,7 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
     //TODO: implement transaction
     const studyState = (await databaseHelper.getCollection('collection-study-state').findOne(
         { collectionId: new ObjectId(result.collectionId), userId: new ObjectId(userId) },
-    )) as Models.DBCollectionStudyStateDoc;
+    )) as Models.DBStudyStateDoc;
 
     if (!studyState)
         return false;

@@ -4,7 +4,7 @@ import { DBObject } from '../misc.models';
 export * from './Train';
 export * from './Test';
 
-export interface DBCollectionStudyStateDoc extends DBObject {
+export interface DBStudyStateDoc extends DBObject {
     collectionId: ObjectId;
     userId: ObjectId;
     score: number;
@@ -26,7 +26,7 @@ export interface WordStudyState {
     lastDoneCorrectCounter: number;
 }
 
-export function createEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBCollectionStudyStateDoc {
+export function createEmptyDBCollectionStudyStateDoc(collectionId: string, userId: string, wordsIds: string[] = []): DBStudyStateDoc {
     return {
         createdOn: new Date(),
         lastModified: new Date(),
