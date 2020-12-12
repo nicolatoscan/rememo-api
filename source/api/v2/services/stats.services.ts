@@ -34,7 +34,7 @@ interface Result {
     type: ResultType;
 }
 
-async function saveResult(result: Result[], userId: string) {
+async function saveResult(result: Result[], userId: string): Promise<void> {
 
 
     const resultMappedByGroupId = result.reduce((entryMap, e) => entryMap.set(e.collectionId, [...entryMap.get(e.collectionId) || [], e]), new Map());
@@ -71,11 +71,10 @@ async function saveResult(result: Result[], userId: string) {
             );
         }
     }
-    return;
 }
 
-export async function getStatsCollection(idColl: string) {
-    const stats = await databaseHelper.getCollection('stats').findOne({ collectionId: new ObjectId( idColl)});
+export async function getStatsCollection(idColl: string): Promise<Models.DBStatsDoc | null> {
+    const stats = await databaseHelper.getCollection('stats').findOne({ collectionId: new ObjectId( idColl)}) as (Models.DBStatsDoc | null);
 
     if (!stats)
         return null;
