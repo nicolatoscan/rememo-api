@@ -10,12 +10,12 @@ describe('Test', function() {
     before(async function() {
         this.timeout(20000);
         await databaseHelper.connect();
-        await databaseHelper.getCollection('collections').drop();
-        await databaseHelper.getCollection('users').drop();
-        await databaseHelper.getCollection('collection-study-state').drop();
+        (await databaseHelper.getDb().collections()).map(async c => await c.drop());
         await databaseHelper.getDb().createCollection('collections');
         await databaseHelper.getDb().createCollection('users');
         await databaseHelper.getDb().createCollection('collection-study-state');
+        await databaseHelper.getDb().createCollection('stats');
+        await databaseHelper.getDb().createCollection('tests');
         databaseHelper.closeConnection();
         console.log('DATABASE CLEANED');
     });
