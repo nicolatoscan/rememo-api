@@ -46,6 +46,19 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
     return { value: (user as User) };
 }
 
+export function validateClass(classData: { name: string }): { value?: { name: string }, error?: string } {
+
+    const validationResult = joi.object({
+        name: joi.string().required(),
+    }).validate(classData);
+
+    if (validationResult.error) {
+        return { error: validationResult.error.message };
+    }
+
+    return { value: (classData) };
+}
+
 // --- DB parsers ---
 export function getUserFromDBDoc(doc: DBUserDoc): User {
     return {
