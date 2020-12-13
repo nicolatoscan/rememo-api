@@ -12,7 +12,7 @@ export async function getAllCollections(userId: string): Promise<Models.Collecti
     return collections.map(col => Models.getCollectionFromDBDoc(col));
 }
 
-export async function getMyCollections(userId: string): Promise<Models.Collection[]> {
+export async function getCollections(userId: string): Promise<Models.Collection[]> {
     const collections = await databaseHelper.getCollection('collections').find({ owner: new ObjectId(userId) }).toArray();
     return collections.map(col => Models.getCollectionFromDBDoc(col));
 }

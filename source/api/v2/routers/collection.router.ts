@@ -12,7 +12,7 @@ async function getCollections(req: express.Request, res: express.Response) {
         const colls = await collectionServices.getAllCollections(res.locals._id);
         return res.send(colls);
     }else if(!mine && (classes.length === 0 || classes === null)){
-        const colls = await collectionServices.getMyCollections(res.locals._id);
+        const colls = await collectionServices.getCollections(res.locals._id);
         return res.send(colls);
     }else if(!classes && mine === 'false'){
         const colls = await collectionServices.getJoinedClassCollections(res.locals._id);
