@@ -6,7 +6,7 @@ import { DBObject } from './misc.models';
 export interface StudyClass {
     _id: string | ObjectId,
     name: string,
-    collections: string[]
+    collections: string[] | ObjectId[]
 }
 
 export interface User {
@@ -42,7 +42,7 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
     if (validationResult.error) {
         return { error: validationResult.error.message };
     }
-
+    
     return { value: (user as User) };
 }
 

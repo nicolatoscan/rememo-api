@@ -12,7 +12,7 @@ export interface DBStatsDoc extends DBObject {
 }
 
 export interface WordStats {
-    wordId:  ObjectId,
+    wordId:  ObjectId ,
     days: Day[],
     correctTrain: number,
     wrongTrain: number,
@@ -26,6 +26,30 @@ export interface Day {
     wrongTrain: number,
     correctTest: number,
     wrongTest: number
+}
+
+export interface ClassStats {
+    
+    classId: string,
+    correct: number,
+    wrong: number,
+    users: { [id: string]: string },    
+    collections: {
+        [id: string]: {
+            collectionId: string,
+            name: string,
+            correct: number,
+            wrong: number,
+            usernames: string[],
+            words: {
+                [id: string]: {
+                    wordId:  string ,
+                    correct: number,
+                    wrong: number
+                }
+            }
+        }
+    }
 }
 
 

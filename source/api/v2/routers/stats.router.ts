@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as Models from '../models';
 import * as statsServices from '../services/stats.services';
 import LANG from '../../../lang';
 import { ObjectId } from 'mongodb';
@@ -77,6 +76,20 @@ async function getWordStatsTrain(req: express.Request, res: express.Response) {
     return res.status(200).send({ correctTrain: word?.correctTrain, wrongTrain: word?.wrongTrain });
 }
 
+async function getClassStats(req: express.Request, res: express.Response) {
+
+    const idClass = req.params.idClass;
+    if (!idClass) {
+        //TODO: error
+    }
+    const classStats = await statsServices.getClassStatsParsed(res.locals._id, idClass);
+    if (!classStats) {
+        //TODO: error
+    }
+    return res.status(200).send(classStats);
+}
+
+
 
 
 export default function (): express.Router {
@@ -87,6 +100,8 @@ export default function (): express.Router {
 
     router.get('/test/:idColl/word/:idWord', getWordStatsTest);
     router.get('/train/:idColl/word/:idWord', getWordStatsTrain);
+
+    router.get('/class/:idClass', getClassStats);
 
     return router;
 }
