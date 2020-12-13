@@ -16,8 +16,13 @@ export interface FullWord extends Word {
     collectionId: string | ObjectId;
 }
 
+export interface ClassDescription {
+    classId: string | ObjectId;
+    className: string;
+}
+
 export interface Collection {
-    _id?: string,
+    _id?: string | ObjectId,
     index: number;
     name: string;
     description: string;
@@ -26,6 +31,10 @@ export interface Collection {
     languageTo?: string;
     share?:boolean;
     words: Word[];
+}
+
+export interface CollectionWithClass extends Collection {
+    fromClass?: ClassDescription;
 }
 
 export interface DBCollectionDoc extends Collection, DBObject {
@@ -94,7 +103,7 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
                 languageFrom: w.languageFrom,
                 languageTo: w.languageTo
             };
-        })
+        }),
     };
 }
 
@@ -121,6 +130,6 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         }).sort(w => w.index).map((w, i) => {
             w.index = i;
             return w;
-        })
+        }),
     };
 }

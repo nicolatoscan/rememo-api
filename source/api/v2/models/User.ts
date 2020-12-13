@@ -9,12 +9,16 @@ export interface StudyClass {
     collections: string[] | ObjectId[]
 }
 
-export interface User {
+export interface UserMin {
+    _id?: string | ObjectId,
     username: string;
     displayName: string;
+}
+
+export interface User extends UserMin {
     email: string;
     createdClasses: StudyClass[],
-    joinedClasses: string[],
+    joinedClasses: string[] | ObjectId[],
     settings?: { [id: string]: string };
 }
 
@@ -44,6 +48,19 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
     }
     
     return { value: (user as User) };
+}
+
+export function validateClass(classData: { name: string }): { value?: { name: string }, error?: string } {
+
+    const validationResult = joi.object({
+        name: joi.string().required(),
+    }).validate(classData);
+
+    if (validationResult.error) {
+        return { error: validationResult.error.message };
+    }
+
+    return { value: (classData) };
 }
 
 // --- DB parsers ---
