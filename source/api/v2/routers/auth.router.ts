@@ -37,12 +37,16 @@ async function signup(req: express.Request, res: express.Response) {
         } else {
 
             const userInfo = await userServices.createUser(valUser.value);
-            authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
+            if (userInfo) {
+                authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
+                return res.status(201).send({
+                    ...userInfo.user,
+                    token: res.getHeader('Authentication')
+                });
+            } else {
+                return res.status(400).send(LANG.UNKNOWN_ERROR);
+            }
 
-            res.status(201).send({
-                ...userInfo.user,
-                token: res.getHeader('Authentication')
-            });
         }
     }
 }

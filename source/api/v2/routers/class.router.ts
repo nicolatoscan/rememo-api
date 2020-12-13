@@ -156,7 +156,7 @@ async function addCollectionToClass(req: express.Request, res: express.Response)
     return res.status(204).send({ message: LANG.COLLECTION_ADDED });
 }
 
-async function removeCollectionToClass(req: express.Request, res: express.Response) {
+async function removeCollectionFromClass(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
     const idColl = req.params.idColl;
@@ -168,7 +168,7 @@ async function removeCollectionToClass(req: express.Request, res: express.Respon
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
-    await classServices.removeCollectionToClass(idUser, idClass, idColl);
+    await classServices.removeCollectionFromClass(idUser, idClass, idColl);
 
     return res.status(204).send({ message: LANG.COLLECTION_REMOVED });
 }
@@ -187,8 +187,8 @@ export default function (): express.Router {
     router.put('/:idClass/join', joinClass);
     router.put('/:idClass/leave', leaveClass);
     router.put('/:idClass/kick/:idStudent', kickStudentFromClass);
-    router.put('/:idClass/addCollection/idColl', addCollectionToClass);
-    router.put('/:idClass/removeCollection/idColl', removeCollectionToClass);
+    router.put('/:idClass/addCollection/:idColl', addCollectionToClass);
+    router.put('/:idClass/removeCollection/:idColl', removeCollectionFromClass);
 
 
     return router;

@@ -22,7 +22,7 @@ export interface ClassDescription {
 }
 
 export interface Collection {
-    _id?: string,
+    _id?: string | ObjectId,
     index: number;
     name: string;
     description: string;

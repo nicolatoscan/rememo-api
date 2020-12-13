@@ -9,9 +9,13 @@ export interface StudyClass {
     collections: string[] | ObjectId[]
 }
 
-export interface User {
+export interface UserMin {
+    _id?: string | ObjectId,
     username: string;
     displayName: string;
+}
+
+export interface User extends UserMin {
     email: string;
     createdClasses: StudyClass[],
     joinedClasses: string[] | ObjectId[],
