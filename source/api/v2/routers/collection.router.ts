@@ -2,12 +2,27 @@ import * as express from 'express';
 import * as Models from '../models';
 import * as collectionServices from '../services/collection.services';
 import LANG from '../../../lang';
+import { ObjectId } from 'mongodb';
 
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
-    const colls = await collectionServices.getCollections(res.locals._id);
-    return res.send(colls);
+    const mine = req.params.mine;
+    const classes = req.params.classes.split(',');
+    if(!mine && !classes){
+        const colls = await collectionServices.getAllCollections(res.locals._id);
+        return res.send(colls);
+    }else if(!mine && (classes.length === 0 || classes === null)){
+        const colls = await collectionServices.getCollections(res.locals._id);
+        return res.send(colls);
+    }else if(!classes && mine === 'false'){
+        const colls = await collectionServices.getJoinedClassCollections(res.locals._id);
+        return res.send(colls);
+    }else if(mine === 'false' && classes.length !== 0){
+        const colls = await collectionServices.getClassCollection(classes.map(c => new ObjectId(c)));
+        return res.send(colls);
+    }
 
+    return res.status(404);
 }
 
 async function createCollection(req: express.Request, res: express.Response) {
