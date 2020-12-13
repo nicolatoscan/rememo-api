@@ -7,7 +7,11 @@ import LANG from '../../../lang';
 
 async function getCreatedOrJoinedClasses(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
-    const ownershipType = Number(req.query.type) as Models.EClassOwnershipType;
+    let ownershipType: Models.EClassOwnershipType = Models.EClassOwnershipType.Both;
+    if (req.query.type === 'created')
+        ownershipType = Models.EClassOwnershipType.Created;
+    else if (req.query.type === 'joined')
+        ownershipType = Models.EClassOwnershipType.Joined;
     
     const studyClasses = await classServices.getClasses(idUser, ownershipType);
 

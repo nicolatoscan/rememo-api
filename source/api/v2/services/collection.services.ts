@@ -6,11 +6,19 @@ import * as classServices from '../services/class.services';
 
 export async function getCollections(userId: string, ownershipType: Models.EClassOwnershipType, classIdsFilter: string[] | null): Promise<Models.Collection[]> {
     let query: FilterQuery<any> = { owner: new ObjectId(userId) };
+    const collectionIdsToNameDic: { [id: string]: string } = {};
 
-    if (ownershipType !== Models.EClassOwnershipType.Mine) {
+    if (ownershipType !== Models.EClassOwnershipType.Created) {
 
         const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
-        let collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);
+        let collectionIDs: ObjectId[] = [];
+        const classes = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[]));
+        for (const studyClass of classes) {
+            for (const collId of studyClass.collections as ObjectId[]) {
+                collectionIdsToNameDic[collId.toHexString()] = studyClass.name;
+                collectionIDs.push(collId);
+            }
+        }
 
         if (classIdsFilter)
             collectionIDs = collectionIDs.filter(cId => classIdsFilter.includes(cId.toString()));
@@ -25,11 +33,11 @@ export async function getCollections(userId: string, ownershipType: Models.EClas
         }
     }
 
-    return (await databaseHelper
+    return ((await databaseHelper
         .getCollection('collections')
         .find(query)
-        .toArray())
-        .map(col => Models.getCollectionFromDBDoc(col)) as Models.Collection[];
+        .toArray()) as Models.DBCollectionDoc[])
+        .map(col => Models.getCollectionFromDBDoc(col, collectionIdsToNameDic[col._id?.toString() ?? ''] ?? null)) as Models.Collection[];
 }
 
 /**
