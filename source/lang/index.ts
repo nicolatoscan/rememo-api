@@ -29,8 +29,11 @@ export default {
     
     TEST_NOT_FOUND: 'Test not found',
     TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
-  
+
     STATUS_NOT_FOUND: 'Status not found',
+
+    CLASS_ID_NOT_FOUND: 'Class id not found',
+    CLASS_NOT_FOUND: 'Class not found',
 
     OK: 'OK',
     KO: 'KO',

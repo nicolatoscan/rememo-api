@@ -36,7 +36,6 @@ interface Result {
 
 async function saveResult(result: Result[], userId: string): Promise<void> {
 
-
     const resultMappedByGroupId = result.reduce((entryMap, e) => entryMap.set(e.collectionId, [...entryMap.get(e.collectionId) || [], e]), new Map());
     for (const collectionId of resultMappedByGroupId.keys()) {
         const subResult = resultMappedByGroupId.get(collectionId) as Result[];
@@ -47,7 +46,6 @@ async function saveResult(result: Result[], userId: string): Promise<void> {
         const wrongCollTrain = subResult.filter(r => !r.result && r.type === ResultType.Train).length;
         const stat = await databaseHelper.getCollection('stats').findOne(
             { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) }
-            //{ correctTrain: correctCollTrain.length, correctTest: correctCollTest.length, wrongTrain: wrongCollTrain.length, wrongTest: wrongCollTest.length}
         ) as Models.DBStatsDoc | null;
 
         if (stat) {
@@ -161,8 +159,8 @@ export async function getClassStatsParsed(userId: string, classId: string): Prom
 }
 
 
-export async function getStatsCollection(idColl: string): Promise<Models.DBStatsDoc | null> {
-    const stats = await databaseHelper.getCollection('stats').findOne({ collectionId: new ObjectId( idColl)}) as (Models.DBStatsDoc | null);
+export async function getStatsCollection(userId: string, idColl: string): Promise<Models.DBStatsDoc | null> {
+    const stats = await databaseHelper.getCollection('stats').findOne({ userId: new ObjectId(userId) , collectionId: new ObjectId( idColl)}) as (Models.DBStatsDoc | null);
 
     if (!stats)
         return null;
