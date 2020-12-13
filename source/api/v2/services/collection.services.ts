@@ -98,10 +98,15 @@ export async function getCollectionById(id: string, userId: string): Promise<Mod
     const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id) }) as Models.DBCollectionDoc;
     if (!collection)
         return null;
-    if (collection.owner?.toString() === userId || collection.share)
-        return Models.getCollectionFromDBDoc(collection);
-    else
-        return null;
+
+    if (collection.owner?.toString() !== userId && !collection.share) {
+        const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
+        const classFound = databaseHelper.getCollection('users').find({ 'createdClasses.collections': new ObjectId(id), 'createdClasses._id': { $in: user.joinedClasses } });
+        if (!classFound)
+            return null;
+    }
+    
+    return Models.getCollectionFromDBDoc(collection);
 }
 
 export async function updateCollectionById(id: string, userId: string, updateProps: any): Promise<void> {
