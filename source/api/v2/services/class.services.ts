@@ -84,12 +84,13 @@ export async function joinClass(userId: string, classId: string): Promise<void> 
             { _id: new ObjectId(userId) },
             { $addToSet: { joinedClasses: new ObjectId(classId) } }
         );
+    
     const updatedUser = (await databaseHelper.getCollection('users')
         .findOneAndUpdate(
             { _id: new ObjectId(userId) },
             { $addToSet: { joinedClasses: new ObjectId(classId) } }
-        )) as Models.User;
-
+        )).value as Models.User;
+ 
     const collectionsIds = updatedUser.createdClasses.find(c => c._id === new ObjectId(classId))?.collections as ObjectId[] | null;
     if (collectionsIds) {
         const colelctionsInClass = (await databaseHelper.getCollection('collections').find({ _id: { $in: collectionsIds } }).toArray()) as Models.DBCollectionDoc[];
