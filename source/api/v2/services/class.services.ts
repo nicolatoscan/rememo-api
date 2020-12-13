@@ -15,7 +15,7 @@ export async function getClassesFromIds(classIds: ObjectId[]): Promise<Models.St
 export async function getClasses(userId: string, ownershipType: Models.EClassOwnershipType): Promise<Models.StudyClass[]> {
     const user = await usersServices.getUserDoc(userId);
     if (user) {
-        if (ownershipType === Models.EClassOwnershipType.Mine) {
+        if (ownershipType === Models.EClassOwnershipType.Created) {
             return user.createdClasses;
         }
         else if (ownershipType === Models.EClassOwnershipType.Joined || ownershipType === Models.EClassOwnershipType.Both) {
@@ -47,7 +47,7 @@ export async function getClassById(userId: string, classId: string, ownershipTyp
         if (found)
             return found;
     }
-    if (ownershipType !== Models.EClassOwnershipType.Mine) {
+    if (ownershipType !== Models.EClassOwnershipType.Created) {
         found = (await getClassesFromIds(user.joinedClasses as ObjectId[])).find(c => c._id.toString() === classId) ?? null;
     }
     return found;
@@ -90,7 +90,7 @@ export async function joinClass(userId: string, classId: string): Promise<void> 
             { _id: new ObjectId(userId) },
             { $addToSet: { joinedClasses: new ObjectId(classId) } }
         )).value as Models.User;
- 
+
     const collectionsIds = updatedUser.createdClasses.find(c => c._id === new ObjectId(classId))?.collections as ObjectId[] | null;
     if (collectionsIds) {
         const colelctionsInClass = (await databaseHelper.getCollection('collections').find({ _id: { $in: collectionsIds } }).toArray()) as Models.DBCollectionDoc[];

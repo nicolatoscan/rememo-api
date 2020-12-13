@@ -7,7 +7,7 @@ import * as classServices from '../services/class.services';
 export async function getCollections(userId: string, ownershipType: Models.EClassOwnershipType, classIdsFilter: string[] | null): Promise<Models.Collection[]> {
     let query: FilterQuery<any> = { owner: new ObjectId(userId) };
 
-    if (ownershipType !== Models.EClassOwnershipType.Mine) {
+    if (ownershipType !== Models.EClassOwnershipType.Created) {
 
         const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
         let collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);

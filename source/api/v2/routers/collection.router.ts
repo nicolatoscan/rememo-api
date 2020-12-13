@@ -19,7 +19,7 @@ async function getCollections(req: express.Request, res: express.Response) {
     if (mine === true && classes) {
         type = Models.EClassOwnershipType.Both;
     } else if (mine === true && !classes) {
-        type = Models.EClassOwnershipType.Mine;
+        type = Models.EClassOwnershipType.Created;
     } else if (mine === false) {
         type = Models.EClassOwnershipType.Joined;
     } else if (mine === undefined && classes) {

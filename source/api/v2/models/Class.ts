@@ -1,3 +1,3 @@
 export enum EClassOwnershipType {
-    Mine, Joined, Both
+    Created, Joined, Both
 }
