@@ -143,7 +143,7 @@ export async function addCollectionToClass(userId: string, classId: string, coll
 export async function removeCollectionFromClass(userId: string, classId: string, collectionId: string): Promise<void> {
     await databaseHelper.getCollection('users')
         .updateOne(
-            { _id: new ObjectId(userId), createdClasses: new ObjectId(classId) },
+            { _id: new ObjectId(userId), 'createdClasses._id': new ObjectId(classId) },
             { $pull: { 'createdClasses.$.collections' : new ObjectId(collectionId) } }
         );
 }
