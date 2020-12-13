@@ -31,6 +31,7 @@ export interface Collection {
     languageTo?: string;
     share?:boolean;
     words: Word[];
+    inClassName?: string
 }
 
 export interface CollectionWithClass extends Collection {
@@ -84,8 +85,8 @@ export function validateCollection(collection: unknown, idRequired = false): { v
 }
 
 // --- DB parsers ---
-export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
-    return {
+export function getCollectionFromDBDoc(doc: DBCollectionDoc, inClassName: string | null = null): Collection {
+    const res: Collection = {
         _id: doc._id,
         index: doc.index,
         name: doc.name,
@@ -105,6 +106,9 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
             };
         }),
     };
+    if (inClassName)
+        res.inClassName = inClassName;
+    return res;
 }
 
 export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {

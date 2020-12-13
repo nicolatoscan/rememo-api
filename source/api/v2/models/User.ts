@@ -6,7 +6,8 @@ import { DBObject } from './misc.models';
 export interface StudyClass {
     _id: string | ObjectId,
     name: string,
-    collections: string[] | ObjectId[]
+    collections: string[] | ObjectId[],
+    mine?: boolean
 }
 
 export interface UserMin {

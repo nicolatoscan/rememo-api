@@ -15,11 +15,13 @@ export async function getClassesFromIds(classIds: ObjectId[]): Promise<Models.St
 export async function getClasses(userId: string, ownershipType: Models.EClassOwnershipType): Promise<Models.StudyClass[]> {
     const user = await usersServices.getUserDoc(userId);
     if (user) {
+        user.createdClasses = user.createdClasses.map(c => ({ ...c, mine: true }));
+
         if (ownershipType === Models.EClassOwnershipType.Created) {
             return user.createdClasses;
         }
         else if (ownershipType === Models.EClassOwnershipType.Joined || ownershipType === Models.EClassOwnershipType.Both) {
-            const joinedclasses = (await getClassesFromIds(user.joinedClasses as ObjectId[]));
+            const joinedclasses = (await getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => ({ ...c, mine: false }));
             return ownershipType === Models.EClassOwnershipType.Both ? [...user.createdClasses, ...joinedclasses] : joinedclasses;
         }
     }
@@ -44,13 +46,20 @@ export async function getClassById(userId: string, classId: string, ownershipTyp
     let found: Models.StudyClass | null = null;
     if (ownershipType !== Models.EClassOwnershipType.Joined) {
         found = user.createdClasses.find(c => c._id.toString() === classId) ?? null;
-        if (found)
+        if (found) {
+            found.mine = true;
             return found;
+        }
     }
     if (ownershipType !== Models.EClassOwnershipType.Created) {
+        //TODO: fix
         found = (await getClassesFromIds(user.joinedClasses as ObjectId[])).find(c => c._id.toString() === classId) ?? null;
+        if (found) {
+            found.mine = false;
+            return found;
+        }
     }
-    return found;
+    return null;
 }
 
 export async function updateClassById(userId: string, classId: string, studyClass: Models.StudyClass): Promise<void> {
