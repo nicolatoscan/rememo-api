@@ -84,6 +84,29 @@ export async function joinClass(userId: string, classId: string): Promise<void> 
             { _id: new ObjectId(userId) },
             { $addToSet: { joinedClasses: new ObjectId(classId) } }
         );
+    const updatedUser = (await databaseHelper.getCollection('users')
+        .findOneAndUpdate(
+            { _id: new ObjectId(userId) },
+            { $addToSet: { joinedClasses: new ObjectId(classId) } }
+        )) as Models.User;
+
+    const collectionsIds = updatedUser.createdClasses.find(c => c._id === new ObjectId(classId))?.collections as ObjectId[] | null;
+    if (collectionsIds) {
+        const colelctionsInClass = (await databaseHelper.getCollection('collections').find({ _id: { $in: collectionsIds } }).toArray()) as Models.DBCollectionDoc[];
+
+        const insertStudy = databaseHelper.getCollection('collection-study-state').insertMany(
+            colelctionsInClass.map(c => {
+                return Models.createEmptyDBCollectionStudyStateDoc(c._id?.toString() ?? '', userId, c.words.map(w => w._id?.toString() ?? ''));
+            })
+        );
+        const insertStats = databaseHelper.getCollection('stats').insertMany(
+            colelctionsInClass.map(c => {
+                return Models.createDBStatsDoc(c._id?.toString() ?? '', userId, c.words.map(w => w._id?.toString() ?? ''));
+            })
+        );
+        await insertStudy;
+        await insertStats;
+    }
 }
 
 export async function leaveClass(userId: string, classId: string): Promise<void> {

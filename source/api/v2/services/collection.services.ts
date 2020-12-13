@@ -6,7 +6,7 @@ import * as classServices from '../services/class.services';
 
 export async function getCollections(userId: string, ownershipType: Models.EClassOwnershipType, classIdsFilter: string[] | null): Promise<Models.Collection[]> {
     let query: FilterQuery<any> = { owner: new ObjectId(userId) };
-    
+
     if (ownershipType !== Models.EClassOwnershipType.Mine) {
 
         const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
@@ -82,14 +82,16 @@ export async function createCollection(collection: Models.Collection, userId: st
 
     const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
 
-    await databaseHelper.getCollection('collection-study-state').insertOne(
+    const insertStudy = databaseHelper.getCollection('collection-study-state').insertOne(
         Models.createEmptyDBCollectionStudyStateDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
     );
 
-    await databaseHelper.getCollection('stats').insertOne(
+    const insertStats = databaseHelper.getCollection('stats').insertOne(
         Models.createDBStatsDoc(insertedId, userId, collectionToInsert.words.map(w => w._id?.toString() ?? ''))
     );
 
+    await insertStudy;
+    await insertStats;
     return { collectionId: insertedId };
 
 }
@@ -105,7 +107,7 @@ export async function getCollectionById(id: string, userId: string): Promise<Mod
         if (!classFound)
             return null;
     }
-    
+
     return Models.getCollectionFromDBDoc(collection);
 }
 
@@ -117,29 +119,39 @@ export async function updateCollectionById(id: string, userId: string, updatePro
 }
 
 export async function deleteCollectionById(id: string, userId: string): Promise<void> {
-    await databaseHelper.getCollection('collections').deleteOne({ _id: new ObjectId(id), owner: new ObjectId(userId) });
-    await databaseHelper.getCollection('collection-study-state').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
-    await databaseHelper.getCollection('stats').deleteOne({ collectionId: new ObjectId(id), userId: new ObjectId(userId) });
+    const deleted = (await databaseHelper
+        .getCollection('collections')
+        .deleteOne({ _id: new ObjectId(id), owner: new ObjectId(userId) }))
+        .deletedCount;
+    if (deleted && deleted > 1) {
+        databaseHelper.getCollection('collection-study-state').deleteMany({ collectionId: new ObjectId(id) });
+        databaseHelper.getCollection('stats').deleteMany({ collectionId: new ObjectId(id) });
+    }
 
 }
 
 export async function createWord(word: Models.Word, collectionId: string, userId: string): Promise<{ wordId: string }> {
     word._id = new ObjectId();
 
-    await databaseHelper.getCollection('collections').updateOne(
+    const modified = (await databaseHelper.getCollection('collections').updateOne(
         { _id: new ObjectId(collectionId), owner: new ObjectId(userId) },
         { $push: { words: word } }
-    );
+    )).modifiedCount;
 
-    await databaseHelper.getCollection('collection-study-state').updateOne(
-        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $push: { wordsState: Models.createEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
-    );
+    if (modified) {
 
-    await databaseHelper.getCollection('stats').updateOne(
-        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $push: { words: Models.createEmptyWordStats((word._id as ObjectId).toHexString()) } }
-    );
+        const callStudy = databaseHelper.getCollection('collection-study-state').updateMany(
+            { collectionId: new ObjectId(collectionId) },
+            { $push: { wordsState: Models.createEmptyWordStudyState((word._id as ObjectId).toHexString()) } }
+        );
+
+        const callStats = await databaseHelper.getCollection('stats').updateMany(
+            { collectionId: new ObjectId(collectionId) },
+            { $push: { words: Models.createEmptyWordStats((word._id as ObjectId).toHexString()) } }
+        );
+        await callStudy;
+        await callStats;
+    }
 
     return { wordId: word._id.toHexString() };
 
@@ -168,20 +180,22 @@ export async function updateWordById(collectionId: string, wordId: string, userI
 }
 
 export async function deleteWordById(collectionId: string, wordId: string, userId: string): Promise<void> {
-    await databaseHelper.getCollection('collections').updateOne(
+    const modified = (await databaseHelper.getCollection('collections').updateOne(
         { _id: new ObjectId(collectionId), owner: new ObjectId(userId) },
         { $pull: { words: { _id: new ObjectId(wordId) } } }
-    );
+    )).modifiedCount;
 
-    await databaseHelper.getCollection('collection-study-state').updateOne(
-        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $pull: { wordsState: { wordId: new ObjectId(wordId) } } }
-    );
+    if (modified > 0) {
+        databaseHelper.getCollection('collection-study-state').updateMany(
+            { collectionId: new ObjectId(collectionId) },
+            { $pull: { wordsState: { wordId: new ObjectId(wordId) } } }
+        );
 
-    await databaseHelper.getCollection('stats').updateOne(
-        { collectionId: new ObjectId(collectionId), userId: new ObjectId(userId) },
-        { $pull: { words: { wordId: new ObjectId(wordId) } } }
-    );
+        databaseHelper.getCollection('stats').updateMany(
+            { collectionId: new ObjectId(collectionId) },
+            { $pull: { words: { wordId: new ObjectId(wordId) } } }
+        );
+    }
 }
 
 
