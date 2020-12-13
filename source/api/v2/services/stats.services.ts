@@ -100,13 +100,16 @@ async function getClassStats(usersId: ObjectId[], collectionsId: ObjectId[] ): P
 
 export async function getClassStatsParsed(userId: string, classId: string): Promise<Models.ClassStats | null> {
 
-    const studyClass = (await databaseHelper.getCollection('users').findOne({ _id: userId, createdClasses: classId })) as Models.StudyClass;
+    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId), createdClasses: new ObjectId(classId)}) as Models.DBUserDoc);
+    const studyClass = user.createdClasses.find((c => c._id === new ObjectId(classId)));
+
     if (!studyClass)
         return null;
 
     const classUsersCall = getClassUsers(studyClass._id as ObjectId);
     const classCollectionsCall = getCollectionsFromIds(studyClass.collections as ObjectId[]);
     const classUsers = await classUsersCall;
+
     const classCollections = await classCollectionsCall;
 
     const classStats = await getClassStats(classUsers.map(u => u._id as ObjectId), classCollections.map(u => u._id as ObjectId));
