@@ -44,7 +44,7 @@ async function signup(req: express.Request, res: express.Response) {
                     token: res.getHeader('Authentication')
                 });
             } else {
-                return res.status(400).send(LANG.UNKNOWN_ERROR);
+                return res.status(400).send(LANG.ERROR_UNKNOWN);
             }
 
         }

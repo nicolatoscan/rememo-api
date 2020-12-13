@@ -2,27 +2,37 @@ import * as express from 'express';
 import * as Models from '../models';
 import * as collectionServices from '../services/collection.services';
 import LANG from '../../../lang';
-import { ObjectId } from 'mongodb';
 
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
-    const mine = req.params.mine;
-    const classes = req.params.classes?.split(',');
-    if(!mine && !classes){
-        const colls = await collectionServices.getAllCollections(res.locals._id);
-        return res.send(colls);
-    }else if(!mine && (classes.length === 0 || classes === null)){
-        const colls = await collectionServices.getCollections(res.locals._id);
-        return res.send(colls);
-    }else if(!classes && mine === 'false'){
-        const colls = await collectionServices.getJoinedClassCollections(res.locals._id);
-        return res.send(colls);
-    }else if(mine === 'false' && classes.length !== 0){
-        const colls = await collectionServices.getClassCollection(classes.map(c => new ObjectId(c)));
-        return res.send(colls);
+    let mine: boolean | undefined = undefined;
+    if (req.params.mine === 'true')
+        mine = true;
+    else if (req.params.mine === 'false')
+        mine = false;
+
+    let classes: string[] | null = req.params.classes?.split(',') ?? null;
+    if (classes)
+        classes = null;
+
+    let type: Models.EClassOwnershipType;
+    if (mine === true && classes) {
+        type = Models.EClassOwnershipType.Both;
+    } else if (mine === true && !classes) {
+        type = Models.EClassOwnershipType.Mine;
+    } else if (mine === false) {
+        type = Models.EClassOwnershipType.Joined;
+    } else if (mine === undefined && classes) {
+        type = Models.EClassOwnershipType.Joined;
+    } else if (mine === undefined && !classes) {
+        type = Models.EClassOwnershipType.Both;
+    } else {
+        return res.status(400).send(LANG.ERROR_PARAMS_PARSE);
     }
 
-    return res.status(404);
+    const colls = await collectionServices.getCollections(res.locals._id, type, classes);
+    return res.send(colls);
+
 }
 
 async function createCollection(req: express.Request, res: express.Response) {

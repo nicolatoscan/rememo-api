@@ -28,7 +28,7 @@ export default {
 
     TEST_NOT_FOUND: 'Test not found',
     TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
-  
+
     CLASSES_NOT_FOUND: 'Classes not found',
     CLASS_NOT_FOUND: 'Class not found',
     CLASS_ID_NOT_FOUND: 'Class id not found',
@@ -46,5 +46,6 @@ export default {
     OK: 'OK',
     KO: 'KO',
 
-    UNKNOWN_ERROR: 'Unknown error'
+    ERROR_UNKNOWN: 'Unknown error',
+    ERROR_PARAMS_PARSE: 'Params parse error'
 };
