@@ -6,7 +6,9 @@ import * as classServices from '../services/class.services';
 
 
 export async function getAllCollections(userId: string): Promise<Models.Collection[]> {
-    const user = (await databaseHelper.getCollection('users').findOne({ username: new ObjectId(userId) })) as Models.DBUserDoc;
+    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
+    if (!user)
+        return [];
     const collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);
     const collections = await databaseHelper.getCollection('collections').find({$or:[ {_id: { $in : collectionIDs }}, {owner: new ObjectId(userId)}]}).toArray();
     return collections.map(col => Models.getCollectionFromDBDoc(col));
@@ -18,7 +20,9 @@ export async function getCollections(userId: string): Promise<Models.Collection[
 }
 
 export async function getJoinedClassCollections(userId: string): Promise<Models.Collection[]> {
-    const user = (await databaseHelper.getCollection('users').findOne({ username: new ObjectId(userId) })) as Models.DBUserDoc;
+    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
+    if (!user)
+        return [];
     const collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);
     const collections = await databaseHelper.getCollection('collections').find({ _id: { $in : collectionIDs }}).toArray();
     return collections.map(col => Models.getCollectionFromDBDoc(col));

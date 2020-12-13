@@ -7,7 +7,7 @@ import { ObjectId } from 'mongodb';
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
     const mine = req.params.mine;
-    const classes = req.params.classes.split(',');
+    const classes = req.params.classes?.split(',');
     if(!mine && !classes){
         const colls = await collectionServices.getAllCollections(res.locals._id);
         return res.send(colls);
