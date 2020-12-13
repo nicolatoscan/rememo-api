@@ -6,14 +6,15 @@ import LANG from '../../../lang';
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
     let mine: boolean | undefined = undefined;
-    if (req.params.mine === 'true')
+    if (req.query.mine === 'true')
         mine = true;
-    else if (req.params.mine === 'false')
+    else if (req.query.mine === 'false')
         mine = false;
 
-    let classes: string[] | null = req.params.classes?.split(',') ?? null;
-    if (classes)
-        classes = null;
+    let classes: string[] | null = null;
+    if (typeof req.query.classes === 'string') {
+        classes = req.query.classes.split(',');
+    }
 
     let type: Models.EClassOwnershipType;
     if (mine === true && classes) {
