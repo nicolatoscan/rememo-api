@@ -46,7 +46,7 @@ export function validateUser(user: unknown): { value?: User, error?: string } {
     if (validationResult.error) {
         return { error: validationResult.error.message };
     }
-
+    
     return { value: (user as User) };
 }
 

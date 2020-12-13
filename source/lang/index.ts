@@ -26,7 +26,6 @@ export default {
     LEARN_STATE_WORD_UPDATED: 'Word learn state updated',
     LEARN_STATE_NOT_FOUND: 'Learn state non found',
 
-    
     TEST_NOT_FOUND: 'Test not found',
     TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
   
@@ -42,8 +41,6 @@ export default {
     COLLECTION_ADDED: 'Collection has been added to a class',
     COLLECTION_REMOVED: 'Collection has been removed from a class',
     
-
-
     STATUS_NOT_FOUND: 'Status not found',
 
     OK: 'OK',
