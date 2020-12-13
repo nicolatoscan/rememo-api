@@ -135,8 +135,8 @@ export async function kickStudentFromClass(ownerId: string, classId: string, stu
 export async function addCollectionToClass(userId: string, classId: string, collectionId: string): Promise<void> {
     await databaseHelper.getCollection('users')
         .updateOne(
-            { _id: new ObjectId(userId), createdClasses: new ObjectId(classId) },
-            { $addToSet: { 'joinedClasses.$.collections' : new ObjectId(collectionId) } }
+            { _id: new ObjectId(userId), 'createdClasses._id': new ObjectId(classId) },
+            { $addToSet: { 'createdClasses.$.collections' : new ObjectId(collectionId) } }
         );
 }
 
@@ -144,6 +144,6 @@ export async function removeCollectionFromClass(userId: string, classId: string,
     await databaseHelper.getCollection('users')
         .updateOne(
             { _id: new ObjectId(userId), createdClasses: new ObjectId(classId) },
-            { $pull: { 'joinedClasses.$.collections' : new ObjectId(collectionId) } }
+            { $pull: { 'createdClasses.$.collections' : new ObjectId(collectionId) } }
         );
 }
