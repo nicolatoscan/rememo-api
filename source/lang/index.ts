@@ -30,8 +30,24 @@ export default {
     TEST_NOT_FOUND: 'Test not found',
     TEST_QUESTION_IDS_DO_NOT_MACTH: 'Question ids do not match',
   
+    CLASSES_NOT_FOUND: 'Classes not found',
+    CLASS_NOT_FOUND: 'Class not found',
+    CLASS_ID_NOT_FOUND: 'Class id not found',
+    CLASS_UPDATED: 'Class updated',
+    CLASS_DELETED: 'Class deleted',
+    CLASS_STUDENTS_NOT_FOUND: 'Class students not found',
+    CLASS_JOINED: 'Class has been joined by a student',
+    CLASS_LEAVED: 'Class has been leaved by a student',
+    CLASS_STUDENT_ID_NOT_FOUND: 'Class student id not found',
+    COLLECTION_ADDED: 'Collection has been added to a class',
+    COLLECTION_REMOVED: 'Collection has been removed from a class',
+    
+
+
     STATUS_NOT_FOUND: 'Status not found',
 
     OK: 'OK',
     KO: 'KO',
+
+    UNKNOWN_ERROR: 'Unknown error'
 };
