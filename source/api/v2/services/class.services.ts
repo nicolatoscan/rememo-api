@@ -62,7 +62,7 @@ export async function updateClassById(userId: string, classId: string, studyClas
 
 export async function removeClassById(userId: string, classId: string): Promise<void> {
     await databaseHelper.getCollection('users').updateOne(
-        { _id: new ObjectId(userId), 'createdClasses._id': new ObjectId(userId) },
+        { _id: new ObjectId(userId), 'createdClasses._id': new ObjectId(classId) },
         { $pull: { createdClasses: { _id: new ObjectId(classId) } } }
     );
 }
