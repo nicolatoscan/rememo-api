@@ -10,26 +10,29 @@ export async function getCollections(userId: string, ownershipType: Models.EClas
 
     if (ownershipType !== Models.EClassOwnershipType.Created) {
 
-        const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
-        let collectionIDs: ObjectId[] = [];
-        const classes = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[]));
+        let classIds = ((await databaseHelper
+            .getCollection('users')
+            .findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc)
+            .joinedClasses as ObjectId[];
+        if (classIdsFilter)
+            classIds = classIds.filter(cId => classIdsFilter.includes(cId.toString()));
+
+        const classes = (await classServices.getClassesFromIds(classIds));
+        const collsToGet: ObjectId[] = [];
         for (const studyClass of classes) {
             for (const collId of studyClass.collections as ObjectId[]) {
                 collectionIdsToNameDic[collId.toHexString()] = studyClass.name;
-                collectionIDs.push(collId);
+                collsToGet.push(collId);
             }
         }
 
-        if (classIdsFilter)
-            collectionIDs = collectionIDs.filter(cId => classIdsFilter.includes(cId.toString()));
-
         if (ownershipType === Models.EClassOwnershipType.Both) {
-            if (collectionIDs.length > 0)
-                query = { $or: [{ _id: { $in: collectionIDs } }, { owner: new ObjectId(userId) }] };
+            if (collsToGet.length > 0)
+                query = { $or: [{ _id: { $in: collsToGet } }, { owner: new ObjectId(userId) }] };
         } else if (ownershipType === Models.EClassOwnershipType.Joined) {
-            if (collectionIDs.length === 0)
+            if (collsToGet.length === 0)
                 return [];
-            query = { _id: { $in: collectionIDs } };
+            query = { _id: { $in: collsToGet } };
         }
     }
 
