@@ -69,7 +69,7 @@ async function getCollectionById(req: express.Request, res: express.Response) {
 
 async function updateCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -92,7 +92,7 @@ async function updateCollectionById(req: express.Request, res: express.Response)
 
 async function deleteCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -104,7 +104,7 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
 // --- WORDS ---
 async function createWord(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -122,12 +122,12 @@ async function createWord(req: express.Request, res: express.Response) {
 
 async function getWordById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
-    if (!idWord) {
+    if (!typesHelper.checkId(idWord)) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
@@ -143,12 +143,12 @@ async function getWordById(req: express.Request, res: express.Response) {
 
 async function updateWordById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
-    if (!idWord) {
+    if (!typesHelper.checkId(idWord)) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
@@ -168,12 +168,12 @@ async function updateWordById(req: express.Request, res: express.Response) {
 
 async function deleteWordById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
-    if (!idWord) {
+    if (!typesHelper.checkId(idWord)) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
