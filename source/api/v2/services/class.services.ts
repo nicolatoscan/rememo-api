@@ -158,8 +158,9 @@ export async function leaveClass(userId: string, classId: string): Promise<void>
 
 export async function kickStudentFromClass(ownerId: string, classId: string, studentId: string): Promise<boolean> {
     const owner = await databaseHelper.getCollection('users').findOne(
-        { _id: new ObjectId(studentId), 'createdClasses._id': new ObjectId(classId) }
+        { _id: new ObjectId(ownerId), 'createdClasses._id': new ObjectId(classId) }
     );
+    console.log(owner);
     if (owner) {
         await databaseHelper.getCollection('users')
             .updateOne(
