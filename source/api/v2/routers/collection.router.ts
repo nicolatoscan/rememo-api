@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as Models from '../models';
 import * as collectionServices from '../services/collection.services';
+import * as typesHelper from '../../../helpers/types.helper';
 import LANG from '../../../lang';
 
 // --- COLLECTIONS ---
@@ -53,7 +54,7 @@ async function createCollection(req: express.Request, res: express.Response) {
 
 async function getCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
