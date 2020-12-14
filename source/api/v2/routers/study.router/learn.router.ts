@@ -2,13 +2,15 @@ import * as express from 'express';
 import * as learnServices from '../../services/study.services/learn.services';
 //import queryString from 'querystring';
 import LANG from '../../../../lang';
+import * as typesHelper from './../../../../helpers/types.helper';
+
 
 
 async function getCollectionLearnState(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
     const idUser = res.locals._id;
     
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -25,7 +27,7 @@ async function updateWordLearnState(req: express.Request, res: express.Response)
     const idColl = req.params.idColl;
     const idUser = res.locals._id;
     
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -45,7 +47,7 @@ async function resetCollectionLearnState(req: express.Request, res: express.Resp
     const idColl = req.params.idColl;
     const idUser = res.locals._id;
     
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 

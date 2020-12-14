@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as Models from '../models';
 import * as classServices from '../services/class.services';
 import LANG from '../../../lang';
+import * as typesHelper from '../../../helpers/types.helper';
 
 
 
@@ -41,7 +42,7 @@ async function createClass(req: express.Request, res: express.Response) {
 async function getClassById(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
@@ -57,7 +58,7 @@ async function getClassById(req: express.Request, res: express.Response) {
 async function updateClassById(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
@@ -77,7 +78,7 @@ async function updateClassById(req: express.Request, res: express.Response) {
 async function deleteClassById(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
@@ -89,7 +90,7 @@ async function deleteClassById(req: express.Request, res: express.Response) {
 async function getFullClassById(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
@@ -105,7 +106,7 @@ async function getFullClassById(req: express.Request, res: express.Response) {
 async function joinClass(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
@@ -117,7 +118,7 @@ async function joinClass(req: express.Request, res: express.Response) {
 async function leaveClass(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
@@ -131,10 +132,10 @@ async function kickStudentFromClass(req: express.Request, res: express.Response)
     const idClass = req.params.idClass;
     const idStudent = req.params.idStudent;
 
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
-    if (!idStudent) {
+    if (!typesHelper.checkId(idStudent)) {
         return res.status(404).send(LANG.CLASS_STUDENT_ID_NOT_FOUND);
     }
 
@@ -148,10 +149,10 @@ async function addCollectionToClass(req: express.Request, res: express.Response)
     const idClass = req.params.idClass;
     const idColl = req.params.idColl;
 
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -165,10 +166,10 @@ async function removeCollectionFromClass(req: express.Request, res: express.Resp
     const idClass = req.params.idClass;
     const idColl = req.params.idColl;
 
-    if (!idClass) {
+    if (!typesHelper.checkId(idClass)) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
