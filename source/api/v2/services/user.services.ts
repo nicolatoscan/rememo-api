@@ -20,12 +20,11 @@ export async function login(loginUser: Models.LoginUser): Promise<{ user: Models
     return { user: Models.getUserFromDBDoc(user), id: user._id.toString() };
 }
 
-export async function checkUsernameExists(username: string): Promise<boolean> {
-    const user = await databaseHelper.getCollection('users').findOne({ username: username });
-    return user ? true : false;
-}
-
 export async function createUser(loginUser: Models.SignupUser): Promise<{ user: Models.User, id: string } | null> {
+    const alreadyInsertedUsername = await databaseHelper.getCollection('users').findOne({ username: loginUser.username });
+    if (alreadyInsertedUsername)
+        return null;
+
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(loginUser.password, salt);
     const insertedId = (await databaseHelper.getCollection('users').insertOne(
@@ -66,17 +65,20 @@ export async function updateUserById(userId: string, password: string, user: Mod
     if (!(await checkUserPasswordById(userId, password)))
         return false;
 
+    const setProp: { [id: string]: string } = {};
+
     if (user.displayName) {
-        await databaseHelper.getCollection('users').updateOne({ _id: new ObjectId(userId) }, { $set: { displayName: user.displayName } });
+        setProp['displayName'] = user.displayName;
     }
     if (user.email) {
-        await databaseHelper.getCollection('users').updateOne({ _id: new ObjectId(userId) }, { $set: { email: user.email } });
+        setProp['email'] = user.email;
     }
     if (user.newPassword) {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(user.newPassword, salt);
-        await databaseHelper.getCollection('users').updateOne({ _id: new ObjectId(userId) }, { $set: { password: hashedPassword } });
+        setProp['password'] = hashedPassword;
     }
+    await databaseHelper.getCollection('users').updateOne({ _id: new ObjectId(userId) }, { $set: setProp });
     return true;
 
 }

@@ -6,9 +6,7 @@ dotenv.config({ path: './.env.test' });
 
 describe('Test', function() {
 
-    // CLEAN DB
-    before(async function() {
-        this.timeout(20000);
+    async function cleanDb() {
         await databaseHelper.connect();
         (await databaseHelper.getDb().collections()).map(async c => await c.drop());
         await databaseHelper.getDb().createCollection('collections');
@@ -18,6 +16,16 @@ describe('Test', function() {
         await databaseHelper.getDb().createCollection('tests');
         databaseHelper.closeConnection();
         console.log('DATABASE CLEANED');
+    }
+
+    before(async function() {
+        this.timeout(20000);
+        await cleanDb();
+    });
+
+    after(async function() {
+        this.timeout(20000);
+        await cleanDb();
     });
 
     getServicesTests();
