@@ -98,9 +98,9 @@ export async function joinClass(userId: string, classId: string): Promise<void> 
         .findOneAndUpdate(
             { _id: new ObjectId(userId) },
             { $addToSet: { joinedClasses: new ObjectId(classId) } }
-        )).value as Models.User;
+        )).value as Models.User | undefined;
 
-    const collectionsIds = updatedUser.createdClasses.find(c => c._id === new ObjectId(classId))?.collections as ObjectId[] | null;
+    const collectionsIds = updatedUser?.createdClasses.find(c => c._id === new ObjectId(classId))?.collections as ObjectId[] | null;
     if (collectionsIds) {
         const colelctionsInClass = (await databaseHelper.getCollection('collections').find({ _id: { $in: collectionsIds } }).toArray()) as Models.DBCollectionDoc[];
 

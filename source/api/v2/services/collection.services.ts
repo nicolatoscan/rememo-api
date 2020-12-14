@@ -10,10 +10,10 @@ export async function getCollections(userId: string, ownershipType: Models.EClas
 
     if (ownershipType !== Models.EClassOwnershipType.Created) {
 
-        let classIds = ((await databaseHelper
+        let classIds = (((await databaseHelper
             .getCollection('users')
             .findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc)
-            .joinedClasses as ObjectId[];
+            ?.joinedClasses ?? []) as ObjectId[];
         if (classIdsFilter)
             classIds = classIds.filter(cId => classIdsFilter.includes(cId.toString()));
 
@@ -47,7 +47,7 @@ export async function getCollections(userId: string, ownershipType: Models.EClas
  * @deprecated
  */
 export async function getAllCollections(userId: string): Promise<Models.Collection[]> {
-    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
+    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc | null;
     if (!user)
         return [];
     const collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);
@@ -67,7 +67,7 @@ export async function getCollectionsOld(userId: string): Promise<Models.Collecti
  * @deprecated
  */
 export async function getJoinedClassCollections(userId: string): Promise<Models.Collection[]> {
-    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
+    const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc | null;
     if (!user)
         return [];
     const collectionIDs = (await classServices.getClassesFromIds(user.joinedClasses as ObjectId[])).map(c => c.collections).flat(1);
@@ -108,12 +108,14 @@ export async function createCollection(collection: Models.Collection, userId: st
 }
 
 export async function getCollectionById(id: string, userId: string): Promise<Models.Collection | null> {
-    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id) }) as Models.DBCollectionDoc;
+    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id) }) as Models.DBCollectionDoc | null;
     if (!collection)
         return null;
 
     if (collection.owner?.toString() !== userId && !collection.share) {
-        const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc;
+        const user = (await databaseHelper.getCollection('users').findOne({ _id: new ObjectId(userId) })) as Models.DBUserDoc | null;
+        if (!user)
+            return null;
         const classFound = databaseHelper.getCollection('users').find({ 'createdClasses.collections': new ObjectId(id), 'createdClasses._id': { $in: user.joinedClasses } });
         if (!classFound)
             return null;
