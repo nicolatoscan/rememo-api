@@ -104,7 +104,7 @@ export async function getClassStatsParsed(userId: string, classId: string): Prom
         .getCollection('users')
         .findOne({ _id: new ObjectId(userId), 'createdClasses._id': new ObjectId(classId)}) as Models.DBUserDoc)
         ?.createdClasses
-        .find((c => c._id === new ObjectId(classId)));
+        .find((c => c._id.toString() === classId));
 
     if (!studyClass)
         return null;
@@ -112,7 +112,6 @@ export async function getClassStatsParsed(userId: string, classId: string): Prom
     const classUsersCall = getClassUsers(studyClass._id as ObjectId);
     const classCollectionsCall = getCollectionsFromIds(studyClass.collections as ObjectId[]);
     const classUsers = await classUsersCall;
-
     const classCollections = await classCollectionsCall;
 
     const classStats = await getClassStats(classUsers.map(u => u._id as ObjectId), classCollections.map(u => u._id as ObjectId));
@@ -157,7 +156,7 @@ export async function getClassStatsParsed(userId: string, classId: string): Prom
         }
     }
 
-    for (const k in res) {
+    for (const k in res.collections) {
         res.collections[k].usernames = usernamesSet[k] ? Array.from(usernamesSet[k]) : [];
     }
 
