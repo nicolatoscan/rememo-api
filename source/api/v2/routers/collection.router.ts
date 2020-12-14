@@ -5,8 +5,15 @@ import * as typesHelper from '../../../helpers/types.helper';
 import LANG from '../../../lang';
 
 // --- COLLECTIONS ---
-async function getCollections(req: express.Request, res: express.Response) {
-    const minified = req.query.minified === 'true';
+async function getCollectionsFull(req: express.Request, res: express.Response) {
+    await getCollections(req, res, false);
+}
+
+async function getCollectionsMin(req: express.Request, res: express.Response) {
+    await getCollections(req, res, true);
+}
+
+async function getCollections(req: express.Request, res: express.Response, minified = false) {
     let mine: boolean | undefined = undefined;
     if (req.query.mine === 'true')
         mine = true;
@@ -35,8 +42,9 @@ async function getCollections(req: express.Request, res: express.Response) {
 
     const colls = await collectionServices.getCollections(minified, res.locals._id, type, classes);
     return res.send(colls);
-
 }
+
+
 
 async function createCollection(req: express.Request, res: express.Response) {
     const valCollection = Models.validateCollection(req.body);
@@ -187,7 +195,8 @@ async function deleteWordById(req: express.Request, res: express.Response) {
 export default function (): express.Router {
     const router = express.Router();
 
-    router.get('/', getCollections);
+    router.get('/', getCollectionsFull);
+    router.get('/min', getCollectionsMin);
 
     router.post('/', createCollection);
     router.get('/:idColl', getCollectionById);
