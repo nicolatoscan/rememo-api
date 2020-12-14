@@ -1,4 +1,4 @@
-import getServicesTests from './services';
+import getServicesTests from './helpers';
 import getApiTests from './api';
 import dotenv from 'dotenv';
 import databaseHelper from '../../source/helpers/database.helper';

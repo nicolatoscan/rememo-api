@@ -1,4 +1,4 @@
-import databaseHelper from './database.services.test';
+import databaseHelper from './database.helper.test';
 
 export default function(): void {
     describe('Services', function() {
