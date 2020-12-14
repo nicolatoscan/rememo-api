@@ -4,7 +4,23 @@ export default {
         displayName: 'DisplayName',
         email: 'email@example.com',
         password: 'longpassword',
-        username: 'uniqueUsername123'
+        username: 'uniqueUsername123',
+        studyClass: {
+            id: '',
+            name: 'classname'
+        }
+    },
+    studentInfo: {
+        userId: '',
+        displayName: 'DisplayName',
+        email: 'email@example.com',
+        password: 'longpassword',
+        username: 'uniqueUsername123',
+        collectionId: '',
+        studyClass: {
+            id: '',
+            name: 'studentclassname'
+        }
     },
     collectionInfo: {
         collectionId: '',
