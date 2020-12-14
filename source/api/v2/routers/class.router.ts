@@ -86,14 +86,14 @@ async function deleteClassById(req: express.Request, res: express.Response) {
     return res.status(204).send({ message: LANG.CLASS_DELETED });
 }
 
-async function getClassStudents(req: express.Request, res: express.Response) {
+async function getFullClassById(req: express.Request, res: express.Response) {
     const idUser = res.locals._id;
     const idClass = req.params.idClass;
     if (!idClass) {
         return res.status(404).send(LANG.CLASS_ID_NOT_FOUND);
     }
 
-    const classStudents = await classServices.getClassStudents(idUser, idClass);
+    const classStudents = await classServices.getFullClassById(idUser, idClass);
 
     if (!classStudents) {
         return res.status(404).send(LANG.CLASS_STUDENTS_NOT_FOUND);
@@ -187,7 +187,7 @@ export default function (): express.Router {
     router.put('/:idClass', updateClassById);
     router.delete('/:idClass', deleteClassById);
 
-    router.get('/:idClass/students', getClassStudents);
+    router.get('/:idClass/full', getFullClassById);
     router.put('/:idClass/join', joinClass);
     router.put('/:idClass/leave', leaveClass);
     router.put('/:idClass/kick/:idStudent', kickStudentFromClass);

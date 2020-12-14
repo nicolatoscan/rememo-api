@@ -1,13 +1,20 @@
 import joi from 'joi';
 import { ObjectId } from 'mongodb';
 import { DBObject } from './misc.models';
-
+import { CollectionMin } from './Collection';
 // --- INTERFACES ---
 export interface StudyClass {
     _id: string | ObjectId,
     name: string,
     collections: string[] | ObjectId[],
     mine?: boolean
+}
+
+export interface FullStudyClass {
+    _id: string | ObjectId,
+    name: string,
+    students: UserMin[],
+    collections: CollectionMin[],
 }
 
 export interface UserMin {

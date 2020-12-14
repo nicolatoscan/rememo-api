@@ -21,14 +21,17 @@ export interface ClassDescription {
     className: string;
 }
 
-export interface Collection {
+export interface CollectionMin {
     _id?: string | ObjectId,
-    index: number;
     name: string;
     description: string;
-    owner?: string | ObjectId;
     languageFrom?: string;
     languageTo?: string;
+}
+
+export interface Collection extends CollectionMin {
+    index: number;
+    owner?: string | ObjectId;
     share?:boolean;
     words: Word[];
     inClassName?: string
