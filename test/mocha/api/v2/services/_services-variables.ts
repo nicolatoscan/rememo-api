@@ -21,6 +21,13 @@ export default {
             translation: 'translation',
             languageFrom: 'en',
             languageTo: 'it'
+        },{
+            wordId: '',
+            index: 1,
+            original: 'original',
+            translation: 'translation',
+            languageFrom: 'en',
+            languageTo: 'it'
         }]
     }
 };

@@ -202,9 +202,16 @@ export async function getWordById(collectionId: string, wordId: string, userId: 
 export async function updateWordById(collectionId: string, wordId: string, userId: string, updateProps: any): Promise<void> {
     if (updateProps._id)
         delete updateProps._id;
+
+    const setProps: { [propKey: string]: string } = {};
+    if (updateProps.original)
+        setProps['words.$.original'] = updateProps.original;
+    if (updateProps.translation)
+        setProps['words.$.translation'] = updateProps.translation;
+
     await databaseHelper.getCollection('collections').updateOne(
-        { _id: new ObjectId(collectionId), owner: new ObjectId(userId), 'words._id': wordId },
-        { $set: { 'words.$': updateProps } }
+        { _id: new ObjectId(collectionId), owner: new ObjectId(userId), 'words._id': new ObjectId(wordId) },
+        { $set: setProps }
     );
 }
 
