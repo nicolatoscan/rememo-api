@@ -1,4 +1,5 @@
 import getUserServiceTests from './user.services.test';
+import getCollectionsServiceTests from './collection.services.test';
 import databaseHelper from '../../../../../source/helpers/database.helper';
 
 export default function(): void {
@@ -11,6 +12,7 @@ export default function(): void {
         });
 
         getUserServiceTests();
+        getCollectionsServiceTests();
 
         after(function() {
             databaseHelper.closeConnection();

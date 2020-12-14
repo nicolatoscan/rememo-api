@@ -2,6 +2,7 @@ import { assert } from 'chai';
 import databaseHelper from '../../../../../source/helpers/database.helper';
 import env from './_services-variables';
 import * as userServices from '../../../../../source/api/v2/services/user.services';
+import { ObjectId } from 'mongodb';
 
 export default function (): void {
     describe('User Services', function() {
@@ -27,6 +28,7 @@ export default function (): void {
 
 
             const userFound = await databaseHelper.getCollection('users').findOne({
+                _id: new ObjectId(res?.id),
                 displayName: env.userInfo.displayName,
                 email: env.userInfo.email,
                 username: env.userInfo.username
@@ -34,10 +36,7 @@ export default function (): void {
             assert.isDefined(userFound, 'User not inserted');
             
             const userNotFound = await databaseHelper.getCollection('users').findOne({
-                displayName: env.userInfo.displayName,
-                email: env.userInfo.email,
-                password: env.userInfo.password,
-                username: env.userInfo.username
+                password: env.userInfo.password
             });
             assert.isNull(userNotFound, 'Password not hashed');
 
@@ -56,8 +55,6 @@ export default function (): void {
             assert.isNull(res, 'User returned is not null');
 
             const userFound = await databaseHelper.getCollection('users').find({
-                displayName: 'DisplayName',
-                email: 'email@example.com',
                 username: 'uniqueUsername123'
             }).toArray();
             assert.equal(userFound.length, 1, 'User created with same username');

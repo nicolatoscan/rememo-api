@@ -102,6 +102,9 @@ export async function createCollection(collection: Models.Collection, userId: st
 
     delete collection._id;
     collection.owner = new ObjectId(userId);
+    collection.words.forEach(w => {
+        w._id = new ObjectId();
+    });
     const collectionToInsert = Models.createDBCollectionDoc(collection);
 
     const insertedId = (await databaseHelper.getCollection('collections').insertOne(collectionToInsert)).insertedId;
