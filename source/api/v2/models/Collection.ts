@@ -27,6 +27,7 @@ export interface CollectionMin {
     description: string;
     languageFrom?: string;
     languageTo?: string;
+    inClassName?: string
 }
 
 export interface Collection extends CollectionMin {

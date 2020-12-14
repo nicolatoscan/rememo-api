@@ -5,6 +5,7 @@ import LANG from '../../../lang';
 
 // --- COLLECTIONS ---
 async function getCollections(req: express.Request, res: express.Response) {
+    const minified = req.query.minified === 'true';
     let mine: boolean | undefined = undefined;
     if (req.query.mine === 'true')
         mine = true;
@@ -31,7 +32,7 @@ async function getCollections(req: express.Request, res: express.Response) {
         return res.status(400).send(LANG.ERROR_PARAMS_PARSE);
     }
 
-    const colls = await collectionServices.getCollections(res.locals._id, type, classes);
+    const colls = await collectionServices.getCollections(minified, res.locals._id, type, classes);
     return res.send(colls);
 
 }

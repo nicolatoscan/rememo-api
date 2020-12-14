@@ -4,7 +4,7 @@ import { FilterQuery, ObjectId } from 'mongodb';
 import * as classServices from '../services/class.services';
 
 
-export async function getCollections(userId: string, ownershipType: Models.EClassOwnershipType, classIdsFilter: string[] | null): Promise<Models.Collection[]> {
+export async function getCollections(minified: boolean, userId: string, ownershipType: Models.EClassOwnershipType, classIdsFilter: string[] | null): Promise<Models.Collection[] | Models.CollectionMin[]> {
     let query: FilterQuery<any> = { owner: new ObjectId(userId) };
     const collectionIdsToNameDic: { [id: string]: string } = {};
 
@@ -36,11 +36,24 @@ export async function getCollections(userId: string, ownershipType: Models.EClas
         }
     }
 
-    return ((await databaseHelper
+    const mongoPointer = databaseHelper
         .getCollection('collections')
-        .find(query)
-        .toArray()) as Models.DBCollectionDoc[])
-        .map(col => Models.getCollectionFromDBDoc(col, collectionIdsToNameDic[col._id?.toString() ?? ''] ?? null)) as Models.Collection[];
+        .find(query);
+
+    if (minified) {
+        return ((await mongoPointer.project({
+            _id: 1,
+            name: 1,
+            description: 1,
+            languageFrom: 1,
+            languageTo: 1
+        }).toArray()) as Models.CollectionMin[]).map(col => ({ ...col, inClassName: collectionIdsToNameDic[col._id?.toString() ?? ''] ?? undefined }));
+    } else {
+        return ((await mongoPointer.toArray()) as Models.DBCollectionDoc[])
+            .map(col =>
+                Models.getCollectionFromDBDoc(col, collectionIdsToNameDic[col._id?.toString() ?? ''] ?? null)
+            ) as Models.Collection[];
+    }
 }
 
 /**
