@@ -52,7 +52,6 @@ export async function saveTrainingResult(result: Models.TrainingResult, userId: 
         { _id: studyState._id },
         studyState
     );
-    console.log(result.correct);
     statsServices.saveTrainingResult(studyState.collectionId.toHexString(), word.wordId.toHexString(), result.correct, userId);
     return true;
 }

@@ -38,7 +38,7 @@ export async function createClass(userId: string, studyClass: Models.StudyClass)
     return { studyClassId: studyClass._id.toHexString() };
 }
 
-export async function getClassById(userId: string, classId: string, ownershipType: Models.EClassOwnershipType = Models.EClassOwnershipType.Both): Promise<Models.StudyClass | null> {
+export async function getClassById(userId: string, classId: string): Promise<Models.StudyClass | null> {
     const res = (await getClassesFromIds([new ObjectId(classId)])).find(c => c._id.toString() === classId) ?? null;
     return res;
 
@@ -160,7 +160,7 @@ export async function kickStudentFromClass(ownerId: string, classId: string, stu
     const owner = await databaseHelper.getCollection('users').findOne(
         { _id: new ObjectId(ownerId), 'createdClasses._id': new ObjectId(classId) }
     );
-    console.log(owner);
+
     if (owner) {
         await databaseHelper.getCollection('users')
             .updateOne(

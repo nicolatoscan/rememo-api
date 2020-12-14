@@ -10,6 +10,7 @@ export default function (): void {
     describe('Collection Services', function () {
 
         before(async function () {
+            env.userInfo.username = 'collUsername';
             const user = await userServices.createUser({
                 username: env.userInfo.username,
                 displayName: env.userInfo.displayName,
@@ -194,6 +195,40 @@ export default function (): void {
                 assert.equal(coll.name, env.collectionInfo.name);
                 assert.equal(coll.description, env.collectionInfo.description);
             }
+
+        });
+
+        it('Should not update the collection', async function() {
+            const newUserId = (await userServices.createUser({
+                displayName: 'randomusername',
+                email:'random@email.com',
+                password: 'verylongpassword',
+                username: 'randomusername'
+            }))?.id;
+            if (!newUserId) {
+                assert(false, 'User test failed to be created');
+                return;
+            }
+
+            const toUpdateCollId = (await collectionServices.createCollection({
+                description: 'desc',
+                name: 'name to update',
+                index: 0,
+                words: []
+            }, newUserId)).collectionId;
+
+            env.collectionInfo.name = 'new name';
+            env.collectionInfo.description = 'new description';
+            await collectionServices.updateCollectionById(toUpdateCollId, env.userInfo.userId, {
+                name: 'updated',
+            });
+
+            const coll = await databaseHelper.getCollection('collections')
+                .findOne({
+                    _id: new ObjectId(toUpdateCollId)
+                }) as Models.DBCollectionDoc;
+            assert.isNotNull(coll, 'Collection created not found');
+            assert.equal(coll.name, 'name to update', 'Name changed without authorization');
 
         });
         

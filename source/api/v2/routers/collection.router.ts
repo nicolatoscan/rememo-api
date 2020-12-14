@@ -106,7 +106,6 @@ async function createWord(req: express.Request, res: express.Response) {
     if (!idColl) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
-    console.log(idColl);
 
     const valWord = Models.validateWord(req.body);
     if (valWord.error) {
