@@ -4,7 +4,7 @@
   "engines": {
     "node": "15.x"
   },
-  "description": "",
+  "description": "Rememo restfull API",
   "main": "dist/source/index.js",
   "scripts": {
     "serve": "npm run transpile && npm run start",
@@ -22,8 +22,8 @@
     "type": "git",
     "url": "git+https://github.com/nicolatoscan/rememo-api.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Gandelli Alessio, Taras Rashkevych, Mattia Rashkevych, Nicola Toscan",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/nicolatoscan/rememo-api/issues"
   },
