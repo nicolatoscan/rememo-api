@@ -9,7 +9,8 @@ export async function createTest(testQuery: Models.TestQuery, userId: string): P
 
     const wordsPoll = (await databaseHelper.getCollection('collections')
         .find({
-            owner: new ObjectId(userId),
+            // TODO: check by class
+            // owner: new ObjectId(userId),
             _id: { $in: ids }
         })
         .project({ _id: 1, words: 1 })
