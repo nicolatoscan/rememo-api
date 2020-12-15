@@ -8,7 +8,7 @@
   "main": "dist/source/index.js",
   "scripts": {
     "serve": "npm run transpile && npm run start",
-    "start": "node dist/source/index.js",
+    "start": "pm2 start dist/source/index.js",
     "watch": "nodemon --watch 'source/**/*.ts' --ignore 'source/**/*.spec.ts' --exec 'ts-node' source/index.ts",
     "transpile": "tsc",
     "postinstall": "npm run transpile",
