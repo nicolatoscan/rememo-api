@@ -4,7 +4,6 @@ import getVersionRouter from './api/router';
 import bodyParser from 'body-parser';
 import databaseHelper from './helpers/database.helper';
 import * as path from 'path';
-import * as fs from 'fs';
 
 function normalizePort(val: string | number | undefined, fallback = 3000): number {
     if (typeof val === 'string') {
@@ -28,11 +27,10 @@ async function start(app: express.Application): Promise<void> {
     const server = app.listen(port);
     console.log(`Server listening on port ${port}`);
     process.on('SIGINT', () => {
-        console.log('Killing the server.');
+        console.log('Killing the server');
         databaseHelper.closeConnection();
-        console.log('Connection closed.');
-        server?.close();
-        
+        console.log('Connection closed');
+        server.close();
         process.exit();
     });
 }
