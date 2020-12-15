@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import getVersionRouter from './api/router';
 import bodyParser from 'body-parser';
 import databaseHelper from './helpers/database.helper';
+import * as typesHelper from './helpers/types.helper';
 import * as path from 'path';
 
 function normalizePort(val: string | number | undefined, fallback = 3000): number {
@@ -42,8 +43,17 @@ function middleware(app: express.Application) {
     app.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
         res.setHeader('Access-Control-Allow-Headers', '*');
+        next();
+    });
+    app.use((req, res, next) => {
+        if (req.body)
+            typesHelper.trimValues(req.body);
+        if (req.params)
+            typesHelper.trimValues(req.params);
+        if (req.query)
+            typesHelper.trimValues(req.query);
         next();
     });
 }

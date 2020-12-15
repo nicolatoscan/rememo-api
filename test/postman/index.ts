@@ -1,4 +1,4 @@
-import cleanDb from '../cleanDb';
+import { cleanDb } from '../../source/utils/misc.utils';
 import newman from 'newman';
 import * as path from 'path';
 import dotenv from 'dotenv';

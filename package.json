@@ -17,7 +17,8 @@
     "commit": "git-cz",
     "commit:sign": "git-cz -S",
     "test:start": "mocha ./dist/test/index.test.js",
-    "test": "npm run transpile && npm run test:start"
+    "test": "npm run transpile && npm run test:start",
+    "init-database": "node dist/source/utils/clean-db.js"
   },
   "repository": {
     "type": "git",
