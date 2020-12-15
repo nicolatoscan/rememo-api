@@ -24,7 +24,7 @@ jobs:
         run: npm test
         env:
           PORT: 4000
-          DEFAULT_DB: rememo-test
+          DEFAULT_DB: rememo-github
           MONGODB_CONNECTION_STRING: ${{ secrets.MONGODB_CONNECTION_STRING }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
