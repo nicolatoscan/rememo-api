@@ -56,7 +56,7 @@ async function createCollection(req: express.Request, res: express.Response) {
 
         const { collectionId } = await collectionServices.createCollection(collection, res.locals._id);
 
-        return res.status(201).send({ _id: typesHelper.checkId(collectionId) });
+        return res.status(201).send({ _id: collectionId});
     }
 }
 
@@ -124,7 +124,7 @@ async function createWord(req: express.Request, res: express.Response) {
 
         const { wordId } = await collectionServices.createWord(word, idColl, res.locals._id);
 
-        return res.status(201).send({ _id: typesHelper.checkId(wordId) });
+        return res.status(201).send({ _id: wordId });
     }
 }
 
