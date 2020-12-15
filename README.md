@@ -100,7 +100,7 @@ The postman tests will make an http call to the endpoint specified in `test/post
 ## npm scripts
 The application come with several npm scripts:
 * `npm run serve` - Transpile and run the application in one command
-* `npm run start` - Start the application from the transpiled file
+* `npm run start` - Start cluster of applications with pm2
 * `npm run watch` - Transpile, run the application and hot-reloead on changes
 * `npm run transpile` - Transpile the typescript file to javascript
 * `npm run postinstall` - Transpile the project after a `npm install`

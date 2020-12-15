@@ -7,7 +7,7 @@
   "description": "Rememo restfull API",
   "main": "dist/source/index.js",
   "scripts": {
-    "serve": "npm run transpile && npm run start",
+    "serve": "npm run transpile && node dist/source/index.js",
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "watch": "nodemon --watch 'source/**/*.ts' --ignore 'source/**/*.spec.ts' --exec 'ts-node' source/index.ts",
     "transpile": "tsc",

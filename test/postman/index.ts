@@ -1,9 +1,7 @@
 import { cleanDb } from '../../source/utils/misc.utils';
 import newman from 'newman';
 import * as path from 'path';
-import dotenv from 'dotenv';
 import { ChildProcess, spawn } from 'child_process';
-dotenv.config({ path: './.env.test' });
 
 export default async function() {
     
