@@ -21,7 +21,7 @@ async function nextWord(req: express.Request, res: express.Response) {
     if (valQuery.error) {
         return res.status(400).send(valQuery.error);
     } else if (valQuery.value) {
-        const word = await trainServices.getNextWord(valQuery.value.collectionPollIds, res.locals.username);
+        const word = await trainServices.getNextWord(valQuery.value.collectionPollIds, res.locals._id);
         return res.send(word);
     }
 }

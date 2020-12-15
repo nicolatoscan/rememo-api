@@ -117,34 +117,45 @@ export async function getFullClassById(userId: string, classId: string): Promise
 }
 
 export async function joinClass(userId: string, classId: string): Promise<void> {
-    await databaseHelper.getCollection('users')
+    const classOwner = (await databaseHelper.getCollection('users')
+        .findOne(
+            { 'createdClasses._id': new ObjectId(classId) }
+        )) as Models.DBUserDoc | null;
+
+    if (!classOwner)
+        return;
+
+    const modifiedCount = (await databaseHelper.getCollection('users')
         .updateOne(
             { _id: new ObjectId(userId) },
             { $addToSet: { joinedClasses: new ObjectId(classId) } }
-        );
-    
-    const updatedUser = (await databaseHelper.getCollection('users')
-        .findOneAndUpdate(
-            { _id: new ObjectId(userId) },
-            { $addToSet: { joinedClasses: new ObjectId(classId) } }
-        )).value as Models.User | undefined;
+        )).modifiedCount;
 
-    const collectionsIds = updatedUser?.createdClasses.find(c => c._id === new ObjectId(classId))?.collections as ObjectId[] | null;
-    if (collectionsIds) {
+    const collectionsIds = classOwner?.createdClasses.find(c => c._id.toString() === classId)?.collections as ObjectId[];
+    if (modifiedCount === 1 && collectionsIds.length > 0) {
         const colelctionsInClass = (await databaseHelper.getCollection('collections').find({ _id: { $in: collectionsIds } }).toArray()) as Models.DBCollectionDoc[];
+        const calls: Promise<any>[] = [];
+        for (const c of colelctionsInClass) {
+            calls.push(insertSafeStudyState(Models.createEmptyDBCollectionStudyStateDoc(c._id?.toString() ?? '', userId, c.words.map(w => w._id?.toString() ?? ''))));
+            calls.push(insertStatsState(Models.createDBStatsDoc(c._id?.toString() ?? '', userId, c.words.map(w => w._id?.toString() ?? ''))));
+        }
+        await Promise.all(calls);
+    }
+}
 
-        const insertStudy = databaseHelper.getCollection('collection-study-state').insertMany(
-            colelctionsInClass.map(c => {
-                return Models.createEmptyDBCollectionStudyStateDoc(c._id?.toString() ?? '', userId, c.words.map(w => w._id?.toString() ?? ''));
-            })
-        );
-        const insertStats = databaseHelper.getCollection('stats').insertMany(
-            colelctionsInClass.map(c => {
-                return Models.createDBStatsDoc(c._id?.toString() ?? '', userId, c.words.map(w => w._id?.toString() ?? ''));
-            })
-        );
-        await insertStudy;
-        await insertStats;
+async function insertSafeStudyState(val: Models.DBStudyStateDoc): Promise<any> {
+    try {
+        return await databaseHelper.getCollection('collection-study-state').insertOne(val);
+    } catch {
+        console.log('Study state already inserted');
+    }
+}
+
+async function insertStatsState(val: Models.DBStatsDoc): Promise<any> {
+    try {
+        return await databaseHelper.getCollection('stats').insertOne(val);
+    } catch {
+        console.log('Stats already inserted');
     }
 }
 

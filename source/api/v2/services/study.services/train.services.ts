@@ -95,7 +95,6 @@ export async function getNextWord(idsPolls: string[], userId: string): Promise<M
                 };
             })
         ).flat(1).sort((w1, w2) => w1.score - w2.score);
-
     const RANGE = 0.1;
     const sample = getSampleRange(wordsPoll, RANGE);
     if (sample.length === 0)
@@ -103,7 +102,7 @@ export async function getNextWord(idsPolls: string[], userId: string): Promise<M
 
     const wordInfo = sample.reduce((min, w) => w.lastDoneCorrectCounter < min.lastDoneCorrectCounter ? w : min);
     const collection = ((await databaseHelper.getCollection('collections')
-        .findOne({ _id: new ObjectId(wordInfo.collectionId), owner: new ObjectId(userId) })) as Models.DBCollectionDoc);
+        .findOne({ _id: new ObjectId(wordInfo.collectionId) })) as Models.DBCollectionDoc);
     const word = collection?.words.find(w => (w._id as ObjectId).toHexString() === wordInfo.wordId.toHexString());
 
     if (collection && word) {

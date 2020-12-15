@@ -39,7 +39,6 @@ async function saveResult(result: Result[], userId: string): Promise<void> {
     const resultMappedByGroupId = result.reduce((entryMap, e) => entryMap.set(e.collectionId, [...entryMap.get(e.collectionId) || [], e]), new Map());
     for (const collectionId of resultMappedByGroupId.keys()) {
         const subResult = resultMappedByGroupId.get(collectionId) as Result[];
-        console.log(subResult);
         const correctCollTest = subResult.filter(r => r.result && r.type === ResultType.Test).length;
         const correctCollTrain = subResult.filter(r => r.result && r.type === ResultType.Train).length;
         const wrongCollTest = subResult.filter(r => !r.result && r.type === ResultType.Test).length;
