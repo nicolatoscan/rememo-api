@@ -79,10 +79,11 @@ export function validateCollection(collection: unknown, idRequired = false): { v
     if (validationResult.error) {
         return { error: validationResult.error.message };
     }
-
-    const err = (collection as Collection).words.map(w => validateWord(w).error).find(e => e !== undefined);
-    if (err) {
-        return { error: err };
+    if ((collection as Collection).words) {
+        const err = (collection as Collection).words.map(w => validateWord(w).error).find(e => e !== undefined);
+        if (err) {
+            return { error: err };
+        }
     }
 
     return { value: (collection as Collection) };
@@ -126,7 +127,7 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         languageFrom: collection.languageFrom,
         languageTo: collection.languageTo,
         share: collection.share ? true : false,
-        words: collection.words.map(w => {
+        words: collection.words?.map(w => {
             return {
                 _id: w._id ? w._id : new ObjectId(),
                 index: w.index,
@@ -138,6 +139,6 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         }).sort(w => w.index).map((w, i) => {
             w.index = i;
             return w;
-        }),
+        }) ?? [],
     };
 }
