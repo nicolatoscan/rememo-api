@@ -2,6 +2,7 @@ import * as Models from '../models';
 import { ObjectId } from 'mongodb';
 import databaseHelper from '../../../helpers/database.helper';
 import * as usersServices from '../../../api/v2/services/user.services';
+import * as collectionServices from '../../../api/v2/services/collection.services';
 
 export async function getClassesFromIds(classIds: ObjectId[]): Promise<Models.StudyClass[]> {
     return (await databaseHelper.getCollection('users')
@@ -184,11 +185,33 @@ export async function kickStudentFromClass(ownerId: string, classId: string, stu
 }
 
 export async function addCollectionToClass(userId: string, classId: string, collectionId: string): Promise<void> {
-    await databaseHelper.getCollection('users')
+    const coll = await collectionServices.getCollectionById(collectionId, userId, true);
+    if (!coll)
+        return;
+
+    const modifiedCount = (await databaseHelper.getCollection('users')
         .updateOne(
             { _id: new ObjectId(userId), 'createdClasses._id': new ObjectId(classId) },
             { $addToSet: { 'createdClasses.$.collections' : new ObjectId(collectionId) } }
-        );
+        )).modifiedCount;
+
+    if (modifiedCount !== 1)
+        return;
+
+    
+    const studentsId =  ((await databaseHelper.getCollection('users')
+        .find({ joinedClasses: new ObjectId(classId) })
+        .project({ _id: 1 })
+        .toArray()) as { _id: ObjectId }[]).map(x => x._id.toHexString());
+
+    if (modifiedCount === 1 && studentsId.length > 0) {
+        const calls: Promise<any>[] = [];
+        for (const sId of studentsId) {
+            calls.push(insertSafeStudyState(Models.createEmptyDBCollectionStudyStateDoc(coll._id?.toString() ?? '', sId, coll.words.map(w => w._id?.toString() ?? ''))));
+            calls.push(insertStatsState(Models.createDBStatsDoc(coll._id?.toString() ?? '', sId, coll.words.map(w => w._id?.toString() ?? ''))));
+        }
+        await Promise.all(calls);
+    }
 }
 
 export async function removeCollectionFromClass(userId: string, classId: string, collectionId: string): Promise<void> {

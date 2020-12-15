@@ -39,7 +39,8 @@ async function start(app: express.Application): Promise<void> {
 
 function middleware(app: express.Application) {
     app.use(bodyParser.json());
-    app.use((req, res, next) => morgan('dev')(req, res, next));
+    if (!process.env.PROD)
+        app.use((req, res, next) => morgan('dev')(req, res, next));
     app.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Credentials', 'true');

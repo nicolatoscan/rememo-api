@@ -119,12 +119,22 @@ export async function createCollection(collection: Models.Collection, userId: st
 
     await insertStudy;
     await insertStats;
-    return { collectionId: insertedId };
+    return { collectionId: insertedId.toString() };
 
 }
 
-export async function getCollectionById(id: string, userId: string): Promise<Models.Collection | null> {
-    const collection = await databaseHelper.getCollection('collections').findOne({ _id: new ObjectId(id) }) as Models.DBCollectionDoc | null;
+export async function getCollectionById(id: string, userId: string, onlyMine = false): Promise<Models.Collection | null> {
+    const collection = await databaseHelper.getCollection('collections').findOne(
+        onlyMine ? { _id: new ObjectId(id), owner: new ObjectId(userId) } : { _id: new ObjectId(id) }
+    ) as Models.DBCollectionDoc | null;
+
+    if (onlyMine) {
+        if (collection)
+            return Models.getCollectionFromDBDoc(collection);
+        else
+            return null;
+    }
+
     if (!collection)
         return null;
 

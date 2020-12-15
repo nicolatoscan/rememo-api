@@ -37,7 +37,7 @@ export default function (): void {
                 words: []
             };
             const collId = (await collectionServices.createCollection(coll, env.userInfo.userId)).collectionId;
-            const studentCollId = (await collectionServices.createCollection(coll, env.userInfo.userId)).collectionId;
+            const studentCollId = (await collectionServices.createCollection(coll, env.studentInfo.userId)).collectionId;
             env.collectionInfo.collectionId = collId;
             env.studentInfo.collectionId = studentCollId;
         });
