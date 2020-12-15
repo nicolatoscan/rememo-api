@@ -17,8 +17,8 @@ function normalizePort(val: string | number | undefined, fallback = 3000): numbe
     return fallback;
 }
 
-async function start(app: express.Application): Promise<void> {
-    const port = normalizePort(process.env.PORT);
+async function start(app: express.Application, defaultPort: number | undefined = undefined): Promise<void> {
+    const port = normalizePort(defaultPort ? defaultPort : process.env.PORT);
     await databaseHelper.connect();
     console.log('Database connected');
 
@@ -66,7 +66,7 @@ function routes(app: express.Application) {
 }
 
 
-export default function() {
+export default function(defaultPort: number | undefined = undefined) {
     const app = express();
-    start(app);
+    start(app, defaultPort);
 }

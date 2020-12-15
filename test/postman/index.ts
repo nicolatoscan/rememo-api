@@ -13,7 +13,7 @@ export default async function() {
         before(async function() {
             this.timeout(7500);
             console.log('Starting server in background ...');
-            childServer = spawn('node', ['dist/source/index.js', '--test']);
+            childServer = spawn('node', ['dist/source/index.js', '--test', '--port', process.env.PORT ?? '4000']);
             await new Promise((res) => setTimeout(res, 7000));
         });
 

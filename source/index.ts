@@ -7,4 +7,13 @@ if (process.argv.includes('--test') || process.argv.includes('-t')) {
 } else {
     dotenv.config();
 }
-app();
+
+let port = 0;
+if (process.argv.includes('--port')) {
+    port = +process.argv[process.argv.indexOf('--port') + 1];
+}
+
+if (port)
+    app(port);
+else
+    app();
