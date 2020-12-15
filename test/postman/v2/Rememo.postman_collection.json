@@ -1559,53 +1559,6 @@
 			"response": []
 		},
 		{
-			"name": "/class/:idClass/kick/:idStudent",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "ec42f01b-0a09-419e-8214-c1af31cf4596",
-						"exec": [
-							"pm.test('Is correct status', function() {",
-							"    pm.response.to.have.status(204);",
-							"});",
-							"",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "apikey"
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "{{Token}}"
-					}
-				],
-				"url": {
-					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}/kick/{{StudentId}}",
-					"host": [
-						"{{API_ENDPOINT}}"
-					],
-					"path": [
-						"api",
-						"v2",
-						"class",
-						"{{ClassId}}",
-						"kick",
-						"{{StudentId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/class/:idClass",
 			"event": [
 				{

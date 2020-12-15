@@ -2,7 +2,7 @@ import cleanDb from '../cleanDb';
 import newman from 'newman';
 import * as path from 'path';
 import dotenv from 'dotenv';
-import { ChildProcess, exec, spawn } from 'child_process';
+import { ChildProcess, spawn } from 'child_process';
 dotenv.config({ path: './.env.test' });
 
 export default async function() {
@@ -10,17 +10,17 @@ export default async function() {
     describe('Postaman Tests', function() {
         let childServer: ChildProcess;
         
-        // before(async function() {
-        //     this.timeout(11000);
-        //     console.log('Starting in background');
-        //     childServer = spawn('npm', ['run', 'serve']);
-        //     await new Promise((res) => setTimeout(res, 10000));
-        //     childServer.kill('SIGINT');
-        // });
+        before(async function() {
+            this.timeout(7500);
+            console.log('Starting server in background ...');
+            childServer = spawn('node', ['dist/source/index.js']);
+            await new Promise((res) => setTimeout(res, 7000));
+        });
 
-        // after(async function() {
-        //     childServer.kill('SIGINT');
-        // });
+        after(async function() {
+            console.log('Killing server in background ...');
+            childServer.kill('SIGINT');
+        });
 
 
         async function runPostmanTests(collectionPath: string, envPath: string) {
@@ -50,7 +50,7 @@ export default async function() {
             );
         });
 
-        it('Should run v2mattia postman tests', async function() {
+        it('Should run v2 postman tests', async function() {
             this.timeout(20000);
             await cleanDb();
             await runPostmanTests(
