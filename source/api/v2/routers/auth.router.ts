@@ -31,18 +31,16 @@ async function signup(req: express.Request, res: express.Response) {
         return res.status(400).send(valUser.error);
 
     } else if (valUser.value) {
-        if (await userServices.checkUsernameExists(valUser.value.username)) {
-            res.status(403).send(LANG.AUTH_USERNAME_ALREADY_IN_USE);
 
-        } else {
-
-            const userInfo = await userServices.createUser(valUser.value);
+        const userInfo = await userServices.createUser(valUser.value);
+        if (userInfo) {
             authHelpers.addAuthToResponse(res, { username: userInfo.user.username, _id: userInfo.id });
-
-            res.status(201).send({
+            return res.status(201).send({
                 ...userInfo.user,
                 token: res.getHeader('Authentication')
             });
+        } else {
+            res.status(403).send(LANG.AUTH_USERNAME_ALREADY_IN_USE);
         }
     }
 }

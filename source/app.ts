@@ -4,59 +4,61 @@ import getVersionRouter from './api/router';
 import bodyParser from 'body-parser';
 import databaseHelper from './helpers/database.helper';
 import * as path from 'path';
+import * as fs from 'fs';
 
-export default class App {
-
-    public app: express.Application
-    private port: number;
-
-
-    constructor() {
-        this.app = express();
-        this.port = this.normalizePort(process.env.PORT);
-
-        this.start();
+function normalizePort(val: string | number | undefined, fallback = 3000): number {
+    if (typeof val === 'string') {
+        const port = parseInt(val, 10);
+        if (!isNaN(port) && port > 0)
+            return port;
+    } else if (typeof val === 'number' && val > 0) {
+        return val;
     }
+    return fallback;
+}
 
-    private async start(): Promise<void> {
-        await databaseHelper.connect();
-        console.log('Database connected');
+async function start(app: express.Application): Promise<void> {
+    const port = normalizePort(process.env.PORT);
+    await databaseHelper.connect();
+    console.log('Database connected');
 
-        this.middleware();
-        this.routes();
+    middleware(app);
+    routes(app);
 
-        this.app.listen(this.port);
-        console.log(`Server listening on port ${this.port}`);
-    }
+    const server = app.listen(port);
+    console.log(`Server listening on port ${port}`);
+    process.on('SIGINT', () => {
+        console.log('Killing the server.');
+        databaseHelper.closeConnection();
+        console.log('Connection closed.');
+        server?.close();
+        
+        process.exit();
+    });
+}
 
-    private normalizePort(val: string | number | undefined, fallback = 3000): number {
-        if (typeof val === 'string') {
-            const port = parseInt(val, 10);
-            if (!isNaN(port) && port > 0)
-                return port;
-        } else if (typeof val === 'number' && val > 0) {
-            return val;
-        }
-        return fallback;
-    }
+function middleware(app: express.Application) {
+    app.use(bodyParser.json());
+    if (!process.env.PROD)
+        app.use((req, res, next) => morgan('dev')(req, res, next));
+    app.use((req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        res.setHeader('Access-Control-Allow-Headers', '*');
+        next();
+    });
+}
 
-    private middleware() {
-        this.app.use(bodyParser.json());
-        this.app.use(morgan('dev'));
-        this.app.use((req, res, next) => {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Credentials', 'true');
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-            res.setHeader('Access-Control-Allow-Headers', '*');
-            next();
-        });
-    }
+function routes(app: express.Application) {
+    app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '../../public/index.html')); });
+    app.get('/app', (req, res) => { res.status(301).redirect('https://rememo.nicolatoscan.dev/'); });
+    app.get('/doc', (req, res) => { res.status(301).redirect('https://rememoapi.docs.apiary.io/'); });
+    app.use('/api', getVersionRouter());
+}
 
-    private routes() {
-        this.app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '../../public/index.html')); });
-        this.app.get('/app', (req, res) => { res.status(301).redirect('https://rememo.nicolatoscan.dev/'); });
-        this.app.get('/doc', (req, res) => { res.status(301).redirect('https://rememoapi.docs.apiary.io/'); });
-        this.app.use('/api', getVersionRouter());
-    }
 
+export default function() {
+    const app = express();
+    start(app);
 }

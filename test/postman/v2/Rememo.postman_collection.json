@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f68ede54-8bb4-4ceb-9d46-f72be96dd42f",
+		"_postman_id": "dba8f04c-f9cd-471c-b7ca-88bca8683f9b",
 		"name": "Rememo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "8597ef97-a2e0-4bf1-bcb3-482ac5c56124",
+						"id": "c52804e4-d47e-4068-9913-ee8d6b38fc84",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(201);\r",
@@ -70,7 +70,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "86abebee-dce7-4a0f-9a6c-822a01328add",
+						"id": "141f50af-dee3-4bed-8740-f1a9e280448e",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -136,7 +136,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "6b123d18-5f5a-4d61-b269-5944052af823",
+						"id": "758db70d-88c5-4fde-b423-bde7df3b71a8",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(201);\r",
@@ -193,7 +193,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c4379ee2-112e-4f5b-851d-81ba8dc91add",
+						"id": "5205387a-8e2c-42a4-a93a-3146c5df8908",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(201);\r",
@@ -252,7 +252,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "75f15cfb-77c9-4bbd-b461-54c65af71b01",
+						"id": "843fec20-31e2-4838-8a6b-dbfdba0eb1af",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(200);",
@@ -314,7 +314,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4105b4fd-28b1-4ec2-a33a-46ab8aa73cd0",
+						"id": "2920d95e-7f0a-45ae-af35-825502bb749f",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(200);",
@@ -377,7 +377,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f404f5a5-7712-4e5d-abf8-31574c4616da",
+						"id": "9d32372f-ee0b-4c75-9140-c402df198a9c",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(200);",
@@ -435,7 +435,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3c72e9aa-0d29-412a-977a-6162b6fd648e",
+						"id": "6698ac7f-43b8-4264-94fe-2942bb14dfc5",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(204);\r",
@@ -484,7 +484,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "dc300989-17a8-47a0-98b7-fa6255599f4f",
+						"id": "85db82c8-fa0f-4fd9-8c9a-40d0a829d407",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(204);\r",
@@ -536,7 +536,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1694b087-a87e-454c-a6e2-6158b18996b3",
+						"id": "5743d97b-f9a2-41c4-b15c-3a35d772723a",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(200);",
@@ -590,7 +590,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c7fe9702-7740-4559-9c19-365a97457a2c",
+						"id": "7da6815e-b142-40f9-a400-e06ee4fcbc4a",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(204);",
@@ -631,12 +631,1661 @@
 			"response": []
 		},
 		{
+			"name": "/class",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3dd2de74-f7b0-4f21-9e24-433baea17c88",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson._id).to.be.string;\r",
+							"    pm.environment.set('ClassId', responseJson._id)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Testing Class\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "72ed385b-a9d6-4ed5-8125-8b96b9cdb125",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Testing Class updated\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass/addCollection/:idColl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "74d95902-7089-402a-a15f-1ab3f347f1e7",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}/addCollection/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}",
+						"addCollection",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass/join",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e764d703-5f70-4408-bdde-0fa6405a90cc",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}/join",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass/full",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e56af772-ff8c-413b-b5cf-f72951c5ddb4",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson._id === 'string');",
+							"    pm.expect( responseJson.name).to.oneOf(['Testing Class updated','Testing Class']);;",
+							"    pm.expect(typeof responseJson.students[0]._id === 'string');",
+							"    pm.environment.set('Studentsd', responseJson.students[0]._id);",
+							"    pm.expect(responseJson.students[0].displayName).to.oneOf(['Test Displayname']);",
+							"    pm.expect(responseJson.students[0].username).to.oneOf(['TestUsername']);",
+							"    pm.expect(typeof responseJson.collections[0]._id === 'string');",
+							"    pm.expect(responseJson.collections[0].name).to.oneOf(['Testing Collection updated', 'Testing Collection']);",
+							"    pm.expect(responseJson.collections[0].description).to.oneOf(['Testing description updated', 'Testing description']);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}/full",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}",
+						"full"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "34a00ef0-cdd1-4c2e-8efb-ace89fc73714",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson._id === 'string');",
+							"    pm.expect(responseJson.name).to.oneOf(['Testing Class','Testing Class updated']);",
+							"    pm.expect(typeof responseJson.collections === 'array');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class?type=0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "78497163-2230-4eee-8b3e-05188bd9f507",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Class','Testing Class updated']);",
+							"    pm.expect(typeof responseJson[0].collections[0]._id === 'string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class?type=0",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class?type=1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cfac6db9-b40d-42c5-87f8-44b9b2220538",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Class','Testing Class updated']);",
+							"    pm.expect(typeof responseJson[0].collections[0]._id === 'string');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class?type=1",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class?type=2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f39f19f-ef9e-4958-8caa-18db8856a11a",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Class','Testing Class updated']);",
+							"    pm.expect(typeof responseJson[0].collections[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[1]._id === 'string');",
+							"    pm.expect(responseJson[1].name).to.oneOf(['Testing Class','Testing Class updated']);",
+							"    pm.expect(typeof responseJson[1].collections[0]._id === 'string');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class?type=2",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collection?mine=true",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "82d85901-56ac-462c-81f0-aabfe6013f59",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].index === 'number');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Collection','Testing Collection updated']);",
+							"    pm.expect(responseJson[0].description).to.oneOf(['Testing description','Testing description updated']);",
+							"    pm.expect(typeof responseJson[0].owner === 'string');",
+							"    pm.expect(responseJson[0].languageFrom === null);",
+							"    pm.expect(responseJson[0].languageTo === null);",
+							"    pm.expect(typeof responseJson[0].words[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].index === 'number');",
+							"    pm.expect(typeof responseJson[0].words[0].original === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].translation === 'string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections?mine=true",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections"
+					],
+					"query": [
+						{
+							"key": "mine",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collection?mine=false",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "506fbbd9-d832-4dd7-b57d-c7b0a4c9a81c",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].index === 'number');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Collection','Testing Collection updated']);",
+							"    pm.expect(responseJson[0].description).to.oneOf(['Testing description','Testing description updated']);",
+							"    pm.expect(typeof responseJson[0].owner === 'string');",
+							"    pm.expect(responseJson[0].languageFrom === null);",
+							"    pm.expect(responseJson[0].languageTo === null);",
+							"    pm.expect(typeof responseJson[0].words[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].index === 'number');",
+							"    pm.expect(typeof responseJson[0].words[0].original === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].translation === 'string');",
+							"    pm.expect(responseJson[0].inClassName).to.oneOf(['Testing Class','Testing Class updated']);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections?mine=false",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections"
+					],
+					"query": [
+						{
+							"key": "mine",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collection?classes=classId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b3392fea-f7e6-462c-b141-fe486a7567c0",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].index === 'number');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Collection','Testing Collection updated']);",
+							"    pm.expect(responseJson[0].description).to.oneOf(['Testing description','Testing description updated']);",
+							"    pm.expect(typeof responseJson[0].owner === 'string');",
+							"    pm.expect(responseJson[0].languageFrom === null);",
+							"    pm.expect(responseJson[0].languageTo === null);",
+							"    pm.expect(typeof responseJson[0].words[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].index === 'number');",
+							"    pm.expect(typeof responseJson[0].words[0].original === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].translation === 'string');",
+							"    pm.expect(responseJson[0].inClassName).to.oneOf(['Testing Class','Testing Class updated']);",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections?classes={{ClassId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections"
+					],
+					"query": [
+						{
+							"key": "classes",
+							"value": "{{ClassId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/collection?mine=true&classes=classId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "241d917c-858d-49d2-a691-931f3aeaff61",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].index === 'number');",
+							"    pm.expect(responseJson[0].name).to.oneOf(['Testing Collection','Testing Collection updated']);",
+							"    pm.expect(responseJson[0].description).to.oneOf(['Testing description','Testing description updated']);",
+							"    pm.expect(typeof responseJson[0].owner === 'string');",
+							"    pm.expect(responseJson[0].languageFrom === null);",
+							"    pm.expect(responseJson[0].languageTo === null);",
+							"    pm.expect(typeof responseJson[0].words[0]._id === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].index === 'number');",
+							"    pm.expect(typeof responseJson[0].words[0].original === 'string');",
+							"    pm.expect(typeof responseJson[0].words[0].translation === 'string');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/collections?mine=true&classes={{ClassId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"collections"
+					],
+					"query": [
+						{
+							"key": "mine",
+							"value": "true"
+						},
+						{
+							"key": "classes",
+							"value": "{{ClassId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "stats/class/:idClass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2be9a06a-d5e6-4ea1-8bf9-986050f2393a",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.classId === 'string');",
+							"    pm.expect(typeof responseJson.correct === 'number');",
+							"    pm.expect(typeof responseJson.wrong === 'number');",
+							"    pm.expect(typeof responseJson.users === 'array');",
+							"    pm.expect(typeof responseJson.collections === 'array');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/stats/class/{{ClassId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"stats",
+						"class",
+						"{{ClassId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass/removeCollection/:idColl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c230eeef-d117-447a-9013-db5e6be65d00",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}/removeCollection/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}",
+						"removeCollection",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass/leave",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cef16a67-eae2-4882-b022-2d96a0cfa198",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}/leave",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}",
+						"leave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/class/:idClass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "529a0682-c33b-4e9f-9cda-b90472af2412",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/class/{{ClassId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"class",
+						"{{ClassId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/train/result",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "01a3ba35-539a-460f-bfcf-d49e8cd6b920",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"collectionId\": \"{{CollectionId}}\",\r\n    \"wordId\": \"{{WordId}}\",\r\n    \"correct\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/study/train/result",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"study",
+						"train",
+						"result"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/learn/:idColl/learned",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7862523e-05b1-42ab-87e6-bca5ad63b945",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							" pm.test('Have two query parameters', function(){\r",
+							"     const queryParam = pm.request.url.query.all();\r",
+							"     pm.expect(queryParam.length === 2);\r",
+							"     pm.expect(queryParam[0].key === 'wordId');\r",
+							"     pm.expect(queryParam[1].key === 'status');\r",
+							" });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/study/learn/{{CollectionId}}/learned?wordId={{WordId}}&status=0.333",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"study",
+						"learn",
+						"{{CollectionId}}",
+						"learned"
+					],
+					"query": [
+						{
+							"key": "wordId",
+							"value": "{{WordId}}"
+						},
+						{
+							"key": "status",
+							"value": "0.333"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/learn/:idColl/reset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "87748afc-6eee-4043-bb67-33eb2283cecf",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/study/learn/{{CollectionId}}/reset",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"study",
+						"learn",
+						"{{CollectionId}}",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/train/next",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b79ff3e0-70af-48d0-af6f-7bf70ab0b6e5",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson._id === 'string');",
+							"    pm.expect(typeof responseJson.index === 'number');",
+							"    pm.expect(typeof responseJson.original === 'string');",
+							"    pm.expect(typeof responseJson.translation === 'string');",
+							"    pm.expect(typeof responseJson.languageFrom === 'string');",
+							"    pm.expect(typeof responseJson.languageTo === 'string');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"collectionPollIds\": [\"{{CollectionId}}\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/study/train/next",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"study",
+						"train",
+						"next"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/learn/:idColl/status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "616dbcf8-90dc-4add-a44f-fdc2980efaf7",
+						"exec": [
+							"pm.test('Is correct status', function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test('Is json', function() {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"pm.test('Has all the property', function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('array');\r",
+							"    responseJson.forEach(item => { pm.expect(item).to.be.an('object').to.have.all.keys('wordId', 'learned');\r",
+							"                                   pm.expect(typeof item.wordId === 'string')\r",
+							"                                   pm.expect(typeof item.learned === 'number') });\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/study/learn/{{CollectionId}}/status",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"study",
+						"learn",
+						"{{CollectionId}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/study/test/check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2777f72-1418-4997-a723-dddae60e769e",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"_id\": \"5fb9f52c3999ed6bb1977786\",\r\n    \"createdOn\": \"2020-11-22T05:20:44.941Z\",\r\n    \"ownerId\": \"TestUsername\",\r\n    \"collectionPollIds\": [\r\n        \"5fb9ecc4abcba5641ea4f3c2\"\r\n    ],\r\n    \"numberOfQuestions\": 5,\r\n    \"questions\": [\r\n        {\r\n            \"collectionId\": \"5fb9ecc4abcba5641ea4f3c2\",\r\n            \"wordId\": \"5fb9ecc4abcba5641ea4f3c1\",\r\n            \"question\": \"Red\",\r\n            \"answer\": \"Rosso\"\r\n        },\r\n        {\r\n            \"collectionId\": \"5fb9ecc4abcba5641ea4f3c2\",\r\n            \"wordId\": \"5fb9eccaabcba5641ea4f3c5\",\r\n            \"question\": \"Red2\",\r\n            \"answer\": \"Rosso2\"\r\n        },\r\n        {\r\n            \"collectionId\": \"5fb9ecc4abcba5641ea4f3c2\",\r\n            \"wordId\": \"5fb9eccaabcba5641ea4f3c4\",\r\n            \"question\": \"Red2\",\r\n            \"answer\": \"Rosso2\"\r\n        },\r\n        {\r\n            \"collectionId\": \"5fb9ecc4abcba5641ea4f3c2\",\r\n            \"wordId\": \"5fb9ecccabcba5641ea4f3c8\",\r\n            \"question\": \"Red2\",\r\n            \"answer\": \"Rosso\"\r\n        },\r\n        {\r\n            \"collectionId\": \"5fb9ecc4abcba5641ea4f3c2\",\r\n            \"wordId\": \"5fb9ecccabcba5641ea4f3c7\",\r\n            \"question\": \"Red2\",\r\n            \"answer\": \"Rosso\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/study/test/check",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"study",
+						"test",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats/:idColl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ea994995-7aaf-4849-b149-f270c33bee8e",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.correctTest === 'number');",
+							"    pm.expect(typeof responseJson.wrongTest === 'number');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/stats/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"stats",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats/train/:idColl/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a45d8e62-210c-40cc-be74-75c063f2f45c",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.correctTest === 'number');",
+							"    pm.expect(typeof responseJson.wrongTest === 'number');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/stats/train/{{CollectionId}}/",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"stats",
+						"train",
+						"{{CollectionId}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats/test/:idColl/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "46650fc3-a3fe-49a4-93d1-9106442e1d19",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.correctTest === 'number');",
+							"    pm.expect(typeof responseJson.wrongTest === 'number');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/stats/test/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"stats",
+						"test",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats/class/:idClass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4a0dc3a-0bb1-4a23-a0b9-8a21242174c0",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.correctTest === 'number');",
+							"    pm.expect(typeof responseJson.wrongTest === 'number');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/stats/{{CollectionId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"stats",
+						"{{CollectionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats/train/:idColl/word/:idWord",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c8960048-8cc5-4ecd-8b5b-4b4ef088232e",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.correctTest === 'number');",
+							"    pm.expect(typeof responseJson.wrongTest === 'number');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v1/stats/train/{{CollectionId}}/word/{{WordId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stats",
+						"train",
+						"{{CollectionId}}",
+						"word",
+						"{{WordId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stats/test/:idColl/word/:idWord",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3b1a28e0-f914-4115-933e-75e59afbf244",
+						"exec": [
+							"pm.test('Is correct status', function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('Is json', function() {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"pm.test('Has all the property', function() {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(typeof responseJson.correctTest === 'number');",
+							"    pm.expect(typeof responseJson.wrongTest === 'number');",
+							"",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ENDPOINT}}/api/v2/stats/test/{{CollectionId}}/word/{{WordId}}",
+					"host": [
+						"{{API_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"stats",
+						"test",
+						"{{CollectionId}}",
+						"word",
+						"{{WordId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/collections/:idCol/words/:idWord",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "1e007f56-c229-42a6-8a78-fb374f7d93d8",
+						"id": "0a807f6b-fd91-4354-8326-f6f6e73528cb",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(204);",
@@ -686,7 +2335,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "2314ed03-61e4-4f4e-8444-56b49e3776e7",
+						"id": "0932da25-a319-48bc-9a90-2cfb8365c9b3",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(204);\r",
@@ -731,7 +2380,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4dd4e7ea-2013-4f4e-96cb-5e45ef2b97ee",
+						"id": "dc1d8356-fb6e-41fd-a7e3-e38cafcba240",
 						"exec": [
 							"pm.test('Is correct status', function() {",
 							"    pm.response.to.have.status(200);",
@@ -786,7 +2435,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1e7917c6-b9d4-4915-9704-10a1dc54945d",
+						"id": "779f7536-faa6-4097-b076-f6218baa80ef",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -839,7 +2488,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "750fc0d8-c3d2-4628-b4b3-c67580569a28",
+						"id": "80ff12d0-26f4-4e31-8c07-9e4481694764",
 						"exec": [
 							"pm.test('Is correct status', function() {\r",
 							"    pm.response.to.have.status(200);\r",

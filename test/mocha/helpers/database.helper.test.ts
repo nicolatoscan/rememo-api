@@ -1,7 +1,7 @@
 import databaseHelper from '../../../source/helpers/database.helper';
 
 export default function (): void {
-    describe('Database services', function () {
+    describe('Database helpers', function () {
 
         before(async function () {
             this.timeout(10000);

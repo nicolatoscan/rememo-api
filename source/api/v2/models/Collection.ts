@@ -16,16 +16,30 @@ export interface FullWord extends Word {
     collectionId: string | ObjectId;
 }
 
-export interface Collection {
-    _id?: string,
-    index: number;
+export interface ClassDescription {
+    classId: string | ObjectId;
+    className: string;
+}
+
+export interface CollectionMin {
+    _id?: string | ObjectId,
     name: string;
     description: string;
-    owner?: string | ObjectId;
     languageFrom?: string;
     languageTo?: string;
+    inClassName?: string
+}
+
+export interface Collection extends CollectionMin {
+    index: number;
+    owner?: string | ObjectId;
     share?:boolean;
     words: Word[];
+    inClassName?: string
+}
+
+export interface CollectionWithClass extends Collection {
+    fromClass?: ClassDescription;
 }
 
 export interface DBCollectionDoc extends Collection, DBObject {
@@ -75,8 +89,8 @@ export function validateCollection(collection: unknown, idRequired = false): { v
 }
 
 // --- DB parsers ---
-export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
-    return {
+export function getCollectionFromDBDoc(doc: DBCollectionDoc, inClassName: string | null = null): Collection {
+    const res: Collection = {
         _id: doc._id,
         index: doc.index,
         name: doc.name,
@@ -94,8 +108,11 @@ export function getCollectionFromDBDoc(doc: DBCollectionDoc): Collection {
                 languageFrom: w.languageFrom,
                 languageTo: w.languageTo
             };
-        })
+        }),
     };
+    if (inClassName)
+        res.inClassName = inClassName;
+    return res;
 }
 
 export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
@@ -121,6 +138,6 @@ export function createDBCollectionDoc(collection: Collection): DBCollectionDoc {
         }).sort(w => w.index).map((w, i) => {
             w.index = i;
             return w;
-        })
+        }),
     };
 }

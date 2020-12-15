@@ -28,7 +28,7 @@ export function validateTrainingResult(trainingResult: unknown): { value?: Train
 export function validateNextWordQuery(nextWordQuery: unknown): { value?: NextWordQuery, error?: string } {
 
     const validationResult = joi.object({
-        collectionPollIds: joi.array().items(joi.string())
+        collectionPollIds: joi.array().items(joi.string()).required()
     }).validate(nextWordQuery);
 
     if (validationResult.error) {

@@ -1,4 +1,4 @@
-import App from './app';
+import app from './app';
 import dotenv from 'dotenv';
 
 if (process.argv.includes('--test') || process.argv.includes('-t')) {
@@ -7,5 +7,4 @@ if (process.argv.includes('--test') || process.argv.includes('-t')) {
 } else {
     dotenv.config();
 }
-
-new App();
+app();

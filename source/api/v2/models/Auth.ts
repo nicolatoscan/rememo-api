@@ -78,6 +78,8 @@ export function createDBUserDoc(user: SignupUser, hashedPassword: string): DBUse
         displayName: user.displayName,
         email: user.email,
         password: hashedPassword,
-        username: user.username
+        username: user.username,
+        createdClasses: [],
+        joinedClasses: []
     };
 }

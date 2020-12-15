@@ -1,14 +1,50 @@
 import * as express from 'express';
 import * as Models from '../models';
 import * as collectionServices from '../services/collection.services';
+import * as typesHelper from '../../../helpers/types.helper';
 import LANG from '../../../lang';
 
 // --- COLLECTIONS ---
-async function getCollections(req: express.Request, res: express.Response) {
-    const colls = await collectionServices.getCollections(res.locals._id);
-    return res.send(colls);
-
+async function getCollectionsFull(req: express.Request, res: express.Response) {
+    await getCollections(req, res, false);
 }
+
+async function getCollectionsMin(req: express.Request, res: express.Response) {
+    await getCollections(req, res, true);
+}
+
+async function getCollections(req: express.Request, res: express.Response, minified = false) {
+    let mine: boolean | undefined = undefined;
+    if (req.query.mine === 'true')
+        mine = true;
+    else if (req.query.mine === 'false')
+        mine = false;
+
+    let classes: string[] | null = null;
+    if (typeof req.query.classes === 'string') {
+        classes = req.query.classes.split(',');
+    }
+
+    let type: Models.EClassOwnershipType;
+    if (mine === true && classes) {
+        type = Models.EClassOwnershipType.Both;
+    } else if (mine === true && !classes) {
+        type = Models.EClassOwnershipType.Created;
+    } else if (mine === false) {
+        type = Models.EClassOwnershipType.Joined;
+    } else if (mine === undefined && classes) {
+        type = Models.EClassOwnershipType.Joined;
+    } else if (mine === undefined && !classes) {
+        type = Models.EClassOwnershipType.Both;
+    } else {
+        return res.status(400).send(LANG.ERROR_PARAMS_PARSE);
+    }
+
+    const colls = await collectionServices.getCollections(minified, res.locals._id, type, classes);
+    return res.send(colls);
+}
+
+
 
 async function createCollection(req: express.Request, res: express.Response) {
     const valCollection = Models.validateCollection(req.body);
@@ -26,7 +62,7 @@ async function createCollection(req: express.Request, res: express.Response) {
 
 async function getCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -41,7 +77,7 @@ async function getCollectionById(req: express.Request, res: express.Response) {
 
 async function updateCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -64,7 +100,7 @@ async function updateCollectionById(req: express.Request, res: express.Response)
 
 async function deleteCollectionById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
@@ -76,10 +112,9 @@ async function deleteCollectionById(req: express.Request, res: express.Response)
 // --- WORDS ---
 async function createWord(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
-    console.log(idColl);
 
     const valWord = Models.validateWord(req.body);
     if (valWord.error) {
@@ -95,12 +130,12 @@ async function createWord(req: express.Request, res: express.Response) {
 
 async function getWordById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
-    if (!idWord) {
+    if (!typesHelper.checkId(idWord)) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
@@ -116,12 +151,12 @@ async function getWordById(req: express.Request, res: express.Response) {
 
 async function updateWordById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
-    if (!idWord) {
+    if (!typesHelper.checkId(idWord)) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
@@ -141,12 +176,12 @@ async function updateWordById(req: express.Request, res: express.Response) {
 
 async function deleteWordById(req: express.Request, res: express.Response) {
     const idColl = req.params.idColl;
-    if (!idColl) {
+    if (!typesHelper.checkId(idColl)) {
         return res.status(404).send(LANG.COLLECTION_ID_NOT_FOUND);
     }
 
     const idWord = req.params.idWord;
-    if (!idWord) {
+    if (!typesHelper.checkId(idWord)) {
         return res.status(404).send(LANG.WORD_ID_NOT_FOUND);
     }
 
@@ -160,7 +195,8 @@ async function deleteWordById(req: express.Request, res: express.Response) {
 export default function (): express.Router {
     const router = express.Router();
 
-    router.get('/', getCollections);
+    router.get('/', getCollectionsFull);
+    router.get('/min', getCollectionsMin);
 
     router.post('/', createCollection);
     router.get('/:idColl', getCollectionById);
