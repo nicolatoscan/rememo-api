@@ -12,10 +12,8 @@
     "postinstall": "npm run transpile",
     "commit": "git-cz",
     "commit:sign": "git-cz -S",
-    "test:postman": "newman run test/postman/v2/Rememo.postman_collection.json -e test/postman/v2/Rememo.postman_environment.json",
-    "test:mocha:serve": "npm run transpile && npm run test:mocha:start",
-    "test:mocha:start": "mocha ./dist/test/mocha/index.test.js",
-    "test": "npm run test:mocha:serve && npm run test:postman"
+    "test:start": "mocha ./dist/test/index.test.js",
+    "test": "npm run transpile && npm run test:start"
   },
   "repository": {
     "type": "git",
@@ -47,6 +45,7 @@
     "@types/mocha": "^8.0.3",
     "@types/mongodb": "^3.5.33",
     "@types/morgan": "^1.9.2",
+    "@types/newman": "^5.1.1",
     "@types/node": "^14.14.6",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",

@@ -4,17 +4,18 @@ import getVersionRouter from './api/router';
 import bodyParser from 'body-parser';
 import databaseHelper from './helpers/database.helper';
 import * as path from 'path';
+import { Server } from 'http';
 
 export default class App {
 
     public app: express.Application
+    private server: Server | null = null;
     private port: number;
 
 
     constructor() {
         this.app = express();
         this.port = this.normalizePort(process.env.PORT);
-
         this.start();
     }
 
@@ -25,9 +26,15 @@ export default class App {
         this.middleware();
         this.routes();
 
-        this.app.listen(this.port);
+        this.server = this.app.listen(this.port);
         console.log(`Server listening on port ${this.port}`);
+        process.on('SIGINT', () => {
+            console.log('Killing the server.');
+            this.server?.close();
+            process.exit();
+        });
     }
+    
 
     private normalizePort(val: string | number | undefined, fallback = 3000): number {
         if (typeof val === 'string') {
