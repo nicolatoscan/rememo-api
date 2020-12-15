@@ -1,196 +1,274 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  version: '0.2.2'
+  description: >
+    This is the official documentation of all the APIs that are used in the project **Rememo**. <br>
+    All these APIs are divided into sections that are organized in the following way:<br>
+    **1. Authentication** <br>
+    **2. Users** <br>
+    **3. Collections** <br>
+    **4. Study** <br>
+    **5. Share** <br>
+    **6. Stats** <br>
+    **7. Class** <br>
+
+  version: "2.0.0"
   title: "Rememo API"
   license:
     name: MIT
     url: https://github.com/nicolatoscan/rememo-api/blob/main/LICENSE
 host: rememo-api.herokuapp.com
-basePath: /api/v1
+basePath: /api/v2
 tags:
-- name: "auth"
-  description: "Authentication"
-- name: "users"
-  description: "Users"
-- name: "collections"
-  description: "Collections"
-- name: "study"
-  description: "Study"
-- name: "share"
-  description: "Share"
+  - name: "auth"
+    description: "Authentication"
+  - name: "users"
+    description: "Users"
+  - name: "collections"
+    description: "Collections"
+  - name: "study"
+    description: "Study"
+  - name: "share"
+    description: "Share"
+  - name: "class"
+    description: "Class"
 schemes:
-- https
+  - https
 consumes:
-- application/json
+  - application/json
 produces:
-- application/json
+  - application/json
 
 paths:
+
   /auth/signup:
     post:
       tags:
-      - "auth"
-      summary: Create a New User
+        - "auth"
+      summary: "Create a New User"
       parameters:
         - name: body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/SignupUser'
+            $ref: "#/definitions/SignupUser"
       responses:
         201:
-          description: 'Created user'
+          description: "An object which defines the newly created User"
           schema:
-            $ref: '#/definitions/SignupUserResponse'
+            $ref: "#/definitions/SignupUserResponse"
           examples:
             application/json:
-                username: Test Displayname
-                email: email@example.com
-                displayName: TestUsername
-  
+              {
+                "username": "Test Displayname",
+                "email": "email@example.com",
+                "displayName": "TestUsername",
+              }
+
   /auth/login:
     post:
       tags:
-      - "auth"
-      summary: Login
+        - "auth"
+      summary: "Login"
       parameters:
         - name: body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/LoginUser'
+            $ref: "#/definitions/LoginUser"
       responses:
         200:
-          description: 'Logged in user'
+          description: "An object which defines the logged in User"
           schema:
-            $ref: '#/definitions/SignupUserResponse'
+            $ref: "#/definitions/SignupUserResponse"
           examples:
             application/json:
-                username: Test Displayname
-                email: email@example.com
-                displayName: TestUsername
-                
+              {
+                "username": "Test Displayname",
+                "email": "email@example.com",
+                "displayName": "TestUsername",
+              }
+
   /users:
     get:
       tags:
-      - "users"
-      summary: Get the logged User
+        - "users"
+      summary: "Get the logged in User"
       responses:
         201:
-          description: ''
+          description: "An object which defines the retrieved logged in User"
           schema:
-            $ref: '#/definitions/SignupUserResponse'
+            $ref: "#/definitions/SignupUserResponse"
           examples:
             application/json:
-                username: Test Displayname
-                email: email@example.com
-                displayName: TestUsername
+              {
+                "username": "Test Displayname",
+                "email": "email@example.com",
+                "displayName": "TestUsername",
+              }
+
     delete:
       tags:
-      - "users"
-      summary: delete the logged User
+        - "users"
+      summary: "Delete the logged in User"
       parameters:
         - name: body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/LoginUser'
+            $ref: "#/definitions/LoginUser"
       responses:
         200:
-          description: 'user deleted'
+          description: "The User has been deleted"
+
     put:
       tags:
-      - "users"
-      summary: update the logged User
+        - "users"
+      summary: "Update the logged in User"
       parameters:
         - name: body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateUser'
+            $ref: "#/definitions/UpdateUser"
       responses:
         201:
-          description: ''
+          description: "An object which defines the updated logged in User"
           schema:
-            $ref: '#/definitions/SignupUserResponse'
+            $ref: "#/definitions/SignupUserResponse"
           examples:
             application/json:
-                username: Test Displayname
-                email: email@example.com
-                displayName: TestUsername
-  
-  /collections:
+              {
+                "username": "Test Displayname",
+                "email": "email@example.com",
+                "displayName": "TestUsername",
+              }
+
+  /collections/min:
     get:
       tags:
-      - "collections"
-      summary: Get all the Collections
+        - "collections"
+      summary: "Get all my and/or class minified Collections"
+      parameters:
+        - name: mine
+          in: query
+          type: boolean
+        - name: classes
+          in: query
+          type: string
       responses:
         200:
-          description: All the Collections
+          description: "An array of objects which defines the minified Collections"
           schema:
-            $ref: '#/definitions/CollectionArray'
+            $ref: "#/definitions/CollectionMinArray"
           examples:
             application/json:
               [
                 {
-                  _id: 5fb6e4b522935b001216de8c,
-                  index: 1,
-                  name: Testing Collection,
-                  description: Testing description,
-                  owner: TestUsername,
-                  languageFrom: null,
-                  languageTo: null,
-                  words: [
-                    {
-                      _id: 5fb6e4b522935b001216de8d,
-                      index: 1,
-                      original: Red,
-                      translation: Rosso
-                    }
-                  ]
+                  "_id": "5fb6e4b522935b001216de8c",
+                  "name": "Testing Collection",
+                  "description": "Testing description",
+                  "owner": "TestUsername",
+                  "languageFrom": "en",
+                  "languageTo": "it",
+                  "inClassName": "Testing Collection",
                 },
                 {
-                  _id: 6ts6e4b123935b004476de8c,
-                  index: 2,
-                  name: Testing Collection,
-                  description: Testing description,
-                  owner: TestUsername,
-                  languageFrom: null,
-                  languageTo: null,
-                  words: [
-                    {
-                      _id: 6ts6e4b123935b004476de8f,
-                      index: 2,
-                      original: Green,
-                      translation: Verde
-                    }
-                  ]
-                }
+                  "_id": "6ts6e4b123935b004476de8c",
+                  "name": "Testing Collection",
+                  "description": "Testing description",
+                  "owner": "TestUsername",
+                  "languageFrom": "en",
+                  "languageTo": "it",
+                  "inClassName": "Testing Collection",
+                },
+              ]
+
+  /collections:
+    get:
+      tags:
+        - "collections"
+      summary: "Get all my and/or class Collections"
+      parameters:
+        - name: mine
+          in: query
+          type: boolean
+        - name: classes
+          in: query
+          type: string
+      responses:
+        200:
+          description: "An array of objects which defines the Collections"
+          schema:
+            $ref: "#/definitions/CollectionCompleteArray"
+          examples:
+            application/json:
+              [
+                {
+                  "_id": "b34h5s234k5h4jk5h32j4k5c",
+                  "name": "My Favorite Colors",
+                  "description": "All my favorite colors put together!",
+                  "languageFrom": "en",
+                  "languageTo": "it",
+                  "inClassName": "My Favorite Colors",
+                  "index": "123",
+                  "owner": "Mario",
+                  "share": "true",
+                  "words":
+                    [
+                      {
+                        "index": "456",
+                        "original": "Red",
+                        "translation": "Rosso",
+                        "languageFrom": "en",
+                        "languageTo": "it",
+                      },
+                    ],
+                },
+                {
+                  "_id": "b34h5s234k5h4jk5h32j4k5c",
+                  "name": "My Favorite Colors",
+                  "description": "All my favorite colors put together!",
+                  "languageFrom": "en",
+                  "languageTo": "it",
+                  "inClassName": "My Favorite Colors",
+                  "index": "123",
+                  "owner": "Mario",
+                  "share": "true",
+                  "words":
+                    [
+                      {
+                        "index": "456",
+                        "original": "Red",
+                        "translation": "Rosso",
+                        "languageFrom": "en",
+                        "languageTo": "it",
+                      },
+                    ],
+                },
               ]
     post:
       tags:
-      - "collections"
-      summary: Create a new Collection
+        - "collections"
+      summary: "Create a new Collection"
       parameters:
         - name: body
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Collection'
+            $ref: "#/definitions/Collection"
       responses:
         201:
-          description: ''
+          description: "An object which defines the id of the new Collection"
           schema:
-            $ref: '#/definitions/ReturnId'
+            $ref: "#/definitions/ReturnId"
           examples:
-            application/json:
-                _id: 0123456789abcdef01234567
-  
+            application/json: { "_id": "0123456789abcdef01234567" }
+
   /collections/{collectionId}:
     get:
       tags:
-      - "collections"
-      summary: Get a Collection by its id
+        - "collections"
+      summary: "Get the Collection by its id"
       parameters:
         - name: collectionId
           in: path
@@ -198,28 +276,37 @@ paths:
           type: string
       responses:
         200:
-          description: A Collection of Words identifiend by its id
+          description: "An object which defines the Collection"
           schema:
-            $ref: '#/definitions/Collection'
+            $ref: "#/definitions/CollectionComplete"
           examples:
             application/json:
-                index: 123
-                name: My Favorite Colors
-                description: All my favorite colors put together!
-                owner: Mario
-                words: [
-                  {
-                    index: 456,
-                    original: Red,
-                    translation: Rosso,
-                    languageFrom: English,
-                    languageTo: Italiano
-                  }
-                ]
+              {
+                "_id": "b34h5s234k5h4jk5h32j4k5c",
+                "name": "My Favorite Colors",
+                "description": "All my favorite colors put together!",
+                "languageFrom": "en",
+                "languageTo": "it",
+                "inClassName": "My Favorite Colors",
+                "index": "123",
+                "owner": "Mario",
+                "share": "true",
+                "words":
+                  [
+                    {
+                      "index": "456",
+                      "original": "Red",
+                      "translation": "Rosso",
+                      "languageFrom": "en",
+                      "languageTo": "it",
+                    },
+                  ],
+              }
+
     put:
       tags:
-      - "collections"
-      summary: Update a Collection by its id
+        - "collections"
+      summary: "Update the Collection by its id"
       parameters:
         - name: collectionId
           in: path
@@ -229,14 +316,15 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateCollection'
+            $ref: "#/definitions/UpdateCollection"
       responses:
         204:
-          description: 'Collection updated'
+          description: "The Collection has been updated"
+
     delete:
       tags:
-      - "collections"
-      summary: Delete a Collection by its id
+        - "collections"
+      summary: "Delete the Collection by its id"
       parameters:
         - name: collectionId
           in: path
@@ -244,13 +332,13 @@ paths:
           type: string
       responses:
         204:
-          description: 'Collection deleted'
-  
+          description: "The Collection has been deleted"
+
   /collections/{collectionId}/words:
     post:
       tags:
-      - "collections"
-      summary: Create a new Collection
+        - "collections"
+      summary: "Create a new Word in the Collection by its id"
       parameters:
         - name: collectionId
           in: path
@@ -260,21 +348,20 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Word'
+            $ref: "#/definitions/Word"
       responses:
         201:
-          description: ''
+          description: "An object which defines the id of the new Word"
           schema:
-            $ref: '#/definitions/Word'
+            $ref: "#/definitions/ReturnId"
           examples:
-            application/json:
-                _id: 0123456789abcdef01234567
-  
+            application/json: { "_id": "0123456789abcdef01234567" }
+
   /collections/{collectionId}/words/{wordId}:
     delete:
       tags:
-      - "collections"
-      summary: Delete a Word by its id
+        - "collections"
+      summary: "Delete the Word of the Collection by their ids"
       parameters:
         - name: collectionId
           in: path
@@ -286,13 +373,58 @@ paths:
           type: string
       responses:
         204:
-          description: Word deleted
-          
+          description: "The Word has been deleted"
+    put:
+      tags:
+        - "collections"
+      summary: "Update the Word of the Collection by their ids"
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Word has been updated"
+
+    get:
+      tags:
+        - "collections"
+      summary: "Get the Word of the Collection by their ids"
+      parameters:
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+        - name: wordId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: "An object which defines the Word"
+          schema:
+            $ref: "#/definitions/Word"
+          examples:
+            application/json:
+              {
+                "_id": "b44f8vn47fbfhb3b34t",
+                "index": "1",
+                "original": "Red",
+                "translation": "apple",
+                "languageForm": "en",
+                "languageTo": "it",
+              }
+
   /study/learn/{collectionId}/status:
     get:
       tags:
-      - "study"
-      summary: Get the Learn State of a Collection
+        - "study"
+      summary: "Get the Learn State of the Collection"
       parameters:
         - name: collectionId
           in: path
@@ -300,26 +432,21 @@ paths:
           type: string
       responses:
         200:
-          description: 'An array of objects which defines the Learn State of a Collection'
-          schema: 
-            $ref: '#/definitions/CollectionLearnState'
+          description: "An array of objects which defines the Learn State of the Collection"
+          schema:
+            $ref: "#/definitions/CollectionLearnState"
           examples:
-            application/json: [
-                  {
-                    wordId: 353hk23j5b23k5bjk2sdfasd,
-                    learned: 0.343
-                  },
-                  {
-                    wordId: 891fedf7gd7fgd89f789df7g,
-                    learned: 0.575
-                  }
-                ]
-  
+            application/json:
+              [
+                { "wordId": "353hk23j5b23k5bjk2sdfasd", "learned": "0.343" },
+                { "wordId": "891fedf7gd7fgd89f789df7g", "learned": "0.575" },
+              ]
+
   /study/learn/{collectionId}/learned:
     put:
       tags:
-      - "study"
-      summary: Update the Learn State of a Word
+        - "study"
+      summary: "Update the Learn State of the Word in the Collection"
       parameters:
         - name: collectionId
           in: path
@@ -335,13 +462,13 @@ paths:
           required: true
       responses:
         204:
-          description: 'Word Learn State updated'
-          
+          description: "The Word Learn State has been updated"
+
   /study/learn/{collectionId}/reset:
     put:
       tags:
-      - "study"
-      summary: Reset the Learn State of a Collection
+        - "study"
+      summary: "Reset the Learn State of the Collection"
       parameters:
         - name: collectionId
           in: path
@@ -349,13 +476,132 @@ paths:
           required: true
       responses:
         204:
-          description: 'Collection Learn State reseted'
-          
+          description: "The Collection Learn State has been reseted"
+
+  /study/train/result:
+    post:
+      tags:
+        - "study"
+      summary: "Save the Result of the asked Word in Train"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/TrainingResult"
+      responses:
+        204:
+          description: "The Result has been saved"
+
+  /study/train/next:
+    post:
+      tags:
+        - "study"
+      summary: "Ask for the next Word to be used in Train"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NextWordQuery"
+      responses:
+        200:
+          description: "An object which defines the next Word to be used in Train"
+          schema:
+            $ref: "#/definitions/FullWord"
+          examples:
+            application/json:
+              {
+                "_id": "b44f8vn47fbfhb3b34t",
+                "index": "1",
+                "original": "Red",
+                "translation": "apple",
+                "languageForm": "en",
+                "languageTo": "it",
+                "collectionId": "n45jn4nj4j4b3j45j",
+              }
+
+  /study/test/generate:
+    post:
+      tags:
+        - "study"
+      summary: "Generate a test in Test"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/TestQuery"
+      responses:
+        201:
+          description: "An object which defines the structure of a test data"
+          schema:
+            $ref: "#/definitions/Test"
+          examples:
+            application/json:
+              {
+                "numberOfQuestions": "20",
+                "collectionPollIds": ["1", "2", "3"],
+                "questions":
+                  [
+                    {
+                      "collectionId": "44",
+                      "wordId": "420",
+                      "question": "apple",
+                      "correct": "mela",
+                      "answer": "libro",
+                      "result": "false",
+                    },
+                  ],
+                "_id": "11",
+                "ownerId": "65",
+                "createdOn": "2020-11-13",
+                "corrected": "false",
+              }
+
+  /study/test/check:
+    post:
+      tags:
+        - "study"
+      summary: "Check a test in Test"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Test"
+      responses:
+        201:
+          description: "An object which defines the data to be verified in Train"
+          schema:
+            $ref: "#/definitions/Test"
+          examples:
+            application/json:
+              {
+                "numberOfQuestions": "20",
+                "collectionPollIds": ["1", "2", "3"],
+                "questions":
+                  [
+                    {
+                      "collectionId": "44",
+                      "wordId": "420",
+                      "question": "apple",
+                      "correct": "mela",
+                      "answer": "libro",
+                      "result": "false",
+                    },
+                  ],
+                "_id": "11",
+                "ownerId": "65",
+                "createdOn": "2020-11-13",
+                "corrected": "true",
+              }
+
   /share/{collectionId}:
     get:
       tags:
-      - "share"
-      summary: Share a Collection
+        - "share"
+      summary: "Share the Collection"
       parameters:
         - name: collectionId
           in: path
@@ -363,16 +609,15 @@ paths:
           type: string
       responses:
         200:
-          description: 'Collection can be shared'
+          description: "The URL for sharing the Collection"
           examples:
-            application/json:
-                url: share/import/5fbeca7fa4b2a77d62753073
+            application/json: { "url": "share/import/5fbeca7fa4b2a77d62753073" }
 
   /share/import/{collectionId}:
     get:
       tags:
-      - "share"
-      summary: Import a Collection
+        - "share"
+      summary: "Import the Collection"
       parameters:
         - name: collectionId
           in: path
@@ -380,13 +625,13 @@ paths:
           type: string
       responses:
         204:
-          description: 'Collection imported'
-          
+          description: "The Collection has been imported"
+
   /stats/test/{collectionId}/word/{wordId}:
     get:
       tags:
-      - "stats"
-      summary: Get the stats about a word in test
+        - "stats"
+      summary: "Get the Stats about the Word of the Collection in Test"
       parameters:
         - name: collectionId
           in: path
@@ -398,19 +643,17 @@ paths:
           type: string
       responses:
         200:
-          description: ''
+          description: "An object which defines the Stats of the Word in Test"
           schema:
-            $ref: '#/definitions/StatsTest'
+            $ref: "#/definitions/StatsTest"
           examples:
-            application/json:
-              correctTest: 0
-              wrongTest: 0
-          
+            application/json: { "correctTest": "0", "wrongTest": "0" }
+
   /stats/train/{collectionId}/word/{wordId}:
     get:
       tags:
-      - "stats"
-      summary: Get the stats about a word in train
+        - "stats"
+      summary: "Get the Stats about the Word of the Collection in Train"
       parameters:
         - name: collectionId
           in: path
@@ -422,16 +665,305 @@ paths:
           type: string
       responses:
         200:
-          description: ''
+          description: "An object which defines the Stats of the Word in Train"
           schema:
-            $ref: '#/definitions/StatsTrain'
+            $ref: "#/definitions/StatsTrain"
+          examples:
+            application/json: { "correctTrain": "0", "wrongTrain": "0" }
+
+  /stats/class/{classId}:
+    get:
+      tags:
+        - "stats"
+      summary: "Get the Stats about the Class"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: "An object which defines the Stats of the Class"
+          schema:
+            $ref: "#/definitions/StatsClass"
           examples:
             application/json:
-              correctTrain: 0
-              wrongTrain: 0
+              {
+                "classId": "5fd69c9a4d2554534ca3bb78",
+                "correct": "0",
+                "wrong": "0",
+                "users": { "5fd69bef4d2554534ca3bb69": "TestUsername" },
+                "collections":
+                  {
+                    "5fd69bfd4d2554534ca3bb73":
+                      {
+                        "collectionId": "5fd69bfd4d2554534ca3bb73",
+                        "name": "Testing Collection",
+                        "correct": "0",
+                        "wrong": "0",
+                        "usernames": ["5fd69bef4d2554534ca3bb69"],
+                        "words":
+                          {
+                            "5fd69bfd4d2554534ca3bb72":
+                              {
+                                "wordId": "5fd69bfd4d2554534ca3bb72",
+                                "name": "Red",
+                                "correct": "0",
+                                "wrong": "0",
+                              },
+                            "5fd69c004d2554534ca3bb76":
+                              {
+                                "wordId": "5fd69c004d2554534ca3bb76",
+                                "name": "Green",
+                                "correct": "0",
+                                "wrong": "0",
+                              },
+                            "5fd69c024d2554534ca3bb77":
+                              {
+                                "wordId": "5fd69c024d2554534ca3bb77",
+                                "name": "Blue",
+                                "correct": "0",
+                                "wrong": "0",
+                              },
+                          },
+                      },
+                  },
+              }
+
+  /class:
+    get:
+      tags:
+        - "class"
+      summary: "Get all the joined or/and my Classes"
+      parameters:
+        - name: type
+          in: query
+          type: string
+          required: true
+          enum:
+            - created
+            - joined
+            - both
+      responses:
+        200:
+          description: "An array of objects which defines the Classes"
+          schema:
+            $ref: "#/definitions/ClassArray"
+          examples:
+            application/json:
+              [
+                {
+                  "_id": "5fd6556fb8465313945b966e",
+                  "name": "Class 1",
+                  "collections":
+                    ["5fd64de5b8465313945b9669", "1sd64de5b8465313945b9939"],
+                  "mine": "true",
+                },
+                {
+                  "_id": "5fd6556fb8465313945b966e",
+                  "name": "Class 2",
+                  "collections":
+                    ["5fd64de5b8465313945b9669", "1sd64de5b8465313945b9939"],
+                  "mine": "false",
+                },
+              ]
+
+    post:
+      tags:
+        - "class"
+      summary: "Create a new Class"
+      parameters:
+        - name: classData
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ClassName"
+      responses:
+        201:
+          description: "The id of the newly created Class"
+          schema:
+            $ref: "#/definitions/ReturnId"
+          examples:
+            application/json: { "_id": "0123456789abcdef01234567" }
+
+  /class/{classId}:
+    get:
+      tags:
+        - "class"
+      summary: "Get the Class by its id"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: "An object which defines the new Class"
+          schema:
+            $ref: "#/definitions/ClassMinStructure"
+          examples:
+            application/json:
+              {
+                "_id": "5fd6556fb8465313945b966e",
+                "name": "Class 1",
+                "collections":
+                  ["5fd64de5b8465313945b9669", "1sd64de5b8465313945b9939"],
+                "mine": "true",
+              }
+    put:
+      tags:
+        - "class"
+      summary: "Update the Class by its id"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+        - name: classData
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ClassName"
+      responses:
+        204:
+          description: "The Class has been updated"
+
+    delete:
+      tags:
+        - "class"
+      summary: "Delete the Class by its id"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Class has been deleted"
+
+  /class/{classId}/full:
+    get:
+      tags:
+        - "class"
+      summary: "Get the full Class by its id"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: "An object which defines the full structure of the Class"
+          schema:
+            $ref: "#/definitions/ClassFullStructure"
+          examples:
+            application/json:
+              {
+                "_id": "5fd6dcb1ce33c27e30e8bc17",
+                "name": "lallo",
+                "students":
+                  [
+                    {
+                      "_id": "5fd6f1725e27455158cbe01e",
+                      "displayName": "paperino",
+                      "username": "paperino",
+                    },
+                  ],
+                "collections":
+                  [
+                    {
+                      "_id": "5fd67f9a18febb313b9c820f",
+                      "name": "dfg",
+                      "description": "gfd",
+                      "languageFrom": "English",
+                      "languageTo": "Italian",
+                    },
+                  ],
+              }
+
+  /class/{classId}/join:
+    put:
+      tags:
+        - "class"
+      summary: "Join the Class by its id"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Class has been joined by the Student"
+
+  /class/{classId}/leave:
+    put:
+      tags:
+        - "class"
+      summary: "Leave the Class by its id"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Class has been left by the Student"
+
+  /class/{classId}/kick/{studentId}:
+    put:
+      tags:
+        - "class"
+      summary: "Kick the Student out from the Class by their ids"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+        - name: studentId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Student has been kicked out from the Class"
+
+  /class/{classId}/addCollection/{collectionId}:
+    put:
+      tags:
+        - "class"
+      summary: "Add the Collection to the Class by their ids"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Collection has been added to the Class"
+
+  /class/{classId}/removeCollection/{collectionId}:
+    put:
+      tags:
+        - "class"
+      summary: "Remove the Collection from the Class by their ids"
+      parameters:
+        - name: classId
+          in: path
+          required: true
+          type: string
+        - name: collectionId
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "The Collection has been removed from the Class"
 
 definitions:
-  
   StatsTrain:
     title: StatsTest
     type: object
@@ -440,7 +972,32 @@ definitions:
         type: number
       wrongTrain:
         type: number
-  
+
+  TrainingResult:
+    title: TrainingResult
+    type: object
+    properties:
+      collectionId:
+        type: string
+      wordId:
+        type: string
+      correct:
+        type: boolean
+    required:
+      - collectionId
+      - wordId
+      - correct
+
+  NextWordQuery:
+    title: NextWordQuery
+    type: object
+    properties:
+      collectionPollIds:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+
   StatsTest:
     title: StatsTest
     type: object
@@ -449,6 +1006,63 @@ definitions:
         type: number
       wrongTest:
         type: number
+  Test:
+    title: Test
+    type: object
+    properties:
+      _id:
+        type: string
+      ownerId:
+        type: string
+      createdOn:
+        type: string
+      numberOfQuestions:
+        type: number
+      collectionPollIds:
+        type: array
+      corrected:
+        type: boolean
+      questions:
+        type: array
+        items:
+          $ref: "#/definitions/Question"
+    required:
+      - numberOfQuestions
+      - collectionPollIds
+      - questions
+
+  Question:
+    title: Question
+    type: object
+    properties:
+      collectionId:
+        type: string
+      wordId:
+        type: string
+      question:
+        type: string
+      correct:
+        type: string
+      answer:
+        type: string
+      result:
+        type: boolean
+    required:
+      - collectionId
+      - wordId
+      - question
+
+  TestQuery:
+    title: TestQuery
+    type: object
+    properties:
+      numberOfQuestions:
+        type: number
+      collectionPollId:
+        type: array
+    required:
+      - numberOfQuestions
+      - collectionPollId
 
   ReturnId:
     title: ReturnId
@@ -458,7 +1072,7 @@ definitions:
         type: string
     required:
       - _id
-  
+
   LoginUser:
     title: LoginUser
     type: object
@@ -470,7 +1084,7 @@ definitions:
     required:
       - username
       - password
-  
+
   SignupUser:
     title: SignupUser
     type: object
@@ -488,7 +1102,7 @@ definitions:
       - password
       - displayName
       - email
-      
+
   UpdateUser:
     title: UpdateUser
     type: object
@@ -521,7 +1135,7 @@ definitions:
       - username
       - displayName
       - email
-  
+
   Collection:
     title: Collection
     type: object
@@ -541,20 +1155,20 @@ definitions:
       words:
         type: array
         items:
-          $ref: '#/definitions/Word'
+          $ref: "#/definitions/Word"
     required:
       - index
       - name
       - description
       - owner
       - words
-  
+
   CollectionArray:
     title: CollectionArray
     type: array
     items:
-      $ref: '#/definitions/Collection'
-  
+      $ref: "#/definitions/Collection"
+
   UpdateCollection:
     title: Collection
     type: object
@@ -573,11 +1187,24 @@ definitions:
       - index
       - name
       - description
-  
+
+  FullWord:
+    title: CollectionComplete
+    allOf:
+      - $ref: "#/definitions/Word"
+    type: object
+    properties:
+      collectionId:
+        type: string
+    required:
+      - collectionId
+
   Word:
     title: Word
     type: object
     properties:
+      _id:
+        type: string
       index:
         type: integer
       original:
@@ -589,16 +1216,17 @@ definitions:
       languageTo:
         type: string
     required:
+      - _id
       - index
       - original
       - translation
-      
+
   CollectionLearnState:
     title: CollectionLearnState
     type: array
     items:
-      $ref: '#/definitions/WordLearnState'
-      
+      $ref: "#/definitions/WordLearnState"
+
   WordLearnState:
     title: WordLearnState
     type: object
@@ -610,3 +1238,166 @@ definitions:
     required:
       - wordId
       - learned
+
+  CollectionMinStructure:
+    title: CollectionMinStructure
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      languageFrom:
+        type: string
+      languageTo:
+        type: string
+      inClassName:
+        type: string
+    required:
+      - _id
+      - name
+
+  CollectionComplete:
+    title: CollectionComplete
+    allOf:
+      - $ref: "#/definitions/CollectionMinStructure"
+    type: object
+    properties:
+      index:
+        type: integer
+      owner:
+        type: string
+      share:
+        type: boolean
+      words:
+        type: array
+        items:
+          $ref: "#/definitions/Word"
+
+  CollectionMinArray:
+    title: CollectionMinArray
+    type: array
+    items:
+      $ref: "#/definitions/CollectionMinStructure"
+
+  CollectionCompleteArray:
+    title: CollectionCompleteArray
+    type: array
+    items:
+      $ref: "#/definitions/CollectionComplete"
+
+  ClassArray:
+    title: ClassArray
+    type: array
+    items:
+      $ref: "#/definitions/ClassMinStructure"
+
+  ClassMinStructure:
+    title: ClassStructure
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      collections:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+      mine:
+        type: boolean
+    required:
+      - _id
+      - name
+
+  ClassName:
+    title: ClassName
+    type: object
+    properties:
+      className:
+        type: string
+    required:
+      - className
+
+  ClassFullStructure:
+    title: ClassFullStructure
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      students:
+        type: array
+        items:
+          $ref: "#/definitions/StudentStructure"
+      collections:
+        type: array
+        items:
+          $ref: "#/definitions/CollectionMinStructure"
+
+  StudentArray:
+    title: ClassArray
+    type: array
+    items:
+      $ref: "#/definitions/StudentStructure"
+
+  StudentStructure:
+    title: ClassStructure
+    type: object
+    properties:
+      _id:
+        type: string
+      username:
+        type: string
+      displayName:
+        type: string
+    required:
+      - _id
+      - username
+      - displayName
+
+  StatsClass:
+    title: StatsClass
+    type: object
+    properties:
+      classId:
+        type: string
+      correct:
+        type: number
+      wrong:
+        type: number
+      users:
+        type: object
+        properties:
+          id:
+            type: string
+      collections:
+        type: object
+        properties:
+          id:
+            type: string
+          collectionId:
+            type: string
+          name:
+            type: string
+          correct:
+            type: number
+          wrong:
+            type: number
+          usernames:
+            type: array
+          words:
+            type: object
+            properties:
+              wordId:
+                type: string
+              name:
+                type: string
+              correct:
+                type: number
+              wrong:
+                type: number
