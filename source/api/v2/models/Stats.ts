@@ -44,6 +44,7 @@ export interface ClassStats {
             words: {
                 [id: string]: {
                     wordId:  string ,
+                    name:  string ,
                     correct: number,
                     wrong: number
                 }

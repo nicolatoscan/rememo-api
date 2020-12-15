@@ -73,12 +73,12 @@ async function saveResult(result: Result[], userId: string): Promise<void> {
 
 
 
-async function getCollectionsFromIds(collectionsIds: ObjectId[]): Promise<{ _id : ObjectId, name: string }[]> {
+async function getCollectionsFromIds(collectionsIds: ObjectId[]): Promise<{ _id : ObjectId, name: string, words: { _id: ObjectId, original: string }[] }[]> {
     return (await databaseHelper
         .getCollection('collections')
         .find( { _id : { $in : collectionsIds } } )
-        .project({ _id: 1, name: 1 })
-        .toArray()) as { _id : ObjectId, name: string }[];
+        .project({ _id: 1, name: 1, 'words.original': 1, 'words._id': 1 })
+        .toArray()) as { _id : ObjectId, name: string, words: { _id: ObjectId, original: string }[] }[];
 }
 
 async function getClassUsers(classId: ObjectId): Promise<{ _id : ObjectId, username: string }[]> {
@@ -126,7 +126,12 @@ export async function getClassStatsParsed(userId: string, classId: string): Prom
             correct: 0,
             wrong: 0,
             usernames: [],
-            words: { }
+            words: Object.assign({}, ...c.words.map(w => ({ [w._id.toHexString()]: {
+                wordId:  w._id.toHexString(),
+                name:  w.original,
+                correct: 0,
+                wrong: 0
+            }})))
         }})))
     };
 
@@ -142,16 +147,8 @@ export async function getClassStatsParsed(userId: string, classId: string): Prom
 
         for (const wStats of collStats.words) {
             const wordId = wStats.wordId.toHexString();
-            if (!res.collections[collId].words[wordId]) {
-                res.collections[collId].words[wordId] = {
-                    wordId: wordId,
-                    correct: wStats.correctTest,
-                    wrong: wStats.wrongTest
-                };
-            } else {
-                res.collections[collId].words[wordId].correct += wStats.correctTest;
-                res.collections[collId].words[wordId].wrong += wStats.wrongTest;
-            }
+            res.collections[collId].words[wordId].correct += wStats.correctTest;
+            res.collections[collId].words[wordId].wrong += wStats.wrongTest;
         }
     }
 
